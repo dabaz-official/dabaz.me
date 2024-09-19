@@ -1,4 +1,7 @@
 {
+  "name": "dabaz",
+  "version": "0.0.1",
+  "description": "The official website of DabAZ.",
   "private": true,
   "scripts": {
     "dev": "next dev",
