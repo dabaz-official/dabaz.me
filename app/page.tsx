@@ -2,8 +2,8 @@ import { BlogPosts } from 'app/components/posts'
 
 export default function Page() {
   return (
-    <section>
-      <h1 className="mb-8 text-2xl font-semibold tracking-tighter">
+    <section className="p-4">
+      <h1 className="mb-8 text-2xl font-semibold tracking-tighter mx-auto max-w-5xl">
         My Portfolio
       </h1>
       <p className="mb-4">
