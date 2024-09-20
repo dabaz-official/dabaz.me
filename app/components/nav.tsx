@@ -29,7 +29,7 @@ export function Navbar() {
           <div className="flex space-x-0 pr-10 items-center justify-between">
             <Link
               href="/"
-              className="flex align-middle relative py-1 px-4 m-1.5 md:m-1 items-center"
+              className="flex relative py-1 px-4 m-1.5 md:m-1 items-center justify-start"
             >
               <Logo className="text-neutral-100/80 transition-all hover:text-white h-5 md:h-4" />
             </Link>
