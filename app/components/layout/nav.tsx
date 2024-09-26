@@ -23,7 +23,6 @@ export const navItems = {
 }
 
 export function Navbar() {
-  const svgRef = useRef<SVGSVGElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
 
   useEffect(() => {
