@@ -1,8 +1,18 @@
+import Image from 'next/image'
+
 import { BlogPosts } from 'app/components/posts'
 
 export default function Page() {
   return (
-    <section>
+    <section className="m-0 p-0 h-screen top-0">
+      <div className="bg-black">
+        <Image
+          src="/home/images/heroes/hero-large-2x.webp"
+          alt="The ocean."
+          width={3120}
+          height={2080}
+        />
+      </div>
       <h1 className="mb-8 text-2xl font-semibold tracking-tighter mx-auto">
         My Portfolio
       </h1>
