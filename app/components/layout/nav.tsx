@@ -23,45 +23,11 @@ export const navItems = {
 }
 
 export function Navbar() {
-  const tlRef = useRef<gsap.core.Timeline | null>(null);
-
-  useEffect(() => {
-    if (!svgRef.current) return;
-
-    const line1 = svgRef.current.querySelector('#line-1');
-    const line2 = svgRef.current.querySelector('#line-2');
-
-    if (!line1 || !line2) return;
-
-    tlRef.current = gsap.timeline({ paused: true });
-
-    tlRef.current.to(line1, {
-      rotation: 45,
-      y: 3,
-      transformOrigin: "50% 50%",
-      duration: 0.3,
-    }, 0);
-
-    tlRef.current.to(line2, {
-      rotation: -45,
-      y: -3,
-      transformOrigin: "50% 50%",
-      duration: 0.3,
-    }, 0);
-  }, []);
-
-  const handleClick = () => {
-    if (tlRef.current) {
-      tlRef.current.reversed(!tlRef.current.reversed());
-      tlRef.current.play();
-    }
-  };
-
   return (
-    <header className="-ml-[8px] tracking-tight bg-black/70 backdrop-blur-lg sticky top-0">
-      <Popover className="max-w-5xl items-center mx-auto my-1">
+    <header className="-ml-[8px] tracking-tight sticky top-0">
+      <Popover className="max-w-5xl items-center mx-auto">
         {({ open }) => (
-          <>
+          <div className="bg-black/80 backdrop-blur-lg">
             <nav className="flex flex-row px-0 pb-0 fade md:overflow-auto scroll-pr-6 justify-between" id="nav">
               <div className="flex space-x-0 pr-10 items-center justify-start">
                 <div className="py-1 px-4 m-1.5 md:m-1">
@@ -91,10 +57,7 @@ export function Navbar() {
                 </div>
                 <div className="md:hidden flex flex-1 justify-end">
                   <div className="flex relative py-1 px-2 m-1.5 md:m-1 items-center justify-start">
-                    <PopoverButton 
-                      className="outline-none cursor-pointer"
-                      onClick={handleClick}
-                    >
+                    <PopoverButton className="outline-none cursor-pointer">
                       <HiChevronDown className={clsx("text-neutral-100/80 transition-all duration-500 hover:text-white h-6 w-6", open && "rotate-180")} />
                     </PopoverButton>
                   </div>
@@ -110,21 +73,23 @@ export function Navbar() {
               leaveFrom="opacity-100 translate-y-0"
               leaveTo="opacity-0 -translate-y-1"
             >
-              <PopoverPanel anchor="bottom" className="w-screen h-screen bg-black flex flex-col space-y-2 pt-8 px-12">
-                {Object.entries(navItems).map(([path, { name }]) => {
-                  return (
-                    <Link
-                      key={path}
-                      href={path}
-                      className="text-white text-3xl font-semibold tracking-tight transition-all flex align-middle relative py-1"
-                    >
-                      {name}
-                    </Link>
-                  )
-                })}
+              <PopoverPanel static anchor="right" className="w-screen h-screen flex flex-col absolute bg-black pt-8 px-12 top-24">
+                <div className="space-y-2">
+                  {Object.entries(navItems).map(([path, { name }]) => {
+                    return (
+                      <Link
+                        key={path}
+                        href={path}
+                        className="text-white text-3xl font-semibold tracking-tight transition-all flex align-middle relative py-1"
+                      >
+                        {name}
+                      </Link>
+                    )
+                  })}
+                </div>
               </PopoverPanel>
             </Transition>
-          </>
+          </div>
         )}
       </Popover>
     </header>
