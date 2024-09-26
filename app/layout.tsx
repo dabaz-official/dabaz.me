@@ -47,7 +47,9 @@ export default function RootLayout({
       <body className="antialiased mx-auto">
         <main className="flex-auto min-w-0 flex flex-col px-0">
           <Navbar />
-          {children}
+          <div>
+            {children}
+          </div>
           <Footer />
           <Analytics />
           <SpeedInsights />
