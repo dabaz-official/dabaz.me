@@ -1,11 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { SVGProps, useEffect, useRef, useState } from 'react';
+import { SVGProps, useEffect, useRef } from 'react';
 
 import { gsap } from 'gsap/gsap-core';
-import { MotionPathPlugin } from 'gsap/all';
-import { Dialog } from '@headlessui/react';
+import { MotionPathPlugin } from 'gsap/dist/MotionPathPlugin';
+import { Fragment } from 'react'
+import { Popover, PopoverButton, PopoverPanel, Transition } from '@headlessui/react';
+
+gsap.registerPlugin(MotionPathPlugin);
 
 export const navItems = {
   '/blog': { name: 'Blog' },
@@ -25,9 +28,8 @@ export function Logo(props: SVGProps<SVGSVGElement>) {
 }
 
 export function Navbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
   const svgRef = useRef<SVGSVGElement>(null);
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
 
   useEffect(() => {
     if (!svgRef.current) return;
@@ -35,38 +37,36 @@ export function Navbar() {
     const line1 = svgRef.current.querySelector('#line-1');
     const line2 = svgRef.current.querySelector('#line-2');
 
-    gsap.registerPlugin(MotionPathPlugin);
+    if (!line1 || !line2) return;
 
-    const tl = gsap.timeline({ paused: true });
+    tlRef.current = gsap.timeline({ paused: true });
 
-    tl.to(line1, {
+    tlRef.current.to(line1, {
       rotation: 45,
       y: 3,
       transformOrigin: "50% 50%",
       duration: 0.3,
     }, 0);
 
-    tl.to(line1, {
+    tlRef.current.to(line2, {
       rotation: -45,
       y: -3,
       transformOrigin: "50% 50%",
       duration: 0.3,
     }, 0);
+  }, []);
 
-    if (mobileMenuOpen) {
-      tl.play();
-    } else {
-      tl.reverse();
+  const handleClick = () => {
+    if (tlRef.current) {
+      tlRef.current.reversed(!tlRef.current.reversed());
+      tlRef.current.play();
     }
-  }, [mobileMenuOpen]);
+  };
 
   return (
     <header className="-ml-[8px] tracking-tight bg-black/70 backdrop-blur-lg sticky top-0">
-      <div className="max-w-5xl items-center mx-auto my-1">
-        <nav
-          className="flex flex-row px-0 pb-0 fade md:overflow-auto scroll-pr-6 justify-between"
-          id="nav"
-        >
+      <Popover className="max-w-5xl items-center mx-auto my-1">
+        <nav className="flex flex-row px-0 pb-0 fade md:overflow-auto scroll-pr-6 justify-between" id="nav">
           <div className="flex space-x-0 pr-10 items-center justify-start">
             <Link
               href="/"
@@ -91,66 +91,48 @@ export function Navbar() {
             </div>
             <div className="md:hidden flex flex-1 justify-end">
               <div className="flex relative py-1 px-2 m-1.5 md:m-1 items-center justify-start">
-                <svg viewBox="0 0 24 24" fill="currentColor" className="text-neutral-100/80 transition-all hover:text-white h-6 w-6" onClick={() => setMobileMenuOpen(true)}>
-                  <path d="M3.75 9H20.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" id="line-1" />
-                  <path d="M3.75 15.75H20.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" id="line-2" />
-                </svg>
+                <PopoverButton 
+                  className="outline-none"
+                  onClick={handleClick}
+                >
+                  <svg 
+                    ref={svgRef}
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    className="text-neutral-100/80 transition-all hover:text-white h-6 w-6"
+                  >
+                    <path d="M3.75 9H20.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" id="line-1" />
+                    <path d="M3.75 15.75H20.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" id="line-2" />
+                  </svg>
+                </PopoverButton>
               </div>
             </div>
           </div>
         </nav>
-        <Dialog as="div" className="md:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
-          <div className="fixed inset-0 z-10" />
-          <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-            <div className="flex items-center justify-between">
-              <a href="#" className="-m-1.5 p-1.5">
-                <span className="sr-only">Your Company</span>
-                <img
-                  className="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                  alt=""
-                />
-              </a>
-              <button
-                type="button"
-                className="-m-2.5 rounded-md p-2.5 text-gray-700"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <span className="sr-only">Close menu</span>
-                <svg viewBox="0 0 24 24" fill="currentColor" className="text-neutral-100/80 transition-all hover:text-white h-6 w-6" onClick={() => setMobileMenuOpen(true)}>
-                  <path d="M3.75 9H20.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" id="line-1" />
-                  <path d="M3.75 15.75H20.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" id="line-2" />
-                </svg>
-              </button>
-            </div>
-            <div className="mt-6 flow-root">
-              <div className="-my-6 divide-y divide-gray-500/10">
-                <div className="space-y-2 py-6">
-                  {Object.entries(navItems).map(([path, { name }]) => {
-                    return (
-                      <Link
-                        key={path}
-                        href={path}
-                        className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                      >
-                        {name}
-                      </Link>
-                    )
-                  })}
-                </div>
-                <div className="py-6">
-                  <a
-                    href="#"
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  >
-                    Log in
-                  </a>
-                </div>
-              </div>
-            </div>
-          </Dialog.Panel>
-        </Dialog>
-      </div>
+        <Transition
+          as={Fragment}
+          enter="transition ease-out duration-500"
+          enterFrom="opacity-0 -translate-y-1"
+          enterTo="opacity-100 translate-y-0"
+          leave="transition ease-in duration-300"
+          leaveFrom="opacity-100 translate-y-0"
+          leaveTo="opacity-0 -translate-y-1"
+        >
+          <PopoverPanel anchor="bottom" className="w-screen h-screen bg-black flex flex-col space-y-2 pt-8 px-3">
+            {Object.entries(navItems).map(([path, { name }]) => {
+              return (
+                <Link
+                  key={path}
+                  href={path}
+                  className="text-white text-3xl font-semibold tracking-tight transition-all flex align-middle relative py-1"
+                >
+                  {name}
+                </Link>
+              )
+            })}
+          </PopoverPanel>
+        </Transition>
+      </Popover>
     </header>
   )
 }
