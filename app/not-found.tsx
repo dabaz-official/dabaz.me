@@ -1,6 +1,9 @@
+import { Back } from "./blog/back";
+
 export default function NotFound() {
   return (
     <section className="pt-12">
+      <Back />
       <h1 className="mb-8 text-2xl font-semibold tracking-tighter">
         404 - 未找到页面
       </h1>
