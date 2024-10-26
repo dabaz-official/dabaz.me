@@ -1,10 +1,10 @@
 import { Link } from 'next-view-transitions';
 
-export function AnimatedName() {
+export function Back() {
   return (
     <div className='font-medium transition-element'>
-      <Link href="/" className="flex mb-8 font-medium text-gray-400 fade-in">
-        DabAZ
+      <Link href="/" className="flex mb-2 font-medium text-neutral-500 fade-in">
+        {`返回首页`}
       </Link>
     </div>
   );
