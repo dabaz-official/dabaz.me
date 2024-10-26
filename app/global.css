@@ -1,5 +1,9 @@
 @import 'tailwindcss';
 
+body {
+  font-family: "SF Pro SC", "SF Pro Text", "SF Pro Icons", "PingFang SC", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
+
 ::selection {
   background-color: #0a0a0a;
   color: #fefefe;
