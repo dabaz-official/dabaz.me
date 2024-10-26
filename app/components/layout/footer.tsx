@@ -26,7 +26,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="mt-12 text-center mx-auto">
+    <footer className="mt-12 text-center mx-auto text-sm">
       <div className="justify-center tracking-tight flex gap-x-4">
         {links.map((link) => (
           <a
