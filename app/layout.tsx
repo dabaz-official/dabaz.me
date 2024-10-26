@@ -36,8 +36,6 @@ export const metadata: Metadata = {
   },
 }
 
-const cx = (...classes) => classes.filter(Boolean).join(' ')
-
 export default function RootLayout({
   children,
 }: {
@@ -45,16 +43,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="antialiased mx-auto">
-        <main className="flex-auto min-w-0 flex flex-col px-0">
-          <Navbar />
-          <div>
+      <body className="antialiased tracking-tight">
+        <div className="min-h-screen flex flex-col justify-between pt-0 md:pt-8 p-8 bg-white text-neutral-900">
+          <main className="max-w-[60ch] mx-auto w-full space-y-6">
             {children}
-          </div>
+          </main>
           <Footer />
           <Analytics />
           <SpeedInsights />
-        </main>
+        </div>
       </body>
     </html>
   )

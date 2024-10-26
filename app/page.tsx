@@ -5,23 +5,11 @@ import { BlogPosts } from 'app/components/posts'
 export default function Page() {
   return (
     <section className="m-0 p-0 h-screen top-0">
-      <div className="bg-black">
-        <Image
-          src="/home/images/heroes/hero-large-2x.webp"
-          alt="The ocean."
-          width={3120}
-          height={2080}
-        />
-      </div>
       <h1 className="mb-8 text-2xl font-semibold tracking-tighter mx-auto">
         My Portfolio
       </h1>
       <p className="mb-4">
-        {`I'm a Vim enthusiast and tab advocate, finding unmatched efficiency in
-        Vim's keystroke commands and tabs' flexibility for personal viewing
-        preferences. This extends to my support for static typing, where its
-        early error detection ensures cleaner code, and my preference for dark
-        mode, which eases long coding sessions by reducing eye strain.`}
+        {`我是一名创业者、白帽黑客、音乐人、设计师、前端开发爱好者。`}
       </p>
       <div className="my-8">
         <BlogPosts />
