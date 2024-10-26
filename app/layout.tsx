@@ -6,6 +6,7 @@ import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Footer from './components/layout/footer'
 import { baseUrl } from './sitemap'
+import { ViewTransitions } from 'next-view-transitions'
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -42,17 +43,19 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className="antialiased tracking-tight">
-        <div className="min-h-screen flex flex-col justify-between pt-0 md:pt-8 p-8 bg-white text-neutral-900">
-          <main className="max-w-[60ch] mx-auto w-full space-y-6">
-            {children}
-          </main>
-          <Footer />
-          <Analytics />
-          <SpeedInsights />
-        </div>
-      </body>
-    </html>
+    <ViewTransitions>
+      <html lang="en">
+        <body className="antialiased tracking-tight">
+          <div className="min-h-screen flex flex-col justify-between pt-0 md:pt-8 p-8 bg-white text-neutral-900">
+            <main className="max-w-[44ch] mx-auto w-full space-y-6">
+              {children}
+            </main>
+            <Footer />
+            <Analytics />
+            <SpeedInsights />
+          </div>
+        </body>
+      </html>
+    </ViewTransitions>
   )
 }
