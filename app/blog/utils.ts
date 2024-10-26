@@ -67,16 +67,16 @@ export function formatDate(date: string, includeRelative = false) {
   let formattedDate = ''
 
   if (yearsAgo > 0) {
-    formattedDate = `${yearsAgo}y ago`
+    formattedDate = `${yearsAgo} 年前`
   } else if (monthsAgo > 0) {
-    formattedDate = `${monthsAgo}mo ago`
+    formattedDate = `${monthsAgo} 月前`
   } else if (daysAgo > 0) {
-    formattedDate = `${daysAgo}d ago`
+    formattedDate = `${daysAgo} 天前`
   } else {
-    formattedDate = 'Today'
+    formattedDate = '今天'
   }
 
-  let fullDate = targetDate.toLocaleString('en-us', {
+  let fullDate = targetDate.toLocaleString('zh-cn', {
     month: 'long',
     day: 'numeric',
     year: 'numeric',
