@@ -1,7 +1,10 @@
 @import 'tailwindcss';
 
+html,
 body {
   font-family: "SF Pro SC", "SF Pro Text", "SF Pro Icons", "PingFang SC", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  min-width: 360px;
+  background-color: #fff;
 }
 
 ::selection {
@@ -31,10 +34,6 @@ body {
   html {
     color-scheme: dark;
   }
-}
-
-html {
-  min-width: 360px;
 }
 
 .prose .anchor {
