@@ -16,45 +16,32 @@ function ArrowIcon() {
 }
 
 export default function Footer() {
+  const links = [
+    { name: 'X', href: 'https://x.com/dabaz_official' },
+    { name: 'Instagram', href: 'https://instagram.com/dabaz_official' },
+    { name: 'GitHub', href: 'https://github.com/dabaz-official' },
+    { name: 'TikTok', href: 'https://tiktok.com/@dabaz_official' },
+    { name: 'YouTube', href: 'https://youtube.com/@dabaz_official' },
+    { name: 'RSS', href: '/rss' },
+  ];
+
   return (
-    <footer className="max-w-5xl mx-auto">
-      <ul className="font-sm mt-8 flex flex-col space-x-0 space-y-2 text-neutral-600 md:flex-row md:space-x-4 md:space-y-0 dark:text-neutral-300">
-        <li>
+    <footer className="mt-12 text-center mx-auto">
+      <div className="justify-center tracking-tight grid grid-cols-4 sm:flex gap-x-4">
+        {links.map((link) => (
           <a
-            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
-            rel="noopener noreferrer"
+            key={link.name}
+            href={link.href}
             target="_blank"
-            href="/rss"
-          >
-            <ArrowIcon />
-            <p className="ml-2 h-7">rss</p>
-          </a>
-        </li>
-        <li>
-          <a
-            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
             rel="noopener noreferrer"
-            target="_blank"
-            href="https://github.com/vercel/next.js"
+            className="text-neutral-600 hover:text-black transition-colors duration-200"
           >
-            <ArrowIcon />
-            <p className="ml-2 h-7">github</p>
+            {link.name}
           </a>
-        </li>
-        <li>
-          <a
-            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
-            rel="noopener noreferrer"
-            target="_blank"
-            href="https://vercel.com/templates/next.js/portfolio-starter-kit"
-          >
-            <ArrowIcon />
-            <p className="ml-2 h-7">view source</p>
-          </a>
-        </li>
-      </ul>
-      <p className="mt-8 text-neutral-600 dark:text-neutral-300">
-        © {new Date().getFullYear()} MIT Licensed
+        ))}
+      </div>
+      <p className="my-8 text-neutral-600">
+        © {new Date().getFullYear()} DabAZ
       </p>
     </footer>
   )
