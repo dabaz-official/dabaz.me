@@ -27,7 +27,7 @@ export default function Footer() {
 
   return (
     <footer className="mt-12 text-center mx-auto">
-      <div className="justify-center tracking-tight grid grid-cols-4 sm:flex gap-x-4">
+      <div className="justify-center tracking-tight flex gap-x-4">
         {links.map((link) => (
           <a
             key={link.name}
@@ -40,7 +40,7 @@ export default function Footer() {
           </a>
         ))}
       </div>
-      <p className="my-8 text-neutral-600">
+      <p className="mt-4 sm:mt-8 text-neutral-600">
         © {new Date().getFullYear()} DabAZ
       </p>
     </footer>
