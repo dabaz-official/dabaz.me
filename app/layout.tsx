@@ -1,4 +1,5 @@
 import './global.css'
+import './fonts.css'
 import type { Metadata } from 'next'
 import { Navbar } from './components/layout/nav'
 import { Analytics } from '@vercel/analytics/react'
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
     description: 'An entrepreneur and bug hunter with a passion for creating music, front-end development, and UI design.',
     url: baseUrl,
     siteName: 'DabAZ',
-    locale: 'en_US',
+    locale: 'zh_CNS',
     type: 'website',
   },
   robots: {
