@@ -92,7 +92,7 @@ body {
 }
 
 .prose h1 {
-  @apply text-4xl font-medium tracking-tight mt-6 mb-2;
+  @apply text-[1.5rem] font-medium tracking-tight mt-6 mb-2;
 }
 
 .prose h2 {
@@ -100,11 +100,11 @@ body {
 }
 
 .prose h3 {
-  @apply text-xl font-medium tracking-tight mt-6 mb-2;
+  @apply text-lg font-medium tracking-tight mt-6 mb-2;
 }
 
 .prose h4 {
-  @apply text-lg font-medium tracking-tight mt-6 mb-2;
+  @apply font-medium tracking-tight mt-6 mb-2;
 }
 
 .prose strong {
