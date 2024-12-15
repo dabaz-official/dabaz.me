@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     default: 'DabAZ - Entrepreneur with a Vision',
     template: '%s - DabAZ',
   },
-  description: 'Hi, I’m Diebold Dai, an entrepreneur passionate about turning visions into thriving realities. As a 6-figure business owner striving to reach the 7-figure milestone, I’ve learned that perseverance and a clear vision are the cornerstones of sustainable success.',
+  description: 'Hi, I’m Diebold Dai, a 6-figure entrepreneur passionate about turning visions into thriving realities.',
   keywords: [
     '6-figure business owner', 
     '7-figure entrepreneur', 
@@ -70,7 +70,7 @@ export default function RootLayout({
       <html lang="en-US">
         <body className="antialiased tracking-tight">
           <div className="min-h-screen flex flex-col justify-between pt-0 md:pt-8 p-8 bg-white text-neutral-900">
-            <main className="max-w-[44ch] mx-auto w-full space-y-6">
+            <main className="max-w-3xl mx-auto w-full space-y-6">
               {children}
             </main>
             <Footer />
