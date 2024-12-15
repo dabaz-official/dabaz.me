@@ -17,12 +17,12 @@ function ArrowIcon() {
 
 export default function Footer() {
   const links = [
+    { name: 'Email', href: 'mailto:hi@dabaz.me' },
     { name: 'X', href: 'https://x.com/dabaz_official' },
     { name: 'Instagram', href: 'https://instagram.com/dabaz_official' },
-    { name: 'GitHub', href: 'https://github.com/dabaz-official' },
-    { name: 'TikTok', href: 'https://tiktok.com/@dabaz_official' },
-    { name: 'YouTube', href: 'https://youtube.com/@dabaz_official' },
-    { name: 'RSS', href: '/rss' },
+    { name: 'LinkedIn', href: 'https://linkedin.com/in/diebold-dai' },
+    { name: 'Facebook', href: 'https://www.facebook.com/profile.php?id=100026087412660' },
+    { name: 'Company', href: 'https://cobotrading.com' },
   ];
 
   return (
