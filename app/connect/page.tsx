@@ -15,7 +15,7 @@ export default function Page() {
         Hi, it’s Diebold Dai (DabAZ) again. Thanks for your interest.
       </p>
       <p className="my-6 text-lg">
-        The contact form is currently unavailable. You can contact me via <a href="mailto:hi@dabaz.me" className="underline underline-offset-1">Email</a>.
+        The contact form is currently unavailable. You can contact me via <a href="mailto:hi@dabaz.me" className="underline underline-offset-1 hover:text-blue-700 transition duration-300">Email</a>.
       </p>
     </div>
   )
