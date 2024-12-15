@@ -11,17 +11,40 @@ import { ViewTransitions } from 'next-view-transitions'
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'DabAZ',
+    default: 'DabAZ - Entrepreneur with a Vision',
     template: '%s - DabAZ',
   },
-  description: 'An entrepreneur and bug hunter with a passion for creating music, front-end development, and UI design.',
-  keywords: 'DabAZ, 戴博, Diebold Dai, ethical hacker, musician, artist, designer, UI designer, developer, front-end developer, rapper, DJ',
+  description: 'Hi, I’m Diebold Dai, an entrepreneur passionate about turning visions into thriving realities. As a 6-figure business owner striving to reach the 7-figure milestone, I’ve learned that perseverance and a clear vision are the cornerstones of sustainable success.',
+  keywords: [
+    '6-figure business owner', 
+    '7-figure entrepreneur', 
+    'cross-border e-commerce', 
+    'vision-driven leadership', 
+    'self-made entrepreneur', 
+    'perseverance', 
+    'visionary thinking', 
+    'adaptability', 
+    'continuous growth', 
+    'customer-centric', 
+    'interdisciplinary innovation', 
+    'white-hat hacker', 
+    'creative problem-solving', 
+    'front-end development', 
+    'multi-faceted entrepreneur', 
+    'strategic execution', 
+    'market expansion', 
+    'e-commerce success', 
+    'startup challenges', 
+    'leadership principles',
+    'DabAZ',
+    'Diebold Dai',
+  ],
   openGraph: {
-    title: 'DabAZ',
-    description: 'An entrepreneur and bug hunter with a passion for creating music, front-end development, and UI design.',
+    title: 'DabAZ - Entrepreneur with a Vision',
+    description: 'Hi, I’m Diebold Dai, an entrepreneur passionate about turning visions into thriving realities. As a 6-figure business owner striving to reach the 7-figure milestone, I’ve learned that perseverance and a clear vision are the cornerstones of sustainable success.',
     url: baseUrl,
     siteName: 'DabAZ',
-    locale: 'zh_CNS',
+    locale: 'en_US',
     type: 'website',
   },
   robots: {
@@ -44,7 +67,7 @@ export default function RootLayout({
 }) {
   return (
     <ViewTransitions>
-      <html lang="en">
+      <html lang="en-US">
         <body className="antialiased tracking-tight">
           <div className="min-h-screen flex flex-col justify-between pt-0 md:pt-8 p-8 bg-white text-neutral-900">
             <main className="max-w-[44ch] mx-auto w-full space-y-6">

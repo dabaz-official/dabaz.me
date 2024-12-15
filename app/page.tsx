@@ -7,8 +7,8 @@ export default function Page() {
   return (
     <div>
       <NameTransition />
-      <p className="my-6 font-medium">
-        {`我是一名创业者、白帽黑客、音乐人、设计师、前端开发爱好者。 我还喜欢电子游戏、骑行与内容创作。`}
+      <p className="my-6 font-regular">
+        {`Hi, I’m Diebold Dai, an entrepreneur passionate about turning visions into thriving realities. As a 6-figure business owner striving to reach the 7-figure milestone, I’ve learned that perseverance and a clear vision are the cornerstones of sustainable success.`}
       </p>
       <BlogPosts />
     </div>
