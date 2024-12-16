@@ -17,7 +17,7 @@ export default function Page() {
         Beyond business, I’m a hacker, musician, designer, and developer, blending creativity and technical expertise into every project I pursue. Whether it’s crafting seamless user experiences or composing music, I believe in the power of interdisciplinary thinking to inspire innovation.
       </p>
       <p className="my-6 text-lg">
-        Let’s <a href="/connect" className="underline underline-offset-1 hover:text-green-600 transition duration-300">connect</a> and explore how we can build a better future together.
+        Let’s <a href="mailto:hi@dabaz.me" className="underline underline-offset-1 hover:text-green-600 transition duration-300">connect</a> and explore how we can build a better future together.
       </p>
     </div>
   )
