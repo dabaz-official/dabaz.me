@@ -22,7 +22,6 @@ export default function Footer() {
     { name: 'Instagram', href: 'https://instagram.com/dabaz_official' },
     { name: 'LinkedIn', href: 'https://linkedin.com/in/diebold-dai' },
     { name: 'Facebook', href: 'https://www.facebook.com/profile.php?id=100026087412660' },
-    { name: 'Company', href: 'https://cobotrading.com' },
   ];
 
   return (
