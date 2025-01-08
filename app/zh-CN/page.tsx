@@ -1,5 +1,55 @@
+import { Metadata } from 'next'
 import Link from 'next/link'
+
 import { NameTransition } from 'app/name'
+
+export const metadata: Metadata = {
+  title: {
+    default: 'DabAZ - 视角卓越的企业家',
+    template: '%s - DabAZ',
+  },
+  description: '你好，我是 Diebold Dai，一位热衷于将愿景转化为蓬勃现实的企业家。',
+  keywords: [
+    '6-figure business owner', 
+    '6位数收入的企业主',
+    '7-figure entrepreneur', 
+    '7位数收入的企业家',
+    'cross-border e-commerce', 
+    '跨境电商',
+    'vision-driven leadership', 
+    '视野驱动的领导者',
+    'self-made entrepreneur', 
+    '自我创业者',
+    'perseverance', 
+    'visionary thinking',
+    '远见卓识', 
+    'adaptability', 
+    'continuous growth', 
+    '持续增长',
+    'customer-centric', 
+    'interdisciplinary innovation', 
+    'white-hat hacker', 
+    '白帽黑客',
+    'creative problem-solving', 
+    'front-end development',
+    '前端开发', 
+    'multi-faceted entrepreneur', 
+    'strategic execution', 
+    'market expansion', 
+    'e-commerce success', 
+    'startup challenges', 
+    'leadership principles',
+    'DabAZ',
+    'Diebold Dai',
+  ],
+  openGraph: {
+    title: 'DabAZ - 视角卓越的企业家',
+    description: '你好，我是 Diebold Dai，一位热衷于将愿景转化为蓬勃现实的企业家。作为一位拥有六位数收入的企业主，我正在努力突破七位数里程碑。我深知，毅力和清晰的愿景是可持续成功的基石。',
+    siteName: 'DabAZ',
+    locale: 'zh_CNS',
+    type: 'website',
+  },
+}
 
 export default function Page() {
   return (
