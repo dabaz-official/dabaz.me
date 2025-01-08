@@ -1,11 +1,20 @@
+import Link from 'next/link'
 import { NameTransition } from './name'
 
 export default function Page() {
   return (
     <div>
       <NameTransition />
+      <div className='flex text-center gap-x-6'>
+        <Link href="/zh-CN" className='text-md hover:underline hover:underline-offset-1 transition-all duration-300'>
+          中文 ↗
+        </Link>
+        <a href='https://notion.dabaz.me' target='_blank' className='text-md hover:underline hover:underline-offset-1 transition-all duration-300'>
+          Notion Templates ↗
+        </a>
+      </div>
       <p className="my-6 text-lg">
-        {`Hi, I’m Diebold Dai, an entrepreneur passionate about turning visions into thriving realities. As a 6-figure business owner striving to reach the 7-figure milestone, I’ve learned that perseverance and a clear vision are the cornerstones of sustainable success.`}
+        Hi, I’m Diebold Dai, an entrepreneur passionate about turning visions into thriving realities. As a 6-figure business owner striving to reach the 7-figure milestone, I’ve learned that perseverance and a clear vision are the cornerstones of sustainable success.
       </p>
       <p className="my-6 text-lg">
         With a foundation in information security, I’ve built my career across diverse fields, including technology, design, and music, eventually channeling these experiences into entrepreneurship. My journey has been shaped by a commitment to continuous learning and the ability to adapt to ever-changing challenges.
