@@ -9,6 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@formspree/react": "^2.5.1",
     "@headlessui/react": "^2.1.8",
     "@next/mdx": "^15.0.1",
     "@tailwindcss/postcss": "4.0.0-alpha.13",

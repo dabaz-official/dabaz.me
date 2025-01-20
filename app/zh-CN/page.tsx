@@ -56,11 +56,11 @@ export default function Page() {
     <div>
       <NameTransition />
       <div className='flex text-center gap-x-6'>
-        <Link href="/" className='text-md hover:underline hover:underline-offset-1 transition-all duration-300'>
-          English ↗
+        <Link href="/" className='text-md underline underline-offset-1'>
+          English
         </Link>
-        <a href='https://notion.dabaz.me' target='_blank' className='text-md hover:underline hover:underline-offset-1 transition-all duration-300'>
-          Notion 模版 ↗
+        <a href='https://notion.dabaz.me' target='_blank' className='text-md underline underline-offset-1'>
+          Notion 模版
         </a>
       </div>
       <p className="my-6 text-lg">
@@ -70,13 +70,13 @@ export default function Page() {
         凭借信息安全的基础，我在技术、设计和音乐等多个领域积累了经验，最终将这些经验融入到创业之中。我的旅程一直秉承着持续学习和适应不断变化的挑战的理念。
       </p>
       <p className="my-6 text-lg">
-        目前，我领导一家<a href="https://cobotrading.com" target="_blank" className="underline underline-offset-1 hover:text-indigo-600 transition duration-300">贸易公司</a>，专注于向北美市场提供高质量的产品。我的使命是创建有影响力的企业，不仅实现财务成功，还能为全球客户和合作伙伴创造价值。
+        目前，我领导一家<a href="https://cobotrading.com" target="_blank" className="underline underline-offset-1 hover:text-black transition duration-300">贸易公司</a>，专注于向北美市场提供高质量的产品。我的使命是创建有影响力的企业，不仅实现财务成功，还能为全球客户和合作伙伴创造价值。
       </p>
       <p className="my-6 text-lg">
         除了商业，我还是一名黑客、音乐人、设计师和开发者，将创意和技术专长融入到每一个我参与的项目中。无论是设计无缝的用户体验，还是创作音乐，我都相信跨学科的思维能够激发创新的力量。
       </p>
       <p className="my-6 text-lg">
-        让我们<a href="mailto:hi@dabaz.me" className="underline underline-offset-1 hover:text-green-600 transition duration-300">联系</a>起来，共同探索如何建设更美好的未来。
+        让我们<a href="/zh-CN/connect" className="underline underline-offset-1 hover:text-black transition duration-300">联系</a>起来，共同探索如何建设更美好的未来。
       </p>
     </div>
   )

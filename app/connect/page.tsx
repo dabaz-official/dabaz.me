@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 
 import { NameTransitionConnect } from "./name";
+import ContactForm from "./form";
 
 export const metadata: Metadata = {
   title: "Connect",
@@ -11,12 +12,7 @@ export default function Page() {
   return (
     <div>
       <NameTransitionConnect />
-      <p className="my-6 text-lg">
-        Hi, it’s Diebold Dai (DabAZ) again. Thanks for your interest.
-      </p>
-      <p className="my-6 text-lg">
-        The contact form is currently unavailable. You can contact me via <a href="mailto:hi@dabaz.me" className="underline underline-offset-1 hover:text-blue-700 transition duration-300">Email</a>.
-      </p>
+      <ContactForm />
     </div>
   )
 }
