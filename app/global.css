@@ -2,7 +2,7 @@
 
 html,
 body {
-  font-family: "SF Pro SC", "SF Pro Text", "SF Pro Icons", "PingFang SC", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  font-family: "SF Pro SC", sans-serif;
   min-width: 360px;
   background-color: #fff;
   user-select: none;
