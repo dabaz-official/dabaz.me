@@ -7,17 +7,17 @@ import { NavBar } from "@/components/ui/Navbar"
 import { siteConfig } from "./siteConfig"
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://yoururl.com"),
+  metadataBase: new URL("https://dabaz.me"),
   title: siteConfig.name,
   description: siteConfig.description,
-  keywords: ["Marketing", "Database", "Software"],
+  keywords: ["DabAZ", "Diebold Dai", "hacker", "musician", "DJ", "rapper", "entrepreneur", "designer", "developer"],
   authors: [
     {
-      name: "yourname",
-      url: "",
+      name: "DabAZ",
+      url: "https://dabaz.me",
     },
   ],
-  creator: "yourname",
+  creator: "DabAZ",
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteConfig.name,
     description: siteConfig.description,
-    creator: "@yourname",
+    creator: "@dabaz_official",
   },
   icons: {
     icon: "/favicon.ico",
