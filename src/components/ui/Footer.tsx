@@ -1,8 +1,8 @@
 import {
   RiGithubFill,
-  RiSlackFill,
+  RiInstagramLine,
+  RiTiktokFill,
   RiTwitterXFill,
-  RiYoutubeFill,
 } from "@remixicon/react"
 import Link from "next/link"
 import { DabAZLogo } from "../../../public/DabAZLogo"
@@ -148,14 +148,14 @@ const Footer = () => {
           >
             <DabAZLogo className="ml-2 w-20" />
 
-            <span className="sr-only">Solar Logo (go home)</span>
+            <span className="sr-only">DabAZ Logo (go home)</span>
           </Link>
 
           <div>
             <div className="mt-4 flex items-center">
               {/* Social Icons */}
               <Link
-                href="#"
+                href="https://x.com/dabaz_official"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rounded-sm p-2 text-gray-700 transition-colors duration-200 hover:bg-gray-200 hover:text-gray-900"
@@ -163,15 +163,15 @@ const Footer = () => {
                 <RiTwitterXFill className="size-5" />
               </Link>
               <Link
-                href="#"
+                href="https://instagram.com/dabaz_official"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rounded-sm p-2 text-gray-700 transition-colors duration-200 hover:bg-gray-200 hover:text-gray-900"
               >
-                <RiYoutubeFill className="size-5" />
+                <RiInstagramLine className="size-5" />
               </Link>
               <Link
-                href="#"
+                href="https://github.com/dabaz-official"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rounded-sm p-2 text-gray-700 transition-colors duration-200 hover:bg-gray-200 hover:text-gray-900"
@@ -179,16 +179,16 @@ const Footer = () => {
                 <RiGithubFill className="size-5" />
               </Link>
               <Link
-                href="#"
+                href="https://tiktok.com/@dabaz_official"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rounded-sm p-2 text-gray-700 transition-colors duration-200 hover:bg-gray-200 hover:text-gray-900"
               >
-                <RiSlackFill className="size-5" />
+                <RiTiktokFill className="size-5" />
               </Link>
             </div>
             <div className="ml-2 hidden text-sm text-gray-700 lg:inline">
-              &copy; {CURRENT_YEAR} Solar Technologies, Inc.
+              &copy; {CURRENT_YEAR} DabWave.
             </div>
           </div>
         </div>
@@ -213,6 +213,10 @@ const Footer = () => {
             </ul>
           </div>
         ))}
+
+        <div className="mt-10 ml-2 inline text-sm text-gray-700 lg:hidden">
+          &copy; {CURRENT_YEAR} DabWave.
+        </div>
       </footer>
     </div>
   )
