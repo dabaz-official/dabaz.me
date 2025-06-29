@@ -1,1 +1,0 @@
-This is the repo for my personal website at [dabaz.me](https://dabaz.me).
