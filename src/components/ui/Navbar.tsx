@@ -30,23 +30,25 @@ export function NavBar() {
           </Link>
           <nav className="hidden sm:block md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:transform">
             <div className="flex items-center gap-10 font-medium">
-              <Link className="px-2 py-1 text-gray-900" href="#solutions">
-                Solutions
+              <Link className="px-2 py-1 text-gray-900" href="/blog">
+                Blog
               </Link>
-              <Link className="px-2 py-1 text-gray-900" href="#farm-management">
-                Farm Management
-              </Link>
-              <Link className="px-2 py-1 text-gray-900" href="#solar-analytics">
-                Analytics
+              <Link className="px-2 py-1 text-gray-900" href="/links">
+                Links
               </Link>
             </div>
           </nav>
-          <Button
-            variant="secondary"
-            className="hidden h-10 font-semibold sm:block"
+          <a
+            href="mailto:hi@dabaz.me"
+            className="cursor-pointer"
           >
-            Get a quote
-          </Button>
+            <Button
+              variant="secondary"
+              className="hidden h-10 font-semibold sm:block cursor-pointer"
+            >
+              Contact me
+            </Button>
+          </a>
           <Button
             onClick={() => setOpen(!open)}
             variant="secondary"
@@ -74,18 +76,21 @@ export function NavBar() {
         >
           <ul className="space-y-4 font-medium">
             <li onClick={() => setOpen(false)}>
-              <Link href="#solutions">Solutions</Link>
+              <Link href="/blog">
+                Blog
+              </Link>
             </li>
             <li onClick={() => setOpen(false)}>
-              <Link href="#farm-management">Farm Management</Link>
+              <Link href="/links">
+                Links
+              </Link>
             </li>
             <li onClick={() => setOpen(false)}>
-              <Link href="#solar-analytics">Analytics</Link>
+              <a href="mailto:hi@dabaz.me">
+                Contact me
+              </a>
             </li>
           </ul>
-          <Button variant="secondary" className="text-lg">
-            Get a quote
-          </Button>
         </nav>
       </div>
     </header>
