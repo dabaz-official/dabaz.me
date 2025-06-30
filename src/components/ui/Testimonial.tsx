@@ -28,7 +28,7 @@ export default function Testimonial() {
                 DabAZ revolutionized our online presence by building a dynamic website.
               </strong>{" "}
               <span className="text-gray-900/70">
-                This platform showcases their sustainable produce, streamlines sales, and boosts revenue with seamless user experience and real-time inventory updates.
+                This platform showcases our sustainable produce, streamlines sales, and boosts revenue with seamless user experience and real-time inventory updates.
               </span>
             </p>
           </blockquote>
