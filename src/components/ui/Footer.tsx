@@ -9,6 +9,7 @@ import { DabAZLogo } from "../../../public/DabAZLogo"
 const CURRENT_YEAR = new Date().getFullYear()
 
 const Footer = () => {
+  {/*
   const sections = {
     solutions: {
       title: "Solutions",
@@ -58,6 +59,7 @@ const Footer = () => {
       ],
     },
   }
+  */}
 
   return (
     <div className="px-4 xl:px-0">
