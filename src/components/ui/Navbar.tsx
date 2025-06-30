@@ -28,6 +28,18 @@ export function NavBar() {
             <span className="sr-only">Solar Tech Logo</span>
             <DabAZLogo className="w-22" />
           </Link>
+          <nav className="hidden sm:block md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:transform">
+            {/*
+            <div className="flex items-center gap-10 font-medium">
+              <Link className="px-2 py-1 text-gray-900" href="/blog">
+                Blog
+              </Link>
+              <Link className="px-2 py-1 text-gray-900" href="/links">
+                Links
+              </Link>
+            </div>
+            */}
+          </nav>
           <Link
             href="mailto:hi@dabaz.me"
             className="cursor-pointer"
@@ -39,7 +51,51 @@ export function NavBar() {
               Contact me
             </Button>
           </Link>
+          {/*
+          <Button
+            onClick={() => setOpen(!open)}
+            variant="secondary"
+            className="p-1.5 sm:hidden"
+            aria-label={open ? "CloseNavigation Menu" : "Open Navigation Menu"}
+          >
+            {!open ? (
+              <RiMenuFill
+                className="size-6 shrink-0 text-gray-900"
+                aria-hidden
+              />
+            ) : (
+              <RiCloseFill
+                className="size-6 shrink-0 text-gray-900"
+                aria-hidden
+              />
+            )}
+          </Button>
+          */}
         </div>
+        <nav
+          className={cx(
+            "mt-6 flex flex-col gap-6 text-lg ease-in-out will-change-transform sm:hidden",
+            open ? "" : "hidden",
+          )}
+        >
+          <ul className="space-y-4 font-medium">
+            <li onClick={() => setOpen(false)}>
+              <Link href="/blog">
+                Blog
+              </Link>
+            </li>
+            <li onClick={() => setOpen(false)}>
+              <Link href="/links">
+                Links
+              </Link>
+            </li>
+            <li onClick={() => setOpen(false)}>
+              <a href="mailto:hi@dabaz.me">
+                Contact me
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </header>
   )
