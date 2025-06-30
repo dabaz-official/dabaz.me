@@ -25,12 +25,10 @@ export default function Testimonial() {
           <blockquote className="relative max-w-2xl text-xl leading-relaxed tracking-tight text-gray-900 md:text-2xl lg:text-3xl">
             <p className="before:absolute before:top-0 before:right-full before:content-['“'] after:text-gray-900/70 after:content-['”']">
               <strong className="font-semibold">
-                Solar transformed our environmental monitoring capabilities.
+                DabAZ revolutionized our online presence by building a dynamic website.
               </strong>{" "}
               <span className="text-gray-900/70">
-                Their autonomous network provides real-time data on forest
-                health, wildlife patterns, and ecosystem changes with
-                unprecedented precision and efficiency.
+                This platform showcases their sustainable produce, streamlines sales, and boosts revenue with seamless user experience and real-time inventory updates.
               </span>
             </p>
           </blockquote>
@@ -50,7 +48,7 @@ export default function Testimonial() {
               Dr. Sarah Miller
             </div>
             <div className="text-sm text-[#C33621]/80">
-              Director of Conservation Technologies
+              Director of PureSoil Ventures
             </div>
           </div>
         </div>
