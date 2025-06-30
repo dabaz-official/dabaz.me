@@ -20,25 +20,27 @@ export function CallToAction() {
             <Button asChild className="text-md">
               <Link href="mailto:hi@dabaz.me">Contact me</Link>
             </Button>
+            {/*
             <Button asChild className="text-md" variant="secondary">
               <Link href="#">Learn more</Link>
             </Button>
+            */}
           </div>
         </div>
         <div className="relative isolate rounded-xl sm:col-span-4 sm:h-full">
           <Image
             aria-hidden
-            alt="Farm with vehicles"
-            src="/images/farm-footer.webp"
-            height={1000}
-            width={1000}
+            alt="Orange liquid"
+            src="/images/cta.webp"
+            height={663}
+            width={994}
             className="absolute inset-0 -z-10 rounded-2xl blur-xl"
           />
           <Image
-            alt="Farm with vehicles"
-            src="/images/farm-footer.webp"
-            height={1000}
-            width={1000}
+            alt="Orange liquid"
+            src="/images/cta.webp"
+            height={663}
+            width={994}
             className="relative z-10 rounded-2xl"
           />
         </div>
