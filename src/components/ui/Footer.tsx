@@ -146,7 +146,7 @@ const Footer = () => {
             href="/"
             className="flex items-center font-medium text-gray-700 select-none sm:text-sm"
           >
-            <DabAZLogo className="ml-2 w-20" />
+            <DabAZLogo className="ml-2 mt-4 w-20" />
 
             <span className="sr-only">DabAZ Logo (go home)</span>
           </Link>
@@ -193,26 +193,28 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Footer Sections */}
+        {/* Footer Sections 
         {Object.entries(sections).map(([key, section]) => (
-          <div key={key} className="mt-10 min-w-44 pl-2 lg:mt-0 lg:pl-0">
-            <h3 className="mb-4 font-medium text-gray-900 sm:text-sm">
-              {section.title}
-            </h3>
-            <ul className="space-y-4">
-              {section.items.map((item) => (
-                <li key={item.label} className="text-sm">
-                  <Link
-                    href={item.href}
-                    className="text-gray-600 transition-colors duration-200 hover:text-gray-900"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+          <div key={key} className="mt-10 min-w-44 pl-2 lg:mt-0 lg:pl-0">
+            <h3 className="mb-4 font-medium text-gray-900 sm:text-sm">
+              {section.title}
+            </h3>
+            <ul className="space-y-4">
+              {section.items.map((item) => (
+                <li key={item.label} className="text-sm">
+                  <Link
+                    href={item.href}
+                    className="text-gray-600 transition-colors duration-200 hover:text-gray-900"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        */}
+        
 
         <div className="mt-10 ml-2 inline text-sm text-gray-700 lg:hidden">
           &copy; {CURRENT_YEAR} DabWave.
