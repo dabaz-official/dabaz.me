@@ -12,7 +12,7 @@ export function Hero() {
         </h1>
         <p className="mt-5 max-w-xl text-center text-base text-balance text-gray-700 sm:mt-8 sm:text-xl">
           <FadeSpan>I like to make music that moves people,</FadeSpan>{" "}
-          <FadeSpan>build things that make people's lives easier,</FadeSpan>{" "}
+          <FadeSpan>build things that make people&apos;s lives easier,</FadeSpan>{" "}
           <FadeSpan>and strive to make the internet safer.</FadeSpan>
         </p>
         <FadeDiv>

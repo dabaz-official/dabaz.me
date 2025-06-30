@@ -137,7 +137,7 @@ export default function Features() {
             A master of multiple skills and passions
           </p>
           <p className="mt-4 text-balance text-gray-700">
-            Music, my passion since 2017, lets me create soulful melodies. Since 2019, I've been a hacker securing the web. Since 2020, I've designed and developed websites that empower users, a craft I'm proud of.
+            Music, my passion since 2017, lets me create soulful melodies. Since 2019, I&apos;ve been a hacker securing the web. Since 2020, I&apos;ve designed and developed websites that empower users, a craft I&apos;m proud of.
           </p>
         </div>
         <div className="relative col-span-2 flex items-center justify-center overflow-hidden">
@@ -303,7 +303,7 @@ export default function Features() {
             The lowest price for the highest quality
           </p>
           <p className="mt-4 text-balance text-gray-700">
-            Need a website, music track, or graphic design? I craft solutions that inspire and empower. I'm available for freelance projects at a fair price—let's bring your ideas to life!
+            Need a website, music track, or graphic design? I craft solutions that inspire and empower. I&apos;m available for freelance projects at a fair price—let&apos;s bring your ideas to life!
           </p>
         </div>
         <div className="relative col-span-2 flex items-center justify-center overflow-hidden">
