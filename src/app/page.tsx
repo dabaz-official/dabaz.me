@@ -19,13 +19,6 @@ export default function Home() {
         <Testimonial />
       </div>
       <FeatureDivider className="my-16 max-w-6xl" />
-      <div className="px-4 xl:px-0">
-        <Map />
-      </div>
-      <FeatureDivider className="my-16 max-w-6xl" />
-      <div className="mt-12 mb-40 px-4 xl:px-0">
-        <SolarAnalytics />
-      </div>
       <div className="mt-10 mb-40 px-4 xl:px-0">
         <CallToAction />
       </div>
