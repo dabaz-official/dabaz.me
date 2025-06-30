@@ -3,9 +3,7 @@
 import { siteConfig } from "@/app/siteConfig"
 import useScroll from "@/lib/useScroll"
 import { cx } from "@/lib/utils"
-{/*
 import { RiCloseFill, RiMenuFill } from "@remixicon/react"
-*/}
 import Link from "next/link"
 import React from "react"
 import { DabAZLogo } from "../../../public/DabAZLogo"
