@@ -1,47 +1,74 @@
-# Tremor – Solar
+# Nikola Tesla Portfolio
+Nikola Tesla Portfolio is an Astro template built with of course Astro 5.7, React 19 and TailwindCSS 4
 
-`Solar` is a website template from [Tremor](https://tremor.so). It's built
-using [`Tremor`](https://tremor.so/docs/getting-started/installation) and
-[Next.js](https://nextjs.org).
+![Nikola Tesla Astro Portfolio](/public/social-image.jpg "Nikola Tesla Portfolio")
 
-## Getting started
+## Getting Started
+Clone Repository
+```sh
+git clone https://github.com/iann-mathaiya/nikola-tesla.git
+```
 
-1. Install the dependencies. We recommend using pnpm. If you want to use `npm`,
-   just replace `pnpm` with `npm`.
-
-```bash
+Install Dependencies
+```sh
 pnpm install
 ```
 
-2. Then, start the development server:
-
-```bash
+Development
+```sh
 pnpm run dev
 ```
 
-3. Visit [http://localhost:3000](http://localhost:3000) in your browser to view
-   the template.
+Build
+```sh
+pnpm run build
+```
 
-## Notes
+Preview
+```sh
+pnpm run preview
+```
 
-This project uses
-[`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to
-automatically optimize and load Inter, a custom Google Font.
+## Project Structure
 
-This project uses
-[`Tremor`](https://raw.tremor.so/docs/getting-started/installation) components
-for the UI.
+Inside of your Astro project, you'll see the following folders and files:
+
+```text
+/
+├── public/
+│   └── favicon.svg
+│   └── social-image.svg
+├── src/
+│   ├── actions/
+│   │   └── # Astro server actions
+│   ├── assets/
+│   │   └── # Images that are transformed, optimized and bundled by Astro 
+│   ├── components/
+│   │   └── # Astro and React components
+│   ├── layouts/
+│   │   └── RootLayout.astro
+│   └── pages/
+│   │   └── blog/
+│   │   │   └── index.astro
+│   │   │   └── [...slug].astro
+│   │   └── about.astro
+│   │   └── contact.astro
+│   │   └── index.astro
+│   │   └── projects.astro
+│   └── styles/
+│   │   └── global.css
+└── .gitignore
+└── astro.config.mjs
+└── package.json
+└── tsconfig.json
+```
+
+## Deployment
+The site is configured for deployment on Vercel, but with slight modifications it can be deployed to any hosting service.
 
 ## License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-This site template is a commercial product and is licensed under the
-[Tremor License](https://blocks.tremor.so/license).
-
-## Learn more
-
-For a deeper understanding of the technologies used in this template, check out
-the resources listed below:
-
-- [Tailwind CSS v4 beta](https://tailwindcss.com) - A utility-first CSS framework
-- [Next.js](https://nextjs.org/docs) - Next.js documentation
-- [Radix UI](https://www.radix-ui.com) - Radix UI Website
+## ⛔️ Changes
+The template also uses [React Paper Shaders](https://github.com/paper-design/shaders). 
+The Paper Team will be publishing [breaking changes](https://github.com/paper-design/shaders?tab=readme-ov-file#getting-started) to the Shaders library under 0.0.x versioning so check back to get updates when they release Paper Shaders v1.
