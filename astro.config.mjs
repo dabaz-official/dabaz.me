@@ -16,12 +16,42 @@ export default defineConfig({
   integrations: [react()],
 
   experimental: {
-    fonts: [{
-      provider: fontProviders.google(),
-      name: "Geist",
-      cssVariable: "--font-geist",
-      fallbacks: ["Inter", "sans-serif"],
-    }]
+    fonts: [
+      {
+        provider: "local",
+        name: "Geist",
+        cssVariable: "--font-geist",
+        variants: [
+          {
+            weight: "100 900",
+            style: "normal",
+            src: ["./src/assets/fonts/Geist[wght].woff2"]
+          },
+          {
+            weight: "100 900",
+            style: "italic",
+            src: ["./src/assets/fonts/Geist-Italic[wght].woff2"]
+          }
+        ]
+      },
+      {
+        provider: "local",
+        name: "Geist Mono",
+        cssVariable: "--font-geist-mono",
+        variants: [
+          {
+            weight: "100 900",
+            style: "normal",
+            src: ["./src/assets/fonts/GeistMono[wght].woff2"]
+          },
+          {
+            weight: "100 900",
+            style: "italic",
+            src: ["./src/assets/fonts/GeistMono-Italic[wght].woff2"]
+          }
+        ]
+      }
+    ]
   },
 
   adapter: vercel()
