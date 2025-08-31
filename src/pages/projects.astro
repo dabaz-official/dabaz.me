@@ -2,26 +2,18 @@
 import { Image } from 'astro:assets';
 import H1 from "../components/h1.astro";
 import InfoLayout from "../layouts/InfoLayout.astro";
-import ACGenerator from "../assets/ac-generator.jpg";
+import Cyclic from "../assets/cyclic.jpg";
 import FluidPropulsion from "../assets/fluid-propulsion.jpg";
 import ElectricMotor from "../assets/electro-magnetic-motor.jpg";
 
 const projects = [
      {
-          title: "Web Application Portfolio",
-          description: "Modern web applications built with React, Next.js, and cutting-edge technologies",
-          image: ACGenerator
+          title: "Cyclic",
+          description: "A modern web note-taking application built with React, Next.js, and cutting-edge technologies",
+          image: Cyclic,
+          link: "https://cyclic.dabaz.me"
      },
-     {
-          title: "API Development Suite",
-          description: "Scalable backend services and APIs designed for performance and reliability.",
-          image: FluidPropulsion
-     },
-     {
-          title: "UI/UX Design Systems",
-          description: "Beautiful and intuitive user interfaces with modern design principles.",
-          image: ElectricMotor
-     }];
+];
 ---
 
 <InfoLayout>
@@ -31,11 +23,13 @@ const projects = [
           <ul class="mt-4 sm:mt-12 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-16 sm:gap-8">
                {projects.map((project) => (
                     <li>
-                         <Image src={project.image} alt={project.title} class="aspect-[1/1.33] object-center object-cover rounded-lg shadow-lg mb-4 sm:mb-0 sm:mr-4" />
-                         <div class="p-1 sm:p-2">
-                              <h2 class="text-base text-zinc-100">{project.title}</h2>
-                              <p class="text-sm text-zinc-400 text-balance">{project.description}</p>
-                         </div>
+                         <a href={project.link} target="_blank">
+                              <Image src={project.image} alt={project.title} class="object-center object-cover rounded-lg shadow-lg mb-4 sm:mb-0 sm:mr-4" />
+                              <div class="p-1 sm:p-2">
+                                   <h2 class="text-base text-zinc-100">{project.title}</h2>
+                                   <p class="text-sm text-zinc-400 text-balance">{project.description}</p>
+                              </div>
+                         </a>
                     </li>
                ))}
           </ul>
