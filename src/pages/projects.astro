@@ -2,14 +2,19 @@
 import { Image } from 'astro:assets';
 import H1 from "../components/h1.astro";
 import InfoLayout from "../layouts/InfoLayout.astro";
-import Cyclic from "../assets/cyclic.jpg";
-import FluidPropulsion from "../assets/fluid-propulsion.jpg";
-import ElectricMotor from "../assets/electro-magnetic-motor.jpg";
+import DabMusic from "../assets/projects/dabmusic.jpg";
+import Cyclic from "../assets/projects/cyclic.jpg";
 
 const projects = [
      {
+          title: "DabMusic",
+          description: "A music app",
+          image: DabMusic,
+          link: "https://music.dabaz.me"
+     },
+     {
           title: "Cyclic",
-          description: "A modern web note-taking application built with React, Next.js, and cutting-edge technologies",
+          description: "A note-taking app",
           image: Cyclic,
           link: "https://cyclic.dabaz.me"
      },
