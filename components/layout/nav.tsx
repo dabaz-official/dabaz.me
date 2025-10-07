@@ -1,45 +1,80 @@
-"use client";
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { Menu, X } from 'lucide-react';
 
 import DabAZ from '@dabaz/app/images/dabaz-256w.jpg'
-import { MenuIcon, XIcon } from 'lucide-react';
-
-const navLinkClassName = "text-label-18 font-medium text-gray-light-10 dark:text-gray-dark-10 tracking-tight hover:bg-gray-light-2 dark:hover:bg-gray-dark-2 px-2 py-1 rounded-xl transition duration-200 active:bg-gray-light-3 dark:active:bg-gray-dark-3";
+import { MobileLink, NavLink } from '@dabaz/components/ui/nav-link';
 
 const MobileMenu = () => {
   const [open, setOpen] = useState(false);
+  const containerVariants = {
+    hidden: { opacity: 0, y: -4 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { when: 'beforeChildren', staggerChildren: 0.02, delayChildren: 0.02 }
+    }
+  };
+  const itemVariants = {
+    hidden: { opacity: 0, y: -6 },
+    visible: { opacity: 1, y: 0 }
+  };
 
   return (
     <div className="relative flex items-center">
       <button
         aria-label={open ? 'Close menu' : 'Open menu'}
-        className="p-1.5 hover:bg-gray-light-1 dark:hover:bg-gray-dark-1 rounded transition duration-200 active:bg-gray-light-2 dark:active:bg-gray-dark-2"
+        className="relative z-[70] p-1.5 hover:bg-gray-light-1 dark:hover:bg-gray-dark-1 rounded transition duration-200 active:bg-gray-light-2 dark:active:bg-gray-dark-2 cursor-pointer"
         onClick={() => setOpen(!open)}
       >
         {open ? (
-          <XIcon className="w-5 h-5 text-gray-light-10 dark:text-gray-dark-10" />
+          <X className="w-5 h-5 text-gray-light-10 dark:text-gray-dark-10" />
         ) : (
-          <MenuIcon className="w-5 h-5 text-gray-light-10 dark:text-gray-dark-10" />
+          <Menu className="m-0.5 w-4 h-4 text-gray-light-10 dark:text-gray-dark-10" />
         )}
       </button>
 
-      {open && (
-        <div className="fixed inset-0 z-[60] bg-black/80" onClick={() => setOpen(false)}>
-          <div className="absolute inset-x-0 top-[56px] flex flex-col items-center space-y-6 p-6" onClick={(e) => e.stopPropagation()}>
-            <Link href="/blog" className={navLinkClassName} onClick={() => setOpen(false)}>
-              Blog
-            </Link>
-            <Link href="/about" className={navLinkClassName} onClick={() => setOpen(false)}>
-              About
-            </Link>
-            <Link href="/contact" className={navLinkClassName} onClick={() => setOpen(false)}>
-              Contact
-            </Link>
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            key="mobile-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] bg-bg-light-1 dark:bg-bg-dark-1 backdrop-blur-sm"
+            onClick={() => setOpen(false)}
+          >
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={containerVariants}
+              className="absolute inset-x-0 top-[3.5rem] flex flex-col items-start space-y-4 p-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <motion.div variants={itemVariants}>
+                <MobileLink href="/blog">
+                  Blog
+                </MobileLink>
+              </motion.div>
+              <motion.div variants={itemVariants}>
+                <MobileLink href="/about">
+                  About
+                </MobileLink>
+              </motion.div>
+              <motion.div variants={itemVariants}>
+                <MobileLink href="/contact">
+                  Contact
+                </MobileLink>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
@@ -47,7 +82,7 @@ const MobileMenu = () => {
 const Navbar = () => {
   return (
     <nav aria-label="Global" className="absolute inset-x-0 top-0 z-50 bg-bg-light-1/60 dark:bg-bg-dark-1/60 backdrop-blur-3xl border-b border-bg-light-1 dark:border-bg-dark-1">
-      <div className="mx-auto flex max-w-3xl items-center justify-between p-4 lg:px-8">
+      <div className="mx-auto flex max-w-3xl items-center justify-between p-6 lg:px-8">
         <div className="flex space-x-4 items-center">
           <div className="w-8 h-8 bg-bg-light-1/60 dark:bg-bg-dark-1/60 rounded-full">
             <Image
@@ -63,15 +98,15 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="hidden sm:flex sm:space-x-4 lg:space-x-6 items-center">
-          <Link href="/blog" className={navLinkClassName}>
+          <NavLink href="/blog">
             Blog
-          </Link>
-          <Link href="/about" className={navLinkClassName}>
+          </NavLink>
+          <NavLink href="/about">
             About
-          </Link>
-          <Link href="/contact" className={navLinkClassName}>
+          </NavLink>
+          <NavLink href="/contact">
             Contact
-          </Link>
+          </NavLink>
         </div>
         <div className="flex sm:hidden">
           <MobileMenu />
