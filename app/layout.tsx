@@ -35,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} ${geistMono.variable} antialiased bg-bg-light-1 dark:bg-bg-dark-1`}
+        className={`${inter.className} ${geistMono.variable} antialiased bg-bg-light-2 dark:bg-bg-dark-2`}
       >
         <Navbar />
         {children}
