@@ -1,10 +1,12 @@
 const Container = ({
-  children
+  children,
+  className,
 }: {
   children: React.ReactNode
+  className?: string
 }) => {
   return (
-    <div className="mx-auto flex max-w-3xl items-center justify-between px-6 lg:px-8">
+    <div className={`mx-auto flex max-w-3xl items-center justify-between ${className || ''}`}>
       {children}
     </div>
   );
