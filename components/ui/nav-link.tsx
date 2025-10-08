@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-const navLinkClassName = "text-label-18 font-medium text-gray-light-10 dark:text-gray-dark-10 tracking-tight hover:bg-gray-light-2 dark:hover:bg-gray-dark-2 px-2 py-1 rounded-xl transition duration-200 active:bg-gray-light-3 dark:active:bg-gray-dark-3";
+const navLinkClassName = "text-copy-16 text-gray-light-10 dark:text-gray-dark-10 tracking-tight hover:bg-gray-light-2 dark:hover:bg-gray-dark-2 px-2 py-1 rounded-xl transition duration-200 active:bg-gray-light-3 dark:active:bg-gray-dark-3";
 const mobileLinkClassName = "text-label-18 font-semibold text-gray-light-10 dark:text-gray-dark-10 tracking-tight";
 
 const NavLink = ({
