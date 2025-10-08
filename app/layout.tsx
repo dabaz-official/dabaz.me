@@ -4,13 +4,9 @@ import { ThemeProvider } from 'next-themes';
 
 import '@dabaz/styles/globals.css';
 import '@dabaz/styles/tailwind.css';
+import '@dabaz/styles/fonts/inter.css'
 import Navbar from '@dabaz/components/layout/nav';
 import Footer from '@dabaz/components/layout/footer';
-
-const inter = Inter({
-  variable: '--font-inter',
-  subsets: ['latin']
-});
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
@@ -37,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className} ${geistMono.variable} antialiased bg-bg-light-2 dark:bg-bg-dark-2`}
+        className={`${geistMono.variable} antialiased bg-bg-light-2 dark:bg-bg-dark-2`}
       >
         <ThemeProvider 
           defaultTheme='system'
