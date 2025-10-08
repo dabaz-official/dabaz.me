@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, Geist_Mono } from 'next/font/google';
+import { ThemeProvider } from 'next-themes';
+
 import '@dabaz/styles/globals.css';
 import '@dabaz/styles/tailwind.css';
 import Navbar from '@dabaz/components/layout/nav';
@@ -33,13 +35,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${inter.className} ${geistMono.variable} antialiased bg-bg-light-2 dark:bg-bg-dark-2`}
       >
-        <Navbar />
-        {children}
-        <Footer />
+        <ThemeProvider 
+          defaultTheme='system'
+          enableSystem={true}
+        >
+          <Navbar />
+          {children}
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );
