@@ -6,8 +6,9 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Menu, X } from 'lucide-react';
 
 import DabAZ from '@dabaz/app/images/dabaz-256w.jpg'
-import { MobileLink, NavLink } from '@dabaz/components/ui/nav-link';
 import Container from '@dabaz/components/layout/container';
+import Link from 'next/link';
+import Button from '../ui/button';
 
 const navigation = [
   { name: 'About', href: '/about' },
@@ -34,7 +35,10 @@ const Navbar = () => {
     <nav aria-label="Global" className="absolute inset-x-0 top-0 z-50 bg-bg-light-1/60 dark:bg-bg-dark-1/60 backdrop-blur-3xl border-b border-bg-light-1 dark:border-bg-dark-1">
       <Container className="p-6 lg:px-8">
         <div className="flex space-x-4 items-center">
-          <div className="w-8 h-8 bg-bg-light-1/60 dark:bg-bg-dark-1/60 rounded-full z-[70]">
+          <Link
+            href="/"
+            className="w-8 h-8 bg-bg-light-1/60 dark:bg-bg-dark-1/60 rounded-full z-[70]"
+          >
             <Image
               src={DabAZ}
               alt="DabAZ"
@@ -42,16 +46,18 @@ const Navbar = () => {
               height={256}
               className="rounded-full"
             />
-          </div>
+          </Link>
         </div>
         <div className="hidden sm:flex sm:gap-x-4 lg:gap-x-6 items-center">
           {navigation.map((item) => (
-            <NavLink
+            <Link
               key={item.name}
               href={item.href}
             >
-              {item.name}
-            </NavLink>
+              <Button variant="navlink">
+                {item.name}
+              </Button>
+            </Link>
           ))}
         </div>
         <div className="relative flex items-center sm:hidden">
@@ -91,9 +97,11 @@ const Navbar = () => {
                       key={item.name}
                       variants={itemVariants}
                     >
-                      <MobileLink href={item.href}>
-                        {item.name}
-                      </MobileLink>
+                      <Link href={item.href}>
+                        <Button variant="mobilelink">
+                          {item.name}
+                        </Button>
+                      </Link>
                     </motion.div>
                   ))}
                 </motion.div>
