@@ -32,7 +32,7 @@ const Navbar = () => {
   };
   
   return (
-    <nav aria-label="Global" className="absolute inset-x-0 top-0 z-50 bg-bg-light-1/60 dark:bg-bg-dark-1/60 backdrop-blur-3xl border-b border-bg-light-1 dark:border-bg-dark-1">
+    <nav aria-label="Global" className="absolute inset-x-0 top-0 z-50 bg-bg-light-2/60 dark:bg-bg-dark-2/60 backdrop-blur-3xl border-b border-bg-light-2 dark:border-bg-dark-2">
       <Container className="p-6 lg:px-8">
         <div className="flex space-x-4 items-center">
           <Link

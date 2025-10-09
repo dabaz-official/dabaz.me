@@ -25,7 +25,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   link:
     "bg-transparent underline underline-offset-4 text-bg-dark-2 dark:text-bg-light-2",
   navlink:
-    "px-2 py-1 text-copy-16 tracking-tight text-gray-light-10 dark:text-gray-dark-10 hover:bg-gray-light-2 dark:hover:bg-gray-dark-2 active:bg-gray-light-3 dark:active:bg-gray-dark-3",
+    "px-2 py-1 text-copy-16 tracking-tight text-gray-light-10 dark:text-gray-dark-10 hover:bg-gray-light-1 dark:hover:bg-gray-dark-1 active:bg-gray-light-2 dark:active:bg-gray-dark-2",
   mobilelink:
     "text-copy-18 font-semibold text-gray-light-10 dark:text-gray-dark-10 tracking-tight",
 };
