@@ -9,7 +9,7 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} DabAZ. All rights reserved.
           </p>
           <p className="pt-2 text-copy-14 text-gray-light-6 dark:text-gray-dark-6 justify-end text-right">
-            {new Date().getHours()}:{new Date().getMinutes()}
+            {new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })}
           </p>
         </div>
       </Container>
