@@ -1,19 +1,15 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Menu, X } from 'lucide-react';
 
 import DabAZ from '@dabaz/app/images/dabaz-256w.jpg'
 import Container from '@dabaz/components/layout/container';
-import Link from 'next/link';
-import Button from '../ui/button';
-
-const navigation = [
-  { name: 'ABOUT', href: '/about' },
-  { name: 'CONTACT', href: '/contact' },
-]
+import Button from '@dabaz/components/ui/button';
+import { navigation } from '@dabaz/data/navigation';
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -33,15 +29,6 @@ const Navbar = () => {
   return (
     <nav aria-label="Global" className="absolute inset-x-0 top-0 z-50 bg-bg-light-2/60 dark:bg-bg-dark-2/60 backdrop-blur-3xl border-b border-bg-light-2 dark:border-bg-dark-2">
       <Container className="p-6 lg:px-8">
-        <div className="hidden sm:flex sm:gap-x-4 lg:gap-x-6 items-center">
-            <Link
-              href="/about"
-            >
-              <Button variant="navlink">
-                ABOUT
-              </Button>
-            </Link>
-        </div>
         <div className="flex space-x-4 items-center">
           <Link
             href="/"
@@ -57,13 +44,16 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="hidden sm:flex sm:gap-x-4 lg:gap-x-6 items-center">
-          <Link
-            href="/contact"
-          >
-            <Button variant="navlink">
-              CONTACT
-            </Button>
-          </Link>
+          {navigation.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+            >
+              <Button variant="navlink">
+                {item.name}
+              </Button>
+            </Link>
+          ))}
         </div>
         <div className="relative flex items-center sm:hidden">
           <button
