@@ -1,5 +1,8 @@
-"use client";
-import * as React from "react";
+'use client';
+
+import * as React from 'react';
+
+import { cn } from '@dabaz/lib/utils';
 
 type ButtonVariant =
   | "default"
@@ -9,12 +12,8 @@ type ButtonVariant =
   | "navlink"
   | "mobilelink";
 
-function cn(...classes: Array<string | undefined | null | false>) {
-  return classes.filter(Boolean).join(" ");
-}
-
 const baseClasses =
-  "inline-flex items-center justify-center font-medium rounded-xl transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bg-dark-2/20 dark:focus-visible:ring-bg-light-2/30 disabled:pointer-events-none disabled:opacity-50 cursor-pointer";
+  "inline-flex items-center justify-center font-medium rounded-full transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bg-dark-2/20 dark:focus-visible:ring-bg-light-2/30 disabled:pointer-events-none disabled:opacity-50 cursor-pointer";
 
 const variantClasses: Record<ButtonVariant, string> = {
   default:
@@ -25,7 +24,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   link:
     "bg-transparent underline underline-offset-4 text-bg-dark-2 dark:text-bg-light-2",
   navlink:
-    "px-2 py-1 text-copy-16 tracking-tight text-gray-light-10 dark:text-gray-dark-10 hover:bg-gray-light-1 dark:hover:bg-gray-dark-1 active:bg-gray-light-2 dark:active:bg-gray-dark-2",
+    "px-3 py-1 text-copy-16 tracking-tight text-gray-light-10 dark:text-gray-dark-10 hover:bg-gray-light-1 dark:hover:bg-gray-dark-1 active:bg-gray-light-2 dark:active:bg-gray-dark-2",
   mobilelink:
     "text-copy-18 font-semibold text-gray-light-10 dark:text-gray-dark-10 tracking-tight",
 };
