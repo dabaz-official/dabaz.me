@@ -1,20 +1,20 @@
 const projects = [
   {
-    name: 'DabMusic',
+    key: 'DabMusic',
     role: 'Developer',
     image: '/images/projects/dabmusic.webp',
     url: 'https://music.dabaz.me',
     description: 'A music player that plays some unreleased tracks.',
   },
   {
-    name: 'DabSudoku',
+    key: 'DabSudoku',
     role: 'Developer',
     image: '/images/projects/dabsudoku.webp',
     url: 'https://sudoku.dabaz.me',
     description: 'A sudoku game that you can play online.',
   },
   {
-    name: 'Cyclic',
+    key: 'Cyclic',
     role: 'Developer',
     image: '/images/projects/cyclic.webp',
     url: 'https://cyclic.dabaz.me',

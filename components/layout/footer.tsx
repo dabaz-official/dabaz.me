@@ -1,12 +1,16 @@
 import Link from 'next/link';
+import { Globe } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import Container from '@dabaz/components/layout/container';
 import social from '@dabaz/data/social';
 import Button from '@dabaz/components/ui/button';
-import { Globe } from 'lucide-react';
-import { DabAZ } from '../icons';
+import { DabAZ } from '@dabaz/components/icons';
 
 const Footer = () => {
+  const t = useTranslations('Footer');
+  const tSocial = useTranslations('Social');
+
   return (
     <footer aria-label="Footer" className="bg-bg-light-2 dark:bg-bg-dark-1">
       <Container className="px-6 pt-12 pb-6 lg:px-8 flex flex-col">
@@ -22,20 +26,22 @@ const Footer = () => {
               role="list"
               className="flex items-center gap-x-6"
             >
-              {social.footer.map(({ href, label, Icon }) => (
-                <li key={label}>
+              {social.footer.map(({ href, key, Icon }) => (
+                <li key={key}>
                   <Link href={href} target="_blank">
                     <Icon className="h-4.5 w-4.5 text-gray-light-10 hover:text-gray-light-9 dark:text-gray-dark-10 dark:hover:text-gray-dark-9 transition duration-200" />
-                    <p className="sr-only">{label}</p>
+                    <p className="sr-only">{tSocial(key)}</p>
                   </Link>
                 </li>
               ))}
             </ul>
             <Button variant="navlink" className="flex items-center space-x-2 group">
               <Globe className="h-4.5 w-4.5 text-gray-light-10 dark:text-gray-dark-10" />
-              <p className="sr-only">The current language is</p>
+              <p className="sr-only">
+                {t('LanguageSR')}
+              </p>
               <p className="text-copy-14 text-gray-light-10 dark:text-gray-dark-10">
-                English
+                {t('Language')}
               </p>
             </Button>
           </div>

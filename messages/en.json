@@ -1,0 +1,32 @@
+{
+  "Navbar": {
+    "About": "About",
+    "Projects": "Projects",
+    "Contact": "Contact"
+  },
+  "HomePage": {
+    "Heading": "DabAZ",
+    "SubHeading": "Hacker · Musician",
+    "SubHeading2": "Developer · Designer",
+    "Description": "Former hacker. Music-maker. I also design album covers and posters for rappers, craft UIs for developers, and build projects with code.",
+    "Email": "Email",
+    "Projects": "Projects",
+    "ViewAll": "View all",
+    "DabMusic": "A music player that plays some unreleased tracks.",
+    "DabSudoku": "A sudoku game that you can play online."
+  },
+  "Footer": {
+    "Language": "English",
+    "LanguageSR": "The current language is"
+  },
+  "Social": {
+    "Email": "Email",
+    "X": "X",
+    "GitHub": "GitHub",
+    "LinkedIn": "LinkedIn",
+    "Instagram": "Instagram",
+    "TikTok": "TikTok",
+    "YouTube": "YouTube",
+    "Spotify": "Spotify"
+  }
+}

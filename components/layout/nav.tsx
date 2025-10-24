@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Menu, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import DabAZ from '@dabaz/app/images/dabaz-256w.jpg'
 import Container from '@dabaz/components/layout/container';
@@ -13,6 +14,7 @@ import { navigation } from '@dabaz/data/navigation';
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const t = useTranslations('Navbar');
   
   return (
     <nav aria-label="Global" className="absolute inset-x-0 top-0 z-50 bg-bg-light-2/60 dark:bg-bg-dark-2/60 backdrop-blur-3xl border-b border-bg-light-2 dark:border-bg-dark-2">
@@ -34,11 +36,11 @@ const Navbar = () => {
         <div className="hidden sm:flex sm:gap-x-4 lg:gap-x-6 items-center">
           {navigation.map((item) => (
             <Link
-              key={item.name}
+              key={item.key}
               href={item.href}
             >
               <Button variant="navlink">
-                {item.name}
+                {t(item.key)}
               </Button>
             </Link>
           ))}
@@ -78,9 +80,9 @@ const Navbar = () => {
                   onClick={(e) => e.stopPropagation()}
                 >
                   {navigation.map((item) => (
-                    <Link key={item.name} href={item.href}>
+                    <Link key={item.key} href={item.href}>
                       <Button variant="mobilelink">
-                        {item.name}
+                        {t(item.key)}
                       </Button>
                     </Link>
                   ))}
