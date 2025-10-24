@@ -17,7 +17,7 @@ const baseClasses =
 
 const variantClasses: Record<ButtonVariant, string> = {
   default:
-    "px-3 py-2 text-copy-16 bg-bg-dark-2 text-gray-dark-10 hover:bg-gray-dark-2 active:bg-gray-dark-3 dark:bg-bg-light-2 dark:text-gray-light-10 dark:hover:bg-gray-light-2 dark:active:bg-gray-light-3",
+    "px-3 py-2 text-copy-14 lg:text-copy-16 bg-bg-dark-2 text-gray-dark-10 hover:bg-gray-dark-2 active:bg-gray-dark-3 dark:bg-bg-light-2 dark:text-gray-light-10 dark:hover:bg-gray-light-2 dark:active:bg-gray-light-3",
   outline:
     "px-3 py-2 border border-gray-light-4 text-gray-light-10 hover:border-gray-light-5 active:border-gray-light-6 dark:border-gray-dark-4 dark:text-gray-dark-10 dark:hover:border-gray-dark-5 dark:active:border-gray-dark-6",
   ghost: "bg-transparent text-copy-16 hover:text-gray-light-9 dark:hover:text-gray-dark-9",
@@ -26,7 +26,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   navlink:
     "px-3 py-1 text-copy-16 tracking-tight text-gray-light-10 dark:text-gray-dark-10 hover:bg-gray-light-1 dark:hover:bg-gray-dark-1 active:bg-gray-light-2 dark:active:bg-gray-dark-2",
   mobilelink:
-    "text-copy-18 font-semibold text-gray-light-10 dark:text-gray-dark-10 tracking-tight",
+    "text-copy-20 font-semibold text-gray-light-10 dark:text-gray-dark-10 tracking-tight",
 };
 
 export interface ButtonProps
