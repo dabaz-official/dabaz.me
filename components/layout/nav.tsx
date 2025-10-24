@@ -13,18 +13,6 @@ import { navigation } from '@dabaz/data/navigation';
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const containerVariants = {
-    hidden: { opacity: 0, y: -4 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { when: 'beforeChildren', duration: 0.16, staggerChildren: 0.08, delayChildren: 0.08 }
-    }
-  };
-  const itemVariants = {
-    hidden: { opacity: 0, y: -6 },
-    visible: { opacity: 1, y: 0 }
-  };
   
   return (
     <nav aria-label="Global" className="absolute inset-x-0 top-0 z-50 bg-bg-light-2/60 dark:bg-bg-dark-2/60 backdrop-blur-3xl border-b border-bg-light-2 dark:border-bg-dark-2">
@@ -71,33 +59,30 @@ const Navbar = () => {
           <AnimatePresence>
             {open && (
               <motion.div
-                key="mobile-overlay"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="fixed inset-0 z-[60]"
+                aria-label="Mobile menu"
+                role="dialog"
+                aria-modal="true"
+                className="fixed inset-0 z-40 backdrop-blur-2xl bg-bg-light-2/20 dark:bg-bg-dark-2/20"
                 onClick={() => setOpen(false)}
               >
                 <motion.div
-                  initial="hidden"
-                  animate="visible"
-                  exit="hidden"
-                  variants={containerVariants}
-                  className="absolute inset-x-0 top-[3.5rem] flex flex-col items-start space-y-4 p-6 bg-bg-light-2 dark:bg-bg-dark-2"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2, delay: 0.1 }}
+                  className="absolute inset-x-0 top-[3.5rem] flex flex-col items-start gap-4 p-6 bg-bg-light-2 dark:bg-bg-dark-2"
                   onClick={(e) => e.stopPropagation()}
                 >
                   {navigation.map((item) => (
-                    <motion.div
-                      key={item.name}
-                      variants={itemVariants}
-                    >
-                      <Link href={item.href}>
-                        <Button variant="mobilelink">
-                          {item.name}
-                        </Button>
-                      </Link>
-                    </motion.div>
+                    <Link key={item.name} href={item.href}>
+                      <Button variant="mobilelink">
+                        {item.name}
+                      </Button>
+                    </Link>
                   ))}
                 </motion.div>
               </motion.div>
