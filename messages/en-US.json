@@ -17,6 +17,7 @@
   "Projects": {
     "Heading": "Projects",
     "Description": "A collection of my projects.",
+    "PageDescription": "I made many projects but these are my favorite.",
     "DabMusic": "A music player that plays some unreleased tracks.",
     "DabSudoku": "A sudoku game that you can play online.",
     "Cyclic": "A note-taking app that supports Markdown."

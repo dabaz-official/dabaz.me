@@ -17,6 +17,7 @@
   "Projects": {
     "Heading": "项目",
     "Description": "我的作品集。",
+    "PageDescription": "我做了很多项目，但这三个是我最喜欢的。",
     "DabMusic": "一个简易的在线音乐播放器。",
     "DabSudoku": "一个可以在线玩的数独游戏。",
     "Cyclic": "一个支持 Markdown 的在线笔记 app。"
