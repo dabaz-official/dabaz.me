@@ -1,0 +1,43 @@
+{
+  "Layout": {
+    "Title": "DabAZ",
+    "Description": "我的作品集和个人网站。"
+  },
+  "HomePage": {
+    "Heading": "DabAZ",
+    "SubHeading": "黑客 · 音乐人",
+    "SubHeading2": "开发者 · 设计师",
+    "Description": "前黑客。音乐制作人。我也为说唱歌手设计专辑封面和海报，为开发者进行 UI 设计，有时我自己用代码构建项目。",
+    "Email": "邮箱",
+    "Projects": "项目",
+    "ViewAll": "查看全部",
+    "DabMusic": "一个简易的在线音乐播放器。",
+    "DabSudoku": "一个可以在线玩的数独游戏。"
+  },
+  "Projects": {
+    "Heading": "项目",
+    "Description": "我的作品集。",
+    "DabMusic": "一个简易的在线音乐播放器。",
+    "DabSudoku": "一个可以在线玩的数独游戏。",
+    "Cyclic": "一个支持 Markdown 的在线笔记 app。"
+  },
+  "Navbar": {
+    "About": "关于",
+    "Projects": "项目",
+    "Contact": "联系"
+  },
+  "Footer": {
+    "Language": "中文",
+    "LanguageSR": "当前语言是"
+  },
+  "Social": {
+    "Email": "邮箱",
+    "X": "X",
+    "GitHub": "GitHub",
+    "LinkedIn": "LinkedIn",
+    "Instagram": "Instagram",
+    "TikTok": "TikTok",
+    "YouTube": "YouTube",
+    "Spotify": "Spotify"
+  }
+}

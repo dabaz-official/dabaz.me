@@ -1,11 +1,15 @@
-import Link from 'next/link';
+'use client';
+
+import { Link } from '@dabaz/i18n/navigation';
 import { Globe } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { AnimatePresence, motion } from 'motion/react';
 
 import Container from '@dabaz/components/layout/container';
 import social from '@dabaz/data/social';
 import Button from '@dabaz/components/ui/button';
 import { DabAZ } from '@dabaz/components/icons';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 
 const Footer = () => {
   const t = useTranslations('Footer');
@@ -35,15 +39,48 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
-            <Button variant="navlink" className="flex items-center space-x-2 group">
-              <Globe className="h-4.5 w-4.5 text-gray-light-10 dark:text-gray-dark-10" />
-              <p className="sr-only">
-                {t('LanguageSR')}
-              </p>
-              <p className="text-copy-14 text-gray-light-10 dark:text-gray-dark-10">
-                {t('Language')}
-              </p>
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="navlink" className="flex items-center space-x-2 group">
+                  <Globe className="h-4.5 w-4.5 text-gray-light-10 dark:text-gray-dark-10" />
+                  <p className="sr-only">
+                    {t('LanguageSR')}
+                  </p>
+                  <p className="text-copy-14 text-gray-light-10 dark:text-gray-dark-10">
+                    {t('Language')}
+                  </p>
+                </Button>
+              </DropdownMenuTrigger>
+              <AnimatePresence>
+                <DropdownMenuContent asChild className="w-56 bg-bg-light-2/60 dark:bg-bg-dark-2/60 backdrop-blur-sm border border-gray-light-4 dark:border-gray-dark-4 rounded-2xl" align="start">
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    <DropdownMenuItem className="min-w-full p-0">
+                      <Link
+                        href="/" 
+                        className="w-full px-2 py-1.5 text-copy-14 text-gray-light-10 dark:text-gray-dark-10 block hover:bg-gray-light-10/10 dark:hover:bg-gray-dark-10/10 rounded-xl transition duration-200"
+                        locale="en-US"
+                      >
+                        English
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="w-full p-0">
+                      <Link
+                        href="/" 
+                        className="w-full px-2 py-1.5 text-copy-14 text-gray-light-10 dark:text-gray-dark-10 block hover:bg-gray-light-10/10 dark:hover:bg-gray-dark-10/10 rounded-xl transition duration-200"
+                        locale="zh-CN"
+                      >
+                        中文
+                      </Link>
+                    </DropdownMenuItem>
+                  </motion.div>
+                </DropdownMenuContent>
+              </AnimatePresence>
+            </DropdownMenu>
           </div>
         </div>
       </Container>

@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Menu, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import DabAZ from '@dabaz/app/images/dabaz-256w.jpg'
+import DabAZ from '@dabaz/app/[locale]/images/dabaz-256w.jpg'
 import Container from '@dabaz/components/layout/container';
 import Button from '@dabaz/components/ui/button';
 import { navigation } from '@dabaz/data/navigation';

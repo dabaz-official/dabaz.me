@@ -1,8 +1,7 @@
 {
-  "Navbar": {
-    "About": "About",
-    "Projects": "Projects",
-    "Contact": "Contact"
+  "Layout": {
+    "Title": "DabAZ",
+    "Description": "My portfolio and personal website."
   },
   "HomePage": {
     "Heading": "DabAZ",
@@ -14,6 +13,18 @@
     "ViewAll": "View all",
     "DabMusic": "A music player that plays some unreleased tracks.",
     "DabSudoku": "A sudoku game that you can play online."
+  },
+  "Projects": {
+    "Heading": "Projects",
+    "Description": "A collection of my projects.",
+    "DabMusic": "A music player that plays some unreleased tracks.",
+    "DabSudoku": "A sudoku game that you can play online.",
+    "Cyclic": "A note-taking app that supports Markdown."
+  },
+  "Navbar": {
+    "About": "About",
+    "Projects": "Projects",
+    "Contact": "Contact"
   },
   "Footer": {
     "Language": "English",
