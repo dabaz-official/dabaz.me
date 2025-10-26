@@ -1,8 +1,8 @@
 'use client';
 
-import { Link } from '@dabaz/i18n/navigation';
+import { Link, usePathname, useRouter } from '@dabaz/i18n/navigation';
 import { Globe } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { AnimatePresence, motion } from 'motion/react';
 
 import Container from '@dabaz/components/layout/container';
@@ -14,6 +14,13 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 const Footer = () => {
   const t = useTranslations('Footer');
   const tSocial = useTranslations('Social');
+  const locale = useLocale();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const switchLocale = (newLocale: string) => {
+    router.replace(pathname, { locale: newLocale });
+  };
 
   return (
     <footer aria-label="Footer" className="bg-bg-light-2 dark:bg-bg-dark-1">
@@ -60,22 +67,20 @@ const Footer = () => {
                     transition={{ duration: 0.4 }}
                   >
                     <DropdownMenuItem className="min-w-full p-0">
-                      <Link
-                        href="/" 
-                        className="w-full px-2 py-1.5 text-copy-14 text-gray-light-10 dark:text-gray-dark-10 block hover:bg-gray-light-10/10 dark:hover:bg-gray-dark-10/10 rounded-xl transition duration-200"
-                        locale="en-US"
+                      <button
+                        onClick={() => switchLocale('en-US')}
+                        className="w-full px-2 py-1.5 text-copy-14 text-gray-light-10 dark:text-gray-dark-10 block hover:bg-gray-light-10/10 dark:hover:bg-gray-dark-10/10 rounded-xl transition duration-200 text-left"
                       >
                         English
-                      </Link>
+                      </button>
                     </DropdownMenuItem>
                     <DropdownMenuItem className="w-full p-0">
-                      <Link
-                        href="/" 
-                        className="w-full px-2 py-1.5 text-copy-14 text-gray-light-10 dark:text-gray-dark-10 block hover:bg-gray-light-10/10 dark:hover:bg-gray-dark-10/10 rounded-xl transition duration-200"
-                        locale="zh-CN"
+                      <button
+                        onClick={() => switchLocale('zh-CN')}
+                        className="w-full px-2 py-1.5 text-copy-14 text-gray-light-10 dark:text-gray-dark-10 block hover:bg-gray-light-10/10 dark:hover:bg-gray-dark-10/10 rounded-xl transition duration-200 text-left"
                       >
                         中文
-                      </Link>
+                      </button>
                     </DropdownMenuItem>
                   </motion.div>
                 </DropdownMenuContent>
