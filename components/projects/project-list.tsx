@@ -32,7 +32,9 @@ const ProjectList = () => {
                   {project.key}
                 </Link>
               </h3>
-              <p className="mt-1 text-copy-16 text-gray-light-9 dark:text-gray-dark-9">{t(project.key)}</p>
+              <p className="mt-1 text-copy-16 text-gray-light-9 dark:text-gray-dark-9">
+                {t(project.key)}
+              </p>
             </div>
           </div>
         </div>
