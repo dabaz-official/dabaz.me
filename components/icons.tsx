@@ -186,6 +186,28 @@ const Spotify = React.forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>(
   )
 );
 
+const Threads = React.forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>(
+  (props, ref) => (
+    <svg
+      ref={ref}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      fill="none"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M10.8178 1.08185C5.85045 1.6421 2.90947 5.08251 2.54091 10.7644C1.99275 19.2142 7.00457 24.2418 14.4729 22.7341C20.9197 21.4327 22.8422 13.9558 17.4192 11.2758C17.1248 11.1303 17.0021 11.0354 16.9842 10.9395C16.9704 10.866 16.9293 10.5729 16.8926 10.2881C16.3737 6.25579 11.5528 4.64158 8.6902 7.54161C8.02009 8.22053 7.9945 8.0874 8.91438 8.70847C9.6862 9.22962 9.6862 9.22962 10.0292 8.88701C11.6292 7.28863 14.4579 7.98522 14.9298 10.0939C15.0194 10.4946 15.05 10.4735 14.4778 10.4068C13.6422 10.3094 11.5808 10.3839 11.0261 10.5315C6.12367 11.8368 7.25619 17.9385 12.3607 17.7224C14.7433 17.6215 16.2786 16.2308 16.8013 13.7003C16.9278 13.0881 17.0175 13.0975 17.6973 13.7942C20.1711 16.3296 17.7709 20.4186 13.4974 20.9496C7.20334 21.7315 3.71229 17.5002 4.51458 10.062C5.0102 5.46731 7.71342 2.95506 12.1568 2.95982C15.8474 2.96375 18.5266 4.76519 19.4495 7.86322C19.6266 8.45775 19.5651 8.43942 20.5285 8.18429C21.5809 7.90559 21.5148 7.98058 21.2934 7.3169C19.8199 2.89882 15.8195 0.517736 10.8178 1.08185ZM14.1207 12.3232C15.1338 12.4335 15.065 12.3957 15.021 12.8165C14.7443 15.4643 12.1184 16.8177 10.3205 15.2392C8.53207 13.6688 10.7622 11.9576 14.1207 12.3232Z"
+      />
+    </svg>
+  )
+);
+
+
 DabAZ.displayName = 'DabAZ';
 DabAZLogo.displayName = 'DabAZLogo';
 X.displayName = 'X';
@@ -195,5 +217,6 @@ Instagram.displayName = 'Instagram';
 TikTok.displayName = 'TikTok';
 LinkedIn.displayName = 'LinkedIn';
 Spotify.displayName = 'Spotify';
+Threads.displayName = 'Threads';
 
-export { DabAZ, DabAZLogo, X, GitHub, YouTube, Instagram, TikTok, LinkedIn, Spotify };
+export { DabAZ, DabAZLogo, X, GitHub, YouTube, Instagram, TikTok, LinkedIn, Spotify, Threads };

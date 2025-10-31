@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server';
 
 import Container from '@dabaz/components/layout/container';
 import Link from 'next/link';
+import social from '@dabaz/data/social';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('Contact');
@@ -14,6 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ContactPage() {
   const t = await getTranslations('Contact');
+  const tSocial = await getTranslations('Social');
 
   return (
     <div className="pt-20">
@@ -28,13 +30,18 @@ export default async function ContactPage() {
             </p>
           </div>
         </section>
-        <div className="w-full flex flex-col gap-y-6">
-          <Link
-            href="mailto:hi@dabaz.me" 
-            className="text-copy-16 lg:text-copy-18 text-pretty text-gray-light-10 dark:text-gray-dark-10 underline hover:text-gray-light-9 dark:hover:text-gray-dark-9 transition duration-200"
-          >
-            hi@dabaz.me
-          </Link>
+        <div className="gap-y-6 w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
+          {social.all.map((item) => (
+            <Link
+              key={item.key}
+              href={item.href}
+              target={item.target}
+              className="flex flex-row gap-x-2 text-copy-16 lg:text-copy-18 text-pretty text-gray-light-10 dark:text-gray-dark-10 hover:text-gray-light-9 dark:hover:text-gray-dark-9 transition duration-200 cursor-pointer w-auto"
+            >
+              <item.Icon className="inline-block h-6 w-6" />
+              {tSocial(item.key)}
+            </Link>
+          ))}
         </div>
       </Container>
     </div>

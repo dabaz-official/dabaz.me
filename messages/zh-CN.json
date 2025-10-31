@@ -50,11 +50,13 @@
     "Email": "邮箱",
     "X": "X",
     "GitHub": "GitHub",
-    "LinkedIn": "LinkedIn",
+    "LinkedIn": "领英",
     "Instagram": "Instagram",
     "TikTok": "TikTok",
     "YouTube": "YouTube",
-    "Spotify": "Spotify"
+    "Spotify": "Spotify",
+    "Threads": "Threads",
+    "DabMusic": "DabMusic"
   },
   "Error": {
     "Title": "错误",
