@@ -8,6 +8,7 @@ import CommandPalette from "@dabaz/components/command-palette";
 import ConsoleEasterEgg from "@dabaz/components/console-easter-egg";
 import Footer from "@dabaz/components/layout/footer";
 import Nav from "@dabaz/components/layout/nav";
+import TerminalBar from "@dabaz/components/terminal-bar";
 import ThemeProvider from "@dabaz/components/theme-provider";
 import site from "@dabaz/data/site";
 
@@ -91,7 +92,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${clashDisplay.variable} ${generalSans.variable} ${geistMono.variable}`}
     >
-      <body className="flex min-h-svh flex-col bg-bg font-sans text-fg antialiased">
+      <body className="flex min-h-svh flex-col bg-bg pb-14 font-sans text-fg antialiased">
         <ThemeProvider>
           <SoundProvider>
             <a
@@ -108,6 +109,7 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
+            <TerminalBar />
           </SoundProvider>
         </ThemeProvider>
       </body>
