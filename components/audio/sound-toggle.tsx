@@ -1,8 +1,8 @@
 "use client";
 
-import { Volume2, VolumeX } from "lucide-react";
-
+import { VolumeX } from "lucide-react";
 import { useSound } from "@dabaz/components/audio/sound-provider";
+import Visualizer from "@dabaz/components/audio/visualizer";
 
 export default function SoundToggle() {
   const { playing, toggle } = useSound();
@@ -16,7 +16,7 @@ export default function SoundToggle() {
       className="inline-flex size-8 items-center justify-center border border-line text-fg transition-colors hover:bg-accent hover:text-accent-ink"
     >
       {playing ? (
-        <Volume2 className="size-4" />
+        <Visualizer variant="mini" className="size-3.5" />
       ) : (
         <VolumeX className="size-4" />
       )}

@@ -1,5 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 
+import Visualizer from "@dabaz/components/audio/visualizer";
 import AmbientStatus from "@dabaz/components/home/ambient-status";
 import SectionHeader from "@dabaz/components/home/section-header";
 import Container from "@dabaz/components/layout/container";
@@ -20,6 +21,10 @@ export default function Sound() {
         <AmbientStatus />
         <p>{"> track layer ............ linked (spotify)"}</p>
       </div>
+      <Visualizer
+        variant="spectrum"
+        className="mt-8 h-16 w-full max-w-md text-muted"
+      />
       <ul className="mt-8 flex flex-wrap gap-3">
         {trackLayer.map(({ label, href }) => (
           <li key={label}>

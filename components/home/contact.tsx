@@ -1,5 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 
+import ScrambleText from "@dabaz/components/scramble-text";
 import SectionHeader from "@dabaz/components/home/section-header";
 import Container from "@dabaz/components/layout/container";
 import social from "@dabaz/data/social";
@@ -10,7 +11,11 @@ export default function Contact() {
     <Container id="contact" className="scroll-mt-20 py-24">
       <SectionHeader index="04" label="Contact" />
       <p className="mt-10 font-display text-4xl font-semibold sm:text-6xl">
-        {"Let's build something loud"}
+        <ScrambleText
+          text={"Let's build something loud"}
+          trigger="in-view"
+          duration={1100}
+        />
         <span className="text-fg dark:text-accent">_</span>
       </p>
       <a

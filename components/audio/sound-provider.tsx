@@ -15,6 +15,7 @@ import { AudioEngine } from "@dabaz/lib/audio-engine";
 type SoundContextValue = {
   playing: boolean;
   toggle: () => void;
+  getAnalyser: () => AnalyserNode | null;
 };
 
 const SoundContext = createContext<SoundContextValue | null>(null);
@@ -37,7 +38,15 @@ export function SoundProvider({ children }: { children: ReactNode }) {
     }
   }, [playing]);
 
-  const value = useMemo(() => ({ playing, toggle }), [playing, toggle]);
+  const getAnalyser = useCallback(
+    () => engineRef.current?.getAnalyser() ?? null,
+    [],
+  );
+
+  const value = useMemo(
+    () => ({ playing, toggle, getAnalyser }),
+    [playing, toggle, getAnalyser],
+  );
 
   return (
     <SoundContext.Provider value={value}>{children}</SoundContext.Provider>

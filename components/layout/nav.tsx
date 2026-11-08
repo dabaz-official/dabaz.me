@@ -37,6 +37,12 @@ export default function Nav() {
           <div className="flex items-center gap-2">
             <SoundToggle />
             <ThemeToggle />
+            <kbd
+              aria-hidden
+              className="hidden border border-line px-1.5 py-0.5 font-mono text-[10px] text-muted md:inline-block"
+            >
+              ⌘K
+            </kbd>
           </div>
         </div>
       </Container>

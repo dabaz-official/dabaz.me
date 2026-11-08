@@ -3,6 +3,9 @@ import localFont from "next/font/local";
 import type { ReactNode } from "react";
 
 import { SoundProvider } from "@dabaz/components/audio/sound-provider";
+import BootSequence from "@dabaz/components/boot-sequence";
+import CommandPalette from "@dabaz/components/command-palette";
+import ConsoleEasterEgg from "@dabaz/components/console-easter-egg";
 import Footer from "@dabaz/components/layout/footer";
 import Nav from "@dabaz/components/layout/nav";
 import ThemeProvider from "@dabaz/components/theme-provider";
@@ -97,6 +100,9 @@ export default function RootLayout({
             >
               skip to content
             </a>
+            <ConsoleEasterEgg />
+            <BootSequence />
+            <CommandPalette />
             <Nav />
             <main id="main" className="flex flex-1 flex-col">
               {children}
