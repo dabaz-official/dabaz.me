@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import type { ReactNode } from "react";
 
+import { SoundProvider } from "@dabaz/components/audio/sound-provider";
 import Footer from "@dabaz/components/layout/footer";
 import Nav from "@dabaz/components/layout/nav";
 import ThemeProvider from "@dabaz/components/theme-provider";
@@ -86,9 +87,11 @@ export default function RootLayout({
     >
       <body className="flex min-h-svh flex-col bg-bg font-sans text-fg antialiased">
         <ThemeProvider>
-          <Nav />
-          <main className="flex flex-1 flex-col">{children}</main>
-          <Footer />
+          <SoundProvider>
+            <Nav />
+            <main className="flex flex-1 flex-col">{children}</main>
+            <Footer />
+          </SoundProvider>
         </ThemeProvider>
       </body>
     </html>

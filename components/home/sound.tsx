@@ -1,5 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 
+import AmbientStatus from "@dabaz/components/home/ambient-status";
 import SectionHeader from "@dabaz/components/home/section-header";
 import Container from "@dabaz/components/layout/container";
 
@@ -16,8 +17,8 @@ export default function Sound() {
     <Container id="sound" className="scroll-mt-20 py-24">
       <SectionHeader index="03" label="Sound" />
       <div className="mt-10 font-mono text-sm leading-7 text-muted">
-        <p>{"> ambient engine ......... offline (warming up)"}</p>
-        <p>{"> track layer ............ linked"}</p>
+        <AmbientStatus />
+        <p>{"> track layer ............ linked (spotify)"}</p>
       </div>
       <ul className="mt-8 flex flex-wrap gap-3">
         {trackLayer.map(({ label, href }) => (
@@ -35,8 +36,9 @@ export default function Sound() {
         ))}
       </ul>
       <p className="mt-8 max-w-lg font-mono text-sm leading-6 text-muted">
-        real releases live on the platforms above — a generative ambient
-        engine takes over this section in the next pass.
+        a generative ambient engine, synthesized live in your browser — arm
+        it with the sound toggle in the header. real releases stay on the
+        platforms above.
       </p>
     </Container>
   );

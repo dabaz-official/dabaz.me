@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import SoundToggle from "@dabaz/components/audio/sound-toggle";
 import Container from "@dabaz/components/layout/container";
 import ThemeToggle from "@dabaz/components/layout/theme-toggle";
 
@@ -33,7 +34,10 @@ export default function Nav() {
               </li>
             ))}
           </ul>
-          <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <SoundToggle />
+            <ThemeToggle />
+          </div>
         </div>
       </Container>
     </header>
