@@ -21,7 +21,7 @@ const PING_POOL = [62, 65, 67, 69, 72, 74, 77];
 
 const PING_D4 = midiToFreq(62);
 
-function softDriveCurve(): Float32Array {
+function softDriveCurve(): Float32Array<ArrayBuffer> {
   const samples = 1024;
   const curve = new Float32Array(samples);
   for (let i = 0; i < samples; i += 1) {

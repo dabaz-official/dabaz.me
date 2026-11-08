@@ -91,8 +91,16 @@ export default function RootLayout({
       <body className="flex min-h-svh flex-col bg-bg font-sans text-fg antialiased">
         <ThemeProvider>
           <SoundProvider>
+            <a
+              href="#main"
+              className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:bg-accent focus:px-3 focus:py-2 focus:font-mono focus:text-xs focus:text-accent-ink"
+            >
+              skip to content
+            </a>
             <Nav />
-            <main className="flex flex-1 flex-col">{children}</main>
+            <main id="main" className="flex flex-1 flex-col">
+              {children}
+            </main>
             <Footer />
           </SoundProvider>
         </ThemeProvider>

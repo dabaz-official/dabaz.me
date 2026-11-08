@@ -19,7 +19,7 @@
 .dark {
   --bg: #0a0a0b;
   --fg: #edede9;
-  --muted: #6e6e6a;
+  --muted: #82827d;
   --line: #2a2a2c;
   --accent: #b8ff29;
   --accent-ink: #0a0a0b;
@@ -41,6 +41,12 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 ::selection {
