@@ -1,15 +1,16 @@
-const Container = ({
-  children,
-  className,
-}: {
-  children: React.ReactNode
-  className?: string
-}) => {
+import type { ReactNode } from "react";
+
+import { cn } from "@dabaz/lib/utils";
+
+type ContainerProps = {
+  className?: string;
+  children: ReactNode;
+};
+
+export default function Container({ className, children }: ContainerProps) {
   return (
-    <div className={`mx-auto flex max-w-5xl items-center justify-between ${className || ''}`}>
+    <div className={cn("mx-auto w-full max-w-6xl px-6", className)}>
       {children}
     </div>
   );
 }
-
-export default Container;
