@@ -59,6 +59,12 @@ html {
   outline-offset: 2px;
 }
 
+/* text fields show focus via their container/caret — never draw an outline box */
+input:focus-visible,
+textarea:focus-visible {
+  outline: none;
+}
+
 @keyframes boot-line {
   to {
     opacity: 1;
