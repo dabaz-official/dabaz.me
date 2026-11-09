@@ -68,7 +68,8 @@ export default function Visualizer({ variant, className }: VisualizerProps) {
           const bars = 3;
           const barW = 2;
           const gap = 2;
-          ctx.fillStyle = ACCENT;
+          // mini bars follow the button's text color, not the accent
+          ctx.fillStyle = baseline;
           const total = bars * barW + (bars - 1) * gap;
           for (let i = 0; i < bars; i += 1) {
             const bin = [6, 24, 64][i];

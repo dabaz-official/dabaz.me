@@ -41,8 +41,8 @@ export default function Sound() {
         ))}
       </ul>
       <p className="mt-8 max-w-lg font-mono text-sm leading-6 text-muted">
-        a generative ambient engine, synthesized live in your browser — arm
-        it with the sound toggle in the header. real releases stay on the
+        A generative ambient engine, synthesized live in your browser — arm
+        it with the sound toggle in the header. Real releases stay on the
         platforms above.
       </p>
     </Container>

@@ -2,10 +2,10 @@ import SectionHeader from "@dabaz/components/home/section-header";
 import Container from "@dabaz/components/layout/container";
 
 const identities = [
-  { name: "Hacker", line: "breaks and bends things until they make sense" },
-  { name: "Musician", line: "synths, unreleased tracks and sound design" },
-  { name: "Designer", line: "typography, grids and pixels with intent" },
-  { name: "Developer", line: "ships interfaces that stay fast" },
+  { name: "Hacker", line: "Breaks and bends things until they make sense" },
+  { name: "Musician", line: "Synths, unreleased tracks and sound design" },
+  { name: "Designer", line: "Typography, grids and pixels with intent" },
+  { name: "Developer", line: "Ships interfaces that stay fast" },
 ];
 
 export default function Whoami() {

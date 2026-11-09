@@ -15,7 +15,7 @@ export default function CvPage() {
         CV loading<span className="text-fg dark:text-accent">_</span>
       </h1>
       <p className="mt-6 max-w-md font-mono text-sm leading-6 text-muted">
-        the resume is on request — meanwhile, ask me directly.
+        The resume is on request — meanwhile, ask me directly.
       </p>
       <Link
         href="/#contact"
