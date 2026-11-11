@@ -1,40 +1,40 @@
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import Container from "@dabaz/components/layout/container";
+import ScrambleText from "@dabaz/components/scramble-text";
+import social from "@dabaz/data/social";
 
-import Button from '@dabaz/components/ui/button';
-import social from '@dabaz/data/social';
+const contactLinks = [...social.primary, ...social.all];
 
-const Hero = () => {
-  const t = useTranslations('HomePage');
-  const tSocial = useTranslations('Social');
-
+export default function Hero() {
   return (
-    <section className="relative isolate w-full">
-      <div className="text-center">
-        <h1 className="text-heading-32 lg:text-heading-40 font-bold text-balance tracking-tight text-gray-light-10 dark:text-gray-dark-10 leading-tight">
-          {t('Heading')}
-        </h1>
-        <p className="mt-1 text-copy-16 lg:text-copy-18 text-pretty text-gray-light-9 dark:text-gray-dark-9">
-          {t('SubHeading')}
-          <br />
-          {t('SubHeading2')}
-        </p>
-        <p className="mt-6 text-copy-16 lg:text-copy-18 text-pretty text-gray-light-10 dark:text-gray-dark-10">
-          {t('Description')}
-        </p>
-        <div className="mt-8 flex flex-wrap justify-center items-center gap-x-2 sm:gap-x-4 lg:gap-x-6 mx-auto w-full">
-          {social.hero.map(({ href, key, Icon, target }) => (
-            <Link key={key} href={href} target={target}>
-              <Button variant="outline" className="cursor-pointer gap-x-2">
-                <Icon className="h-4 w-4" />
-                <p className="text-copy-13 lg:text-copy-14">{tSocial(key)}</p>
-              </Button>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
+    <Container className="pb-0 pt-16">
+      <p className="font-mono text-sm text-muted">$ whoami</p>
+      <h1 className="mt-6 font-display text-5xl font-semibold tracking-tight sm:text-6xl">
+        <ScrambleText text="DabAZ" />
+      </h1>
+      <p className="mt-4 text-xl font-medium sm:text-2xl">
+        Frontend engineer &amp; UI designer
+      </p>
+      <p className="mt-4 max-w-[65ch] text-base leading-7 text-muted">
+        Hacker, musician, designer, developer — building things that make
+        noise, in code, in sound and in pixels.
+      </p>
+      <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-2 border-t border-line pt-4">
+        {contactLinks.map(({ label, href }) => {
+          const external = href.startsWith("http");
+          return (
+            <li key={label}>
+              <a
+                href={href}
+                target={external ? "_blank" : undefined}
+                rel={external ? "noreferrer" : undefined}
+                className="font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:text-fg"
+              >
+                {label}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </Container>
   );
 }
-
-export default Hero;

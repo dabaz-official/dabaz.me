@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Design tokens — "A terminal you can play"
+ * Light: Editorial Brutalist (default persona)
+ * Dark:  Acid Terminal (sudo dark-mode)
+ */
+:root {
+  --bg: #f4f1ea;
+  --fg: #141412;
+  --muted: #6f6b62;
+  --line: #141412;
+  --accent: #b8ff29;
+  --accent-ink: #141412;
+  --header-bg: rgb(244 241 234 / 0.6);
+  --header-hairline: rgb(0 0 0 / 0.06);
+}
+
+.dark {
+  --bg: #0a0a0b;
+  --fg: #edede9;
+  --muted: #82827d;
+  --line: #2a2a2c;
+  --accent: #b8ff29;
+  --accent-ink: #0a0a0b;
+  --header-bg: rgb(10 10 11 / 0.6);
+  --header-hairline: rgb(255 255 255 / 0.05);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+
+  --font-display: var(--font-clash-display), system-ui, sans-serif;
+  --font-sans: var(--font-general-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo,
+    monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+}
+
+/* text fields show focus via their container/caret — never draw an outline box */
+input:focus-visible,
+textarea:focus-visible {
+  outline: none;
+}
+
+/* frosted glass header, ported from dabresume */
+.site-header {
+  background: var(--header-bg);
+  border-bottom: 0.75px solid var(--header-hairline);
+  -webkit-backdrop-filter: blur(16px) saturate(2.2);
+  backdrop-filter: blur(16px) saturate(2.2);
+}
+
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  .site-header {
+    background: var(--bg);
+  }
+}
+
+/* matches the header hairline */
+.site-footer {
+  border-top: 0.75px solid var(--header-hairline);
+}
+
+@keyframes boot-line {
+  to {
+    opacity: 1;
+  }
+}
+
+.boot-line {
+  animation: boot-line 120ms forwards;
+}
+
+@keyframes boot-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.boot-cursor {
+  animation: boot-blink 800ms infinite;
+}
