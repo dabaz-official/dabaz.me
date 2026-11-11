@@ -85,6 +85,11 @@ textarea:focus-visible {
   }
 }
 
+/* matches the header hairline */
+.site-footer {
+  border-top: 0.75px solid var(--header-hairline);
+}
+
 @keyframes boot-line {
   to {
     opacity: 1;
