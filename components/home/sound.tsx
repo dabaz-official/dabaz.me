@@ -15,17 +15,17 @@ const trackLayer = [
 
 export default function Sound() {
   return (
-    <Container id="sound" className="scroll-mt-20 py-24">
+    <Container id="sound" className="scroll-mt-24 pb-16 pt-24">
       <SectionHeader index="03" label="Sound" />
-      <div className="mt-10 font-mono text-sm leading-7 text-muted">
+      <div className="mt-8 font-mono text-sm leading-7 text-muted">
         <AmbientStatus />
         <p>{"> track layer ............ linked (spotify)"}</p>
       </div>
       <Visualizer
         variant="spectrum"
-        className="mt-8 h-16 w-full max-w-md text-muted"
+        className="mt-6 h-12 w-full max-w-sm text-muted"
       />
-      <ul className="mt-8 flex flex-wrap gap-3">
+      <ul className="mt-6 flex flex-wrap gap-3">
         {trackLayer.map(({ label, href }) => (
           <li key={label}>
             <a
@@ -40,7 +40,7 @@ export default function Sound() {
           </li>
         ))}
       </ul>
-      <p className="mt-8 max-w-lg font-mono text-sm leading-6 text-muted">
+      <p className="mt-6 max-w-[65ch] text-sm leading-6 text-muted">
         A generative ambient engine, synthesized live in your browser — arm
         it with the sound toggle in the header. Real releases stay on the
         platforms above.

@@ -10,25 +10,26 @@ const identities = [
 
 export default function Whoami() {
   return (
-    <Container id="whoami" className="scroll-mt-20 py-24">
+    <Container id="whoami" className="scroll-mt-24 pb-0 pt-16">
       <SectionHeader index="01" label="Whoami" />
-      <div className="mt-10 grid gap-10 lg:grid-cols-2">
-        <p className="text-xl leading-8 sm:text-2xl sm:leading-9">
-          Frontend engineer by trade, hacker by instinct, musician by
-          obsession, designer by necessity. I build interfaces, compose
-          systems, and make noise on both sides of the frequency spectrum.
-        </p>
-        <ul className="flex flex-col gap-5">
-          {identities.map(({ name, line }) => (
-            <li key={name} className="flex items-baseline gap-4">
-              <span className="w-28 shrink-0 font-mono text-xs uppercase tracking-widest text-muted">
-                {name}
-              </span>
-              <span className="font-mono text-sm">{line}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <p className="mt-8 max-w-[65ch] text-lg leading-8">
+        Frontend engineer by trade, hacker by instinct, musician by
+        obsession, designer by necessity. I build interfaces, compose
+        systems, and make noise on both sides of the frequency spectrum.
+      </p>
+      <dl className="mt-10 border-t border-line">
+        {identities.map(({ name, line }) => (
+          <div
+            key={name}
+            className="flex flex-col gap-1 border-b border-line py-3 sm:flex-row sm:items-baseline sm:gap-6"
+          >
+            <dt className="w-24 shrink-0 font-mono text-xs uppercase tracking-widest text-muted">
+              {name}
+            </dt>
+            <dd className="font-mono text-sm">{line}</dd>
+          </div>
+        ))}
+      </dl>
     </Container>
   );
 }

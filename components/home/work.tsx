@@ -6,44 +6,45 @@ import projects from "@dabaz/data/projects";
 
 export default function Work() {
   return (
-    <Container id="work" className="scroll-mt-20 py-24">
+    <Container id="work" className="scroll-mt-24 pb-0 pt-16">
       <SectionHeader index="02" label="Work" />
-      <ul className="mt-10 flex flex-col border-t border-line">
-        {projects.map((project, i) => (
-          <li key={project.key}>
+      <ol className="mt-8 border-t border-line">
+        {projects.map((project) => (
+          <li key={project.key} className="border-b border-line">
             <a
               href={project.url}
               target="_blank"
               rel="noreferrer"
-              className="group flex flex-col gap-6 border-b border-line py-8 transition-colors hover:bg-accent sm:flex-row sm:items-center sm:gap-10"
+              className="group grid grid-cols-1 gap-x-8 gap-y-4 py-7 sm:grid-cols-[9rem_1fr]"
             >
-              <span className="font-mono text-sm text-muted group-hover:text-accent-ink/60">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <div className="min-w-0 flex-1">
-                <h3 className="font-display text-3xl font-semibold group-hover:text-accent-ink sm:text-5xl">
-                  {project.key}
-                </h3>
-                <p className="mt-2 font-mono text-sm text-muted group-hover:text-accent-ink/70">
-                  {project.description}
-                </p>
-                <p className="mt-3 font-mono text-xs uppercase tracking-widest text-muted group-hover:text-accent-ink/70">
+              <div>
+                <p className="font-mono text-xs uppercase tracking-widest text-muted">
                   {project.role}
                 </p>
+                {project.image && (
+                  <div className="mt-4 w-24 border border-line bg-bg p-1">
+                    <Image
+                      src={project.image}
+                      alt={project.key}
+                      width={224}
+                      height={140}
+                      className="h-auto w-full"
+                    />
+                  </div>
+                )}
               </div>
-              <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden border border-line sm:w-56 group-hover:border-accent-ink/30">
-                <Image
-                  src={project.image}
-                  alt={project.key}
-                  fill
-                  sizes="(min-width: 640px) 224px, 100vw"
-                  className="object-cover"
-                />
+              <div>
+                <h3 className="font-display text-2xl font-semibold tracking-tight underline-offset-4 group-hover:underline sm:text-3xl">
+                  {project.key}
+                </h3>
+                <p className="mt-2 max-w-[65ch] text-sm leading-6 text-muted">
+                  {project.description}
+                </p>
               </div>
             </a>
           </li>
         ))}
-      </ul>
+      </ol>
     </Container>
   );
 }
