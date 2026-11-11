@@ -92,7 +92,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${clashDisplay.variable} ${generalSans.variable} ${geistMono.variable}`}
     >
-      <body className="flex min-h-svh flex-col bg-bg pb-14 font-sans text-fg antialiased">
+      <body className="flex min-h-svh flex-col bg-bg pb-14 pt-[65px] font-sans text-fg antialiased">
         <ThemeProvider>
           <SoundProvider>
             <a

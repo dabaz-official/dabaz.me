@@ -13,7 +13,7 @@ const links = [
 
 export default function Nav() {
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-bg">
+    <header className="site-header fixed inset-x-0 top-0 z-50">
       <Container className="flex items-center justify-between gap-4 py-4">
         <Link
           href="/"

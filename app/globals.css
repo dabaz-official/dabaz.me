@@ -14,6 +14,8 @@
   --line: #141412;
   --accent: #b8ff29;
   --accent-ink: #141412;
+  --header-bg: rgb(244 241 234 / 0.6);
+  --header-hairline: rgb(0 0 0 / 0.06);
 }
 
 .dark {
@@ -23,6 +25,8 @@
   --line: #2a2a2c;
   --accent: #b8ff29;
   --accent-ink: #0a0a0b;
+  --header-bg: rgb(10 10 11 / 0.6);
+  --header-hairline: rgb(255 255 255 / 0.05);
 }
 
 @theme inline {
@@ -63,6 +67,22 @@ html {
 input:focus-visible,
 textarea:focus-visible {
   outline: none;
+}
+
+/* frosted glass header, ported from dabresume */
+.site-header {
+  background: var(--header-bg);
+  border-bottom: 0.75px solid var(--header-hairline);
+  -webkit-backdrop-filter: blur(16px) saturate(2.2);
+  backdrop-filter: blur(16px) saturate(2.2);
+}
+
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  .site-header {
+    background: var(--bg);
+  }
 }
 
 @keyframes boot-line {
