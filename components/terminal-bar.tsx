@@ -126,7 +126,7 @@ export default function TerminalBar() {
           )}
         </ul>
       )}
-      <div className="flex items-center gap-2 border border-line bg-bg px-3 py-2.5 transition-colors focus-within:border-accent">
+      <div className="flex items-center gap-2 border border-line bg-bg px-3 py-2.5">
         <span aria-hidden className="font-mono text-sm text-muted">
           $
         </span>
