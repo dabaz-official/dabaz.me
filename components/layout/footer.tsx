@@ -7,9 +7,11 @@ import site from "@dabaz/data/site";
 const navLinks = [
   { label: "Work", href: "/#work" },
   { label: "Sound", href: "/#sound" },
-  { label: "CV", href: "/cv" },
-  { label: "Contact", href: "/#contact" },
+  { label: "CV", href: "https://cv.dabaz.me", external: true },
 ];
+
+const linkClass =
+  "font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:text-fg";
 
 export default function Footer() {
   return (
@@ -19,24 +21,29 @@ export default function Footer() {
           © {new Date().getFullYear()} {site.name}
         </p>
         <ul className="flex flex-wrap gap-x-5 gap-y-2 sm:hidden">
-          {navLinks.map(({ label, href }) => (
-            <li key={label}>
-              <Link
-                href={href}
-                className="font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:text-fg"
-              >
-                {label}
-              </Link>
+          {navLinks.map((link) => (
+            <li key={link.label}>
+              {link.external ? (
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={linkClass}
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link href={link.href} className={linkClass}>
+                  {link.label}
+                </Link>
+              )}
             </li>
           ))}
         </ul>
         <ul className="flex flex-wrap gap-x-5 gap-y-2 sm:justify-end">
           {social.primary.map(({ label, href }) => (
             <li key={label}>
-              <a
-                href={href}
-                className="font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:text-fg"
-              >
+              <a href={href} className={linkClass}>
                 {label}
               </a>
             </li>
