@@ -7,8 +7,11 @@ import ThemeToggle from "@dabaz/components/layout/theme-toggle";
 const links = [
   { label: "Work", href: "/#work" },
   { label: "Sound", href: "/#sound" },
-  { label: "CV", href: "/cv" },
+  { label: "CV", href: "https://cv.dabaz.me", external: true },
 ];
+
+const linkClass =
+  "font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:text-fg";
 
 export default function Nav() {
   return (
@@ -24,12 +27,20 @@ export default function Nav() {
           <ul className="hidden items-center gap-6 sm:flex">
             {links.map((link) => (
               <li key={link.label}>
-                <Link
-                  href={link.href}
-                  className="font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:text-fg"
-                >
-                  {link.label}
-                </Link>
+                {link.external ? (
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={linkClass}
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link href={link.href} className={linkClass}>
+                    {link.label}
+                  </Link>
+                )}
               </li>
             ))}
           </ul>

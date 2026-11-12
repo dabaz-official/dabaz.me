@@ -43,8 +43,8 @@ export function useCommands(): Command[] {
       {
         id: "cv",
         label: "cat cv",
-        hint: "resume page",
-        run: () => router.push("/cv"),
+        hint: "resume site",
+        run: () => window.open("https://cv.dabaz.me", "_blank"),
       },
       {
         id: "contact",
