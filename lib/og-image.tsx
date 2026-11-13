@@ -3,20 +3,45 @@ import path from "node:path";
 
 import { ImageResponse } from "next/og";
 
-import site from "@dabaz/data/site";
+import site, { type Locale } from "@dabaz/data/site";
 
-export const alt = site.pageTitle;
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
-export const runtime = "nodejs";
+const fontDir = path.join(process.cwd(), "styles/fonts");
 
-export default async function OpengraphImage() {
-  const [display, mono] = await Promise.all([
-    readFile(
-      path.join(process.cwd(), "styles/fonts/ClashDisplay-Semibold.ttf"),
-    ),
-    readFile(path.join(process.cwd(), "styles/fonts/GeistMono-Regular.ttf")),
+/**
+ * One OG template for the whole site. Locales only swap the rendered copy and
+ * the font that carries it; the layout stays identical.
+ */
+export async function createOgImage(locale: Locale) {
+  const loc = site.locales[locale];
+  const isZh = locale === "zh";
+
+  const [display, mono, cjkSemiBold, cjkRegular] = await Promise.all([
+    readFile(path.join(fontDir, "ClashDisplay-Semibold.ttf")),
+    readFile(path.join(fontDir, "GeistMono-Regular.ttf")),
+    isZh
+      ? readFile(path.join(fontDir, "DabSans-SemiBold-og.ttf"))
+      : Promise.resolve(null),
+    isZh
+      ? readFile(path.join(fontDir, "DabSans-Regular-og.ttf"))
+      : Promise.resolve(null),
   ]);
+
+  const fonts: {
+    name: string;
+    data: Buffer;
+    weight: 400 | 600;
+    style: "normal";
+  }[] = [
+    { name: "display", data: display, weight: 600, style: "normal" },
+    { name: "mono", data: mono, weight: 400, style: "normal" },
+  ];
+
+  if (cjkSemiBold && cjkRegular) {
+    fonts.push(
+      { name: "cjk", data: cjkSemiBold, weight: 600, style: "normal" },
+      { name: "cjk", data: cjkRegular, weight: 400, style: "normal" },
+    );
+  }
 
   return new ImageResponse(
     (
@@ -50,26 +75,26 @@ export default async function OpengraphImage() {
             style={{
               display: "flex",
               maxWidth: 900,
-              fontFamily: "display",
+              fontFamily: isZh ? "cjk" : "display",
               fontSize: 48,
               fontWeight: 600,
-              lineHeight: 1.1,
-              letterSpacing: "-0.02em",
+              lineHeight: 1.2,
+              letterSpacing: isZh ? "0" : "-0.02em",
             }}
           >
-            {site.pageTitle}
+            {loc.pageTitle}
           </div>
           <div
             style={{
               display: "flex",
-              fontFamily: "mono",
+              fontFamily: isZh ? "cjk" : "mono",
               fontSize: 24,
               fontWeight: 400,
               lineHeight: 1.4,
               color: "#6f6b62",
             }}
           >
-            {site.tagline}
+            {loc.tagline}
           </div>
         </div>
         <div
@@ -89,11 +114,9 @@ export default async function OpengraphImage() {
       </div>
     ),
     {
-      ...size,
-      fonts: [
-        { name: "display", data: display, weight: 600, style: "normal" },
-        { name: "mono", data: mono, weight: 400, style: "normal" },
-      ],
+      width: 1200,
+      height: 630,
+      fonts,
     },
   );
 }
