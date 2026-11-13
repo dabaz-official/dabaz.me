@@ -3,6 +3,7 @@ import Link from "next/link";
 import SoundToggle from "@dabaz/components/audio/sound-toggle";
 import Container from "@dabaz/components/layout/container";
 import ThemeToggle from "@dabaz/components/layout/theme-toggle";
+import site from "@dabaz/data/site";
 
 const links = [
   { label: "Work", href: "/#work" },
@@ -21,7 +22,8 @@ export default function Nav() {
           href="/"
           className="font-display text-lg font-semibold tracking-tight"
         >
-          DABAZ<span className="text-fg dark:text-accent">_</span>
+          {site.name}
+          <span className="text-fg dark:text-accent">_</span>
         </Link>
         <div className="flex items-center gap-6">
           <ul className="hidden items-center gap-6 sm:flex">

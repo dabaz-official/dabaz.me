@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import type { ReactNode } from "react";
 
@@ -68,19 +68,44 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: "DabAZ — hacker · musician · designer · developer",
-    template: "%s — DabAZ",
+    default: site.title,
+    template: `%s — ${site.name}`,
   },
   description: site.description,
+  applicationName: site.name,
+  appleWebApp: {
+    capable: true,
+    title: site.name,
+    statusBarStyle: "default",
+  },
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
-    url: site.url,
+    url: "/",
     siteName: site.name,
+    title: site.pageTitle,
     description: site.description,
+    locale: site.ogLocale,
   },
   twitter: {
     card: "summary_large_image",
+    title: site.pageTitle,
+    description: site.description,
   },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: site.theme.light },
+    { media: "(prefers-color-scheme: dark)", color: site.theme.dark },
+  ],
+  colorScheme: "light dark",
 };
 
 export default function RootLayout({
@@ -88,7 +113,7 @@ export default function RootLayout({
 }: Readonly<{ children: ReactNode }>) {
   return (
     <html
-      lang="en"
+      lang={site.locale}
       suppressHydrationWarning
       className={`${clashDisplay.variable} ${generalSans.variable} ${geistMono.variable}`}
     >

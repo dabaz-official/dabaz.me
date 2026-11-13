@@ -1,5 +1,6 @@
 import Container from "@dabaz/components/layout/container";
 import ScrambleText from "@dabaz/components/scramble-text";
+import site from "@dabaz/data/site";
 import social from "@dabaz/data/social";
 
 const contactLinks = [...social.primary, ...social.all];
@@ -8,12 +9,10 @@ export default function Hero() {
   return (
     <Container className="pb-0 pt-16">
       <p className="font-mono text-sm text-muted">$ whoami</p>
-      <h1 className="mt-6 font-display text-5xl font-semibold tracking-tight sm:text-6xl">
-        <ScrambleText text="DabAZ" />
-      </h1>
-      <p className="mt-4 text-xl font-medium sm:text-2xl">
-        Frontend engineer &amp; UI designer
+      <p className="mt-6 font-display text-5xl font-semibold tracking-tight sm:text-6xl">
+        <ScrambleText text={site.name} />
       </p>
+      <h1 className="mt-4 text-xl font-medium sm:text-2xl">{site.pageTitle}</h1>
       <p className="mt-4 max-w-[65ch] text-base leading-7 text-muted">
         Hacker, musician, designer, developer — building things that make
         noise, in code, in sound and in pixels.
