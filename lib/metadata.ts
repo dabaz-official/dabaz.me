@@ -12,7 +12,7 @@ export function buildMetadata(locale: Locale): Metadata {
   return {
     metadataBase: new URL(site.url),
     title: {
-      default: `${loc.pageTitle} — ${site.name}`,
+      default: `${site.name} — ${loc.pageTitle}`,
       template: `%s — ${site.name}`,
     },
     description: loc.description,
