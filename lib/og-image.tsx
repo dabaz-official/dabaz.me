@@ -15,15 +15,10 @@ export async function createOgImage(locale: Locale) {
   const loc = site.locales[locale];
   const isZh = locale === "zh";
 
-  const [display, mono, cjkSemiBold, cjkRegular] = await Promise.all([
-    readFile(path.join(fontDir, "ClashDisplay-Semibold.ttf")),
-    readFile(path.join(fontDir, "GeistMono-Regular.ttf")),
-    isZh
-      ? readFile(path.join(fontDir, "DabSans-SemiBold-og.ttf"))
-      : Promise.resolve(null),
-    isZh
-      ? readFile(path.join(fontDir, "DabSans-Regular-og.ttf"))
-      : Promise.resolve(null),
+  const [display, sans, mono] = await Promise.all([
+    readFile(path.join(fontDir, "DabSans-SemiBold-og.ttf")),
+    readFile(path.join(fontDir, "DabSans-Regular-og.ttf")),
+    readFile(path.join(fontDir, "DabMono-Regular-og.ttf")),
   ]);
 
   const fonts: {
@@ -33,15 +28,9 @@ export async function createOgImage(locale: Locale) {
     style: "normal";
   }[] = [
     { name: "display", data: display, weight: 600, style: "normal" },
+    { name: "sans", data: sans, weight: 400, style: "normal" },
     { name: "mono", data: mono, weight: 400, style: "normal" },
   ];
-
-  if (cjkSemiBold && cjkRegular) {
-    fonts.push(
-      { name: "cjk", data: cjkSemiBold, weight: 600, style: "normal" },
-      { name: "cjk", data: cjkRegular, weight: 400, style: "normal" },
-    );
-  }
 
   return new ImageResponse(
     (
@@ -75,7 +64,7 @@ export async function createOgImage(locale: Locale) {
             style={{
               display: "flex",
               maxWidth: 900,
-              fontFamily: isZh ? "cjk" : "display",
+              fontFamily: "display",
               fontSize: 48,
               fontWeight: 600,
               lineHeight: 1.2,
@@ -87,7 +76,7 @@ export async function createOgImage(locale: Locale) {
           <div
             style={{
               display: "flex",
-              fontFamily: isZh ? "cjk" : "mono",
+              fontFamily: isZh ? "sans" : "mono",
               fontSize: 24,
               fontWeight: 400,
               lineHeight: 1.4,

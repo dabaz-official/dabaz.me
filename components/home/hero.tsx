@@ -15,7 +15,7 @@ export default function Hero({ locale }: { locale: Locale }) {
       <p className="mt-6 font-display text-5xl font-semibold tracking-tight sm:text-6xl">
         <ScrambleText text={site.name} />
       </p>
-      <h1 className="mt-4 text-xl font-medium sm:text-2xl">
+      <h1 className="mt-4 text-xl font-semibold sm:text-2xl">
         {site.locales[locale].pageTitle}
       </h1>
       <p className="mt-4 max-w-[65ch] text-base leading-7 text-muted">

@@ -10,11 +10,6 @@ import TerminalBar from "@dabaz/components/terminal-bar";
 import ThemeProvider from "@dabaz/components/theme-provider";
 import copyByLocale from "@dabaz/data/copy";
 import site, { type Locale } from "@dabaz/data/site";
-import {
-  clashDisplay,
-  generalSans,
-  geistMono,
-} from "@dabaz/lib/fonts";
 
 type RootDocumentProps = {
   locale: Locale;
@@ -22,8 +17,8 @@ type RootDocumentProps = {
 };
 
 /**
- * Shared document shell. Each route group owns a root layout so `<html lang>`
- * matches the page locale; everything inside the document lives here.
+ * Shared document shell. The root layout owns `<html lang>` and the font
+ * preload; everything inside the document lives here.
  */
 export default function RootDocument({
   locale,
@@ -33,12 +28,16 @@ export default function RootDocument({
   const loc = site.locales[locale];
 
   return (
-    <html
-      lang={loc.lang}
-      suppressHydrationWarning
-      className={`${clashDisplay.variable} ${generalSans.variable} ${geistMono.variable}`}
-    >
+    <html lang={loc.lang} suppressHydrationWarning>
       <body className="flex min-h-svh flex-col bg-bg pb-14 pt-[65px] font-sans text-fg antialiased">
+        {/* DabFonts: preload the body weight only; 600 follows with swap. */}
+        <link
+          rel="preload"
+          href="/fonts/DabSans-Regular.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
         <ThemeProvider>
           <SoundProvider>
             <a
