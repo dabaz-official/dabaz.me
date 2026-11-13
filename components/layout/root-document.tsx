@@ -47,15 +47,15 @@ export default function RootDocument({
             >
               {copy.skip}
             </a>
-            <ConsoleEasterEgg />
-            <BootSequence />
-            <CommandPalette />
-            <Nav />
+            <ConsoleEasterEgg locale={locale} />
+            <BootSequence locale={locale} />
+            <CommandPalette locale={locale} />
+            <Nav locale={locale} />
             <main id="main" className="flex flex-1 flex-col">
               {children}
             </main>
-            <Footer />
-            <TerminalBar />
+            <Footer locale={locale} />
+            <TerminalBar locale={locale} />
           </SoundProvider>
         </ThemeProvider>
       </body>

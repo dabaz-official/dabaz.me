@@ -22,7 +22,7 @@ export default function Sound({ locale }: { locale: Locale }) {
     <Container id="sound" className="scroll-mt-24 pb-16 pt-24">
       <SectionHeader index="03" label={copy.sound.label} />
       <div className="mt-8 font-mono text-sm leading-7 text-muted">
-        <AmbientStatus />
+        <AmbientStatus locale={locale} />
         <p>{copy.sound.trackLayer}</p>
       </div>
       <Visualizer

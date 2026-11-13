@@ -1,19 +1,22 @@
 import Link from "next/link";
 
 import Container from "@dabaz/components/layout/container";
+import copyByLocale from "@dabaz/data/copy";
 import social from "@dabaz/data/social";
-import site from "@dabaz/data/site";
-
-const navLinks = [
-  { label: "Work", href: "/#work" },
-  { label: "Sound", href: "/#sound" },
-  { label: "CV", href: "https://cv.dabaz.me", external: true },
-];
+import site, { type Locale } from "@dabaz/data/site";
 
 const linkClass =
   "font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:text-fg";
 
-export default function Footer() {
+export default function Footer({ locale }: { locale: Locale }) {
+  const copy = copyByLocale[locale];
+  const home = site.locales[locale].path;
+  const navLinks = [
+    { label: copy.nav.work, href: `${home}#work` },
+    { label: copy.nav.sound, href: `${home}#sound` },
+    { label: copy.nav.cv, href: "https://cv.dabaz.me", external: true },
+  ];
+
   return (
     <footer className="site-footer">
       <Container className="flex flex-col gap-3 py-6 sm:flex-row sm:items-center sm:justify-between">
@@ -44,7 +47,7 @@ export default function Footer() {
           {social.primary.map(({ label, href }) => (
             <li key={label}>
               <a href={href} className={linkClass}>
-                {label}
+                {href.startsWith("mailto:") ? copy.social.email : label}
               </a>
             </li>
           ))}

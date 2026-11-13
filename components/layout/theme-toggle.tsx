@@ -4,7 +4,11 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
-export default function ThemeToggle() {
+import copyByLocale from "@dabaz/data/copy";
+import type { Locale } from "@dabaz/data/site";
+
+export default function ThemeToggle({ locale }: { locale: Locale }) {
+  const copy = copyByLocale[locale];
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -21,7 +25,7 @@ export default function ThemeToggle() {
   return (
     <button
       type="button"
-      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      aria-label={isDark ? copy.toggles.light : copy.toggles.dark}
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className="inline-flex size-8 items-center justify-center border border-line text-fg transition-colors hover:bg-accent hover:text-accent-ink"
     >
