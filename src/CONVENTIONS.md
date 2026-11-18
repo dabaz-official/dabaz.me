@@ -96,6 +96,11 @@ The `@font-face` quartet and the `--font-sans` stack are DabFonts 1.0.1
 | `.link`, `.button`, `.button-secondary` | classes | link: accent + underline, 2px offset; buttons: `type-label` typography in markup, 44px minimum, neutral ink or 1px boundary |
 | `src/lib/i18n.ts` | `locales`, `Locale`, `defaultLocale`, `Localized<T>` | one vocabulary for locales; no routing |
 | `src/lib/metadata.ts` | `PageMeta`, `ResolvedMeta`, `resolveMeta()` | title suffix, absolute canonical from `site.url` |
+| `components/home/Hero.astro` | `locale: Locale` | name, role, intro, `now`, contact links, and the portrait in the DESIGN.md §7.2 sequence |
+| `components/home/WorkList.astro` | `entries: CollectionEntry<"works">[]`, `locale` | one-link rows, 9rem meta column from 640, optional 16:10 cover |
+| `components/home/ExperienceList.astro` | `entries: CollectionEntry<"experience">[]`, `locale` | year-range meta, role title, org, summary; same row grammar |
+| `src/content.config.ts` | `works`, `experience` collections | Zod schemas mirroring DESIGN.md §10; thread 3 adds `writing` |
+| `src/content/profile.ts` | `HomeCopy` and default export | home copy per locale: role, intro, `now`, about, section labels |
 
 Rules: extend a primitive rather than forking it; a new visual need is a token
 decision, not a local value; a section composes `Section` + `SectionHeader` +
@@ -125,9 +130,13 @@ recorded decision and its own budget line before it ships.
 
 ## 8. Content
 
-- `src/content/` is the only home for records and copy. Thread 2 adds `works/`
-  and `experience/`, thread 3 adds `writing/<locale>/`; collections are defined
-  once in `src/content.config.ts` with a schema mirroring `DESIGN.md` §10.
+- `src/content/` is the only home for records and copy. Thread 2 created
+  `src/content.config.ts` with `works` and `experience`; thread 3 adds
+  `writing/<locale>/` to the same file, never a second config.
+- Works are ordered newest first by `year`; experience newest first by `start`.
+  Both are sorted at the page, not in the loader.
+- A work cover lives beside its record (`src/content/works/<slug>.webp`) so the
+  `image()` schema helper resolves it; images are not kept in `public/`.
 - `src/data/site.ts` and `src/data/social.ts` hold identity constants only.
 - Proper nouns stay untranslated; every other field is `Localized<T>`.
 - A missing fact is omitted, never replaced by a placeholder in production.
@@ -206,6 +215,12 @@ or 1536 CSS pixels (200% zoom on a 1280px window is the 640px case).
 
 ## 14. Not built here
 
-Home sections (thread 2), posts and RSS (thread 3), `/zh` routing (thread 4),
-OG art, sitemap, robots, Lighthouse and the domain switch (thread 5), and the
-portrait asset, first post, and work years listed in `DESIGN.md` §14.
+Home sections are built (thread 2): hero, work, earlier, and about, with contact
+links in the hero and the footer. Not built here: the writing list and posts
+(thread 3), `/zh` routing (thread 4), OG art, sitemap, robots, Lighthouse and the
+domain switch (thread 5).
+
+Open content items, all owner-supplied: a final portrait to replace the CV photo,
+date granularity for works and roles (the schema stores a year, the CV has
+ranges), and the `02` section slot, which DESIGN.md §6 reserves for Writing and
+thread 3 fills.

@@ -4,8 +4,9 @@ Personal site of DabAZ: work, writing, and contact. Static HTML, self-hosted
 fonts, no client runtime beyond the theme toggle.
 
 The rebuild is in progress on `rebuild`. This branch ships the foundation —
-tokens, fonts, the document shell, shared primitives, CI, and a deployable empty
-page. Home sections, writing, and `/zh` follow in their own threads.
+tokens, fonts, the document shell, shared primitives, CI — and the home page:
+hero, work, earlier roles, about, and contact. Writing and `/zh` follow in their
+own threads.
 
 ## Stack
 
@@ -45,14 +46,15 @@ Node 24 (`.nvmrc`), pnpm 12.
 ## Structure
 
 ```text
-public/           fonts, project images, favicon — served as-is
+public/           fonts and favicon — served as-is
 src/
-  components/     shared primitives and the shell (Header, Footer, ThemeToggle)
-  content/        content home; threads 2–3 add collections
+  assets/         the portrait, imported through astro:assets
+  components/     shared primitives, the shell, and the home sections
+  content/        works, experience, and profile copy; writing lands in thread 3
   data/           site identity and social links
   layouts/        BaseLayout — head, theme script, skip link, slots
   lib/            i18n seam, metadata helper
-  pages/          routes; `/` is the shell only
+  pages/          routes; `/` is the home page
   styles/         tokens.css (the only design values) and global.css
 scripts/          check-tokens.mjs, the lint gate
 docs/             working handoff for the rebuild (deleted after merge)
