@@ -2,12 +2,16 @@ import Image from "next/image";
 
 import SectionHeader from "@dabaz/components/home/section-header";
 import Container from "@dabaz/components/layout/container";
+import copyByLocale from "@dabaz/data/copy";
 import projects from "@dabaz/data/projects";
+import type { Locale } from "@dabaz/data/site";
 
-export default function Work() {
+export default function Work({ locale }: { locale: Locale }) {
+  const copy = copyByLocale[locale];
+
   return (
     <Container id="work" className="scroll-mt-24 pb-0 pt-16">
-      <SectionHeader index="02" label="Work" />
+      <SectionHeader index="02" label={copy.work.label} />
       <ol className="mt-8 border-t border-line">
         {projects.map((project) => (
           <li key={project.key} className="border-b border-line">
@@ -19,7 +23,7 @@ export default function Work() {
             >
               <div>
                 <p className="font-mono text-xs uppercase tracking-widest text-muted">
-                  {project.role}
+                  {copy.work.role}
                 </p>
                 {project.image && (
                   <div className="mt-4 w-24 border border-line bg-bg p-1">
@@ -38,7 +42,9 @@ export default function Work() {
                   {project.key}
                 </h3>
                 <p className="mt-2 max-w-[65ch] text-sm leading-6 text-muted">
-                  {project.description}
+                  {copy.work.descriptions[
+                    project.key as keyof typeof copy.work.descriptions
+                  ]}
                 </p>
               </div>
             </a>

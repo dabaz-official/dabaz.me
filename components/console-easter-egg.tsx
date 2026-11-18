@@ -2,22 +2,21 @@
 
 import { useEffect } from "react";
 
+import copyByLocale from "@dabaz/data/copy";
+import type { Locale } from "@dabaz/data/site";
+
 /** Leaves a signature for everyone who opens devtools. */
-export default function ConsoleEasterEgg() {
+export default function ConsoleEasterEgg({ locale }: { locale: Locale }) {
+  const { signature, opened, hint } = copyByLocale[locale].console;
+
   useEffect(() => {
     console.log(
-      "%cDABAZ_%c v27.0.0 — rebuilt from scratch",
+      "%c" + signature,
       "color:#b8ff29;font-weight:bold;font-family:monospace",
       "color:inherit",
     );
-    console.log(
-      "%c> you opened the console. hacker verified.",
-      "font-family:monospace;color:#82827d",
-    );
-    console.log(
-      "%c> try \u2318K — this site takes commands.",
-      "font-family:monospace;color:#82827d",
-    );
-  }, []);
+    console.log("%c" + opened, "font-family:monospace;color:#82827d");
+    console.log("%c" + hint, "font-family:monospace;color:#82827d");
+  }, [signature, opened, hint]);
   return null;
 }

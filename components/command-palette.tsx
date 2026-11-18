@@ -3,9 +3,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { filterCommands, useCommands } from "@dabaz/components/command-registry";
+import copyByLocale from "@dabaz/data/copy";
+import type { Locale } from "@dabaz/data/site";
 
-export default function CommandPalette() {
-  const commands = useCommands();
+export default function CommandPalette({ locale }: { locale: Locale }) {
+  const copy = copyByLocale[locale];
+  const commands = useCommands(locale);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [index, setIndex] = useState(0);
@@ -84,7 +87,7 @@ export default function CommandPalette() {
   return (
     <div
       role="dialog"
-      aria-label="Command palette"
+      aria-label={copy.palette.dialogLabel}
       className="fixed inset-0 z-[150] flex justify-center bg-black/40 px-4 pt-[18vh] backdrop-blur-sm"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) close();
@@ -99,8 +102,8 @@ export default function CommandPalette() {
             setIndex(0);
           }}
           onKeyDown={onKeyDown}
-          placeholder="type a command…"
-          aria-label="Command input"
+          placeholder={copy.palette.placeholder}
+          aria-label={copy.palette.inputLabel}
           style={{ outline: "none" }}
           className="w-full border-b border-line bg-transparent px-4 py-3 font-mono text-sm text-fg placeholder:text-muted"
         />
@@ -144,14 +147,14 @@ export default function CommandPalette() {
           ))}
           {filtered.length === 0 && (
             <li className="px-4 py-3 font-mono text-sm text-muted">
-              command not found
+              {copy.palette.empty}
             </li>
           )}
         </ul>
         <div className="flex gap-4 border-t border-line px-4 py-2 font-mono text-[10px] text-muted">
-          <span>↑↓ navigate</span>
-          <span>↵ run</span>
-          <span>esc close</span>
+          <span>{copy.palette.navigate}</span>
+          <span>{copy.palette.run}</span>
+          <span>{copy.palette.close}</span>
         </div>
       </div>
     </div>

@@ -4,6 +4,8 @@ import Visualizer from "@dabaz/components/audio/visualizer";
 import AmbientStatus from "@dabaz/components/home/ambient-status";
 import SectionHeader from "@dabaz/components/home/section-header";
 import Container from "@dabaz/components/layout/container";
+import copyByLocale from "@dabaz/data/copy";
+import type { Locale } from "@dabaz/data/site";
 
 const trackLayer = [
   {
@@ -13,13 +15,15 @@ const trackLayer = [
   { label: "music.dabaz.me", href: "https://music.dabaz.me" },
 ];
 
-export default function Sound() {
+export default function Sound({ locale }: { locale: Locale }) {
+  const copy = copyByLocale[locale];
+
   return (
     <Container id="sound" className="scroll-mt-24 pb-16 pt-24">
-      <SectionHeader index="03" label="Sound" />
+      <SectionHeader index="03" label={copy.sound.label} />
       <div className="mt-8 font-mono text-sm leading-7 text-muted">
-        <AmbientStatus />
-        <p>{"> track layer ............ linked (spotify)"}</p>
+        <AmbientStatus locale={locale} />
+        <p>{copy.sound.trackLayer}</p>
       </div>
       <Visualizer
         variant="spectrum"
@@ -41,9 +45,7 @@ export default function Sound() {
         ))}
       </ul>
       <p className="mt-6 max-w-[65ch] text-sm leading-6 text-muted">
-        A generative ambient engine, synthesized live in your browser — arm
-        it with the sound toggle in the header. Real releases stay on the
-        platforms above.
+        {copy.sound.description}
       </p>
     </Container>
   );

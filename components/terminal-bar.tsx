@@ -7,13 +7,16 @@ import {
   useCommands,
   type Command,
 } from "@dabaz/components/command-registry";
+import copyByLocale from "@dabaz/data/copy";
+import type { Locale } from "@dabaz/data/site";
 
 /**
  * Always-visible terminal prompt docked to the bottom-left of the viewport.
  * Focus it to reveal the command list above; Enter runs the active command.
  */
-export default function TerminalBar() {
-  const commands = useCommands();
+export default function TerminalBar({ locale }: { locale: Locale }) {
+  const copy = copyByLocale[locale];
+  const commands = useCommands(locale);
   const [query, setQuery] = useState("");
   const [focused, setFocused] = useState(false);
   const [index, setIndex] = useState(0);
@@ -83,7 +86,7 @@ export default function TerminalBar() {
         <ul
           ref={listRef}
           role="listbox"
-          aria-label="Command suggestions"
+          aria-label={copy.terminal.suggestionsLabel}
           onMouseMove={() => {
             if (Date.now() - keyNavAt.current > 400) setPointerActive(true);
           }}
@@ -121,7 +124,7 @@ export default function TerminalBar() {
           ))}
           {filtered.length === 0 && (
             <li className="px-4 py-3 font-mono text-sm text-muted">
-              command not found
+              {copy.terminal.empty}
             </li>
           )}
         </ul>
@@ -140,8 +143,8 @@ export default function TerminalBar() {
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           onKeyDown={onKeyDown}
-          aria-label="Terminal command input"
-          placeholder="type a command…"
+          aria-label={copy.terminal.inputLabel}
+          placeholder={copy.terminal.placeholder}
           style={{ outline: "none" }}
           className="w-full bg-transparent font-mono text-sm text-fg placeholder:text-muted"
         />

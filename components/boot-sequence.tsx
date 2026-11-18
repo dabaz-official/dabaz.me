@@ -2,24 +2,32 @@
 
 import { useEffect, useState } from "react";
 
+import copyByLocale from "@dabaz/data/copy";
+import type { Locale } from "@dabaz/data/site";
+
 const BOOT_KEY = "dabaz-boot-v1";
 
-const BOOT_LINES: { text: string; tone: "muted" | "accent" | "fg" }[] = [
-  { text: "DABAZ BIOS v27.0.0", tone: "fg" },
-  { text: "> memory ................. ok", tone: "muted" },
-  { text: "> design tokens .......... loaded", tone: "muted" },
-  { text: "> fonts .................. clash / general-sans / geist-mono", tone: "muted" },
-  { text: "> audio engine ........... standby", tone: "muted" },
-  { text: "> identity ............... hacker.musician.designer.developer", tone: "accent" },
-  { text: "", tone: "muted" },
-  { text: "$ whoami", tone: "fg" },
+const BOOT_TONES: ("fg" | "muted" | "accent")[] = [
+  "fg",
+  "muted",
+  "muted",
+  "muted",
+  "muted",
+  "accent",
+  "muted",
+  "fg",
 ];
 
 /**
  * First-visit boot screen. Skipped by any key/click, replayed never
  * (localStorage), and disabled entirely under prefers-reduced-motion.
  */
-export default function BootSequence() {
+export default function BootSequence({ locale }: { locale: Locale }) {
+  const copy = copyByLocale[locale];
+  const bootLines = copy.boot.lines.map((text, i) => ({
+    text,
+    tone: BOOT_TONES[i] ?? "muted",
+  }));
   const [state, setState] = useState<"hidden" | "show" | "fading">("hidden");
 
   useEffect(() => {
@@ -54,7 +62,7 @@ export default function BootSequence() {
       }`}
     >
       <div className="font-mono text-xs leading-6 sm:text-sm sm:leading-7">
-        {BOOT_LINES.map((line, i) => (
+        {bootLines.map((line, i) => (
           <p
             key={i}
             className={`boot-line opacity-0 ${
@@ -67,14 +75,14 @@ export default function BootSequence() {
             style={{ animationDelay: `${i * 190}ms` }}
           >
             {line.text || "\u00A0"}
-            {i === BOOT_LINES.length - 1 && (
+            {i === bootLines.length - 1 && (
               <span className="boot-cursor text-accent">▮</span>
             )}
           </p>
         ))}
       </div>
       <p className="mt-10 font-mono text-[10px] text-muted">
-        [ click or press any key to skip ]
+        {copy.boot.skip}
       </p>
     </div>
   );

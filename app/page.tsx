@@ -3,13 +3,15 @@ import Sound from "@dabaz/components/home/sound";
 import Whoami from "@dabaz/components/home/whoami";
 import Work from "@dabaz/components/home/work";
 
+const locale = "en" as const;
+
 export default function HomePage() {
   return (
     <>
-      <Hero />
-      <Whoami />
-      <Work />
-      <Sound />
+      <Hero locale={locale} />
+      <Whoami locale={locale} />
+      <Work locale={locale} />
+      <Sound locale={locale} />
     </>
   );
 }
