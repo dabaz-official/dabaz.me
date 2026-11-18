@@ -69,8 +69,15 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
   the shared surface. Extend them; do not fork them.
 - **Content:** `src/content/` for records and copy, `src/data/site.ts` and
   `src/data/social.ts` for identity. See `src/content/README.md`.
-- **Scope of this branch:** foundation only — no home sections, no posts, no
-  `/zh`, no OG art, no domain change until their threads land.
+- **Design ownership:** thread 1.5 (Design Direction) owns composition, rhythm,
+  and visual detail; Foundation owns tokens; thread 2 implements the approved
+  direction. HQ approves the direction and holds the design veto. A UI change
+  without design sign-off does not merge.
+- **Threads:** HQ (0) decisions and merging · Foundation (1) system · Design
+  Direction (1.5) visual direction · Content & Sections (2) home · Blog (3) ·
+  Internationalization (4) · Launch & Polish (5).
+- **Scope of the current work:** foundation and home sections are in; the design
+  pass is next. Writing, `/zh`, OG art, and the domain wait for their threads.
 
 ## Definition of Done
 
@@ -83,11 +90,20 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
 - [ ] No client JavaScript beyond the theme script
 - [ ] Copy follows DabAgents rule 07; Chinese copy follows DabFonts
 - [ ] `src/CONVENTIONS.md` updated when an interface changes
+- [ ] Design sign-off recorded for every UI change, with screenshots at 375,
+      768, 1024, and 1440 plus one sentence of intent per section
 - [ ] Preview deployment checked for UI changes
 - [ ] No secrets, debug logs, or commented-out code
 
 ## Exceptions
 
+- **Glass header.** Rule: DabDesign `DabDesign.md` §1 bans glassmorphism and
+  DESIGN.md §3 previously banned `backdrop-filter`. Reason: the owner approved a
+  translucent, blurred header so content stays visible while scrolling; the
+  scrim stays at 80% or higher, contrast is measured over the composited
+  surface, and unsupported or reduced-transparency clients get an opaque bar.
+  Scope: the `<header>` only, never a card, dialog, footer, or toast.
+  Owner: HQ. Review: 2026-12-19. A `DEC-` upstream is still open.
 - **`astro check` gate.** Rule: DESIGN.md §12 lists `astro check` as blocking.
   Reason: `@astrojs/check` is outside the foundation dependency whitelist, so
   the gate is `astro sync && tsc --noEmit && astro build`; template errors are

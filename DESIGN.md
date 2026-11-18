@@ -65,7 +65,13 @@ remove it.
 
 **Theme.** Light and dark are equal citizens. Default follows
 `prefers-color-scheme`; an explicit choice is stored and applied before first
-paint. No `backdrop-filter`, no gradient overlays, no tinted header.
+paint. No gradient overlays.
+
+**Glass is allowed in exactly one place: the site header** (§7.1). Every other
+surface — footer, cards, dialogs, toasts — stays opaque. Upstream
+`DabDesign.md` §1 still bans glassmorphism, so this is a recorded project
+exception (`AGENTS.md` → Exceptions) with an open `DEC-` upstream; it is not a
+licence to blur anything else.
 
 **Decided 2026-11-19:** the accent hue is the approved personal-series blue.
 craigweiss.dev's teal is out of scope; adopting it would need a `DEC-` plus a
@@ -143,13 +149,22 @@ radii, or type sizes.
 
 ### 7.1 Header
 
-- Static; scrolls away. Height `space-16`. One 1px bottom border.
+- **Sticky** at the top; height `space-16`; one 1px bottom border. Content
+  scrolls under it, which is what makes the glass legible.
+- Glass: background `--dab-header-bg` (page background at 80% minimum, defined
+  in `tokens.css`), `backdrop-filter: blur(16px) saturate(1.8)` via
+  `--dab-header-blur`. Text sits on the scrim, never on raw content.
+- Fallbacks: no `backdrop-filter` support or `prefers-reduced-transparency:
+  reduce` renders the header fully opaque. Never rely on the blur for contrast.
+- Contrast is measured over the composited scrim in both themes; the scrim may
+  not drop below 80% until it is re-measured.
 - Left: wordmark, `type-h4`, weight 600.
 - Right: nav (`type-label`, `color-text-secondary`, current item
   `color-text-primary` with an accent marker), then the theme toggle.
 - Theme toggle: 24px icon in a 44×44 hit area, `aria-label`, no visible box until
   hover/focus.
-- Background is `color-background`; no blur, no transparency.
+- Anchored sections set `scroll-margin-top` to the header height plus
+  `space-4`, so a jump never hides a heading under the bar.
 
 ### 7.2 Hero
 
@@ -335,7 +350,8 @@ Authoring rules:
 
 ## 13. Non-goals
 
-- No second accent hue, no gradient, no glass, no blur, no illustration system.
+- No second accent hue, no gradient, no illustration system.
+- No glass outside the site header (§7.1).
 - No dark-pattern motion, no autoplay media, no cursor effects.
 - No CMS, no database, no client-side router in v1.
 - No page that exists only to host an animation.
@@ -361,3 +377,19 @@ These block content or assets, not the design:
 | 2026-11-19 | Work is a list only; no case-study pages in v1 | Owner |
 | 2026-11-19 | No system preference means light | Owner |
 | 2026-11-19 | Shell is `container-lg`; no new container token | This document, §5 |
+| 2026-11-19 | Header is sticky and the only surface allowed glass; project exception recorded | Owner |
+
+## 16. Visual direction (pending)
+
+The rules above are a floor, not a design. The current home page satisfies them
+and still reads as a default document, because no thread owned composition,
+rhythm, or detail.
+
+- **Owner:** thread 1.5, Design Direction (see `docs/handoff-design.md`).
+- **Authority:** HQ approves one direction before implementation; thread 2
+  implements it; no UI merges without design sign-off (`AGENTS.md` → Definition
+  of Done).
+- **Until it lands:** no new visual devices, effects, or layout variants. The
+  header glass is the only approved exception.
+- **The direction must name exactly one signature device** — the one thing a
+  visitor remembers — and it must survive with the accent used in three places.
