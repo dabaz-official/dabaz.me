@@ -44,8 +44,8 @@ const home: HomeCopy = {
     zh: "黑客、音乐人、设计师、开发者——在代码、声音与像素之间制造噪音。",
   },
   now: {
-    en: "Currently rebuilding this site and making small tools with AI.",
-    zh: "目前正在重建这个站点，并用 AI 制作一些小工具。",
+    en: "Currently building DabChat and DabMusic.",
+    zh: "目前在做 DabChat 和 DabMusic。",
   },
   about: {
     en: "Frontend engineer by trade, hacker by instinct, musician by obsession, designer by necessity. I build interfaces, compose systems, and make noise on both sides of the frequency spectrum.",

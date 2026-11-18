@@ -221,6 +221,6 @@ links in the hero and the footer. Not built here: the writing list and posts
 domain switch (thread 5).
 
 Open content items, all owner-supplied: a final portrait to replace the CV photo,
-date granularity for works and roles (the schema stores a year, the CV has
-ranges), and the `02` section slot, which DESIGN.md §6 reserves for Writing and
-thread 3 fills.
+real 16:10 work covers, and the `02` section slot, which DESIGN.md §6 reserves
+for Writing and thread 3 fills. Works and roles show years by owner decision;
+the CV's month ranges are not modelled.

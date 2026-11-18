@@ -8,7 +8,7 @@ const site = {
   name: "DabAZ",
   url: "https://dabaz.me",
   email: "hi@dabaz.me",
-  role: "Frontend engineer & UI designer",
+  role: "Forward Deployed Engineer",
   description:
     "Frontend engineer and designer building things that make noise — in code, in sound and in pixels.",
 } as const;

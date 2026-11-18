@@ -10,6 +10,7 @@ const social: { primary: Social[]; all: Social[] } = {
     { label: "Email", href: "mailto:hi@dabaz.me" },
     { label: "X", href: "https://x.com/dabaz_official" },
     { label: "GitHub", href: "https://github.com/dabaz-official" },
+    { label: "CV", href: "https://cv.dabaz.me" },
   ],
   all: [
     { label: "Email", href: "mailto:hi@dabaz.me" },
@@ -25,6 +26,7 @@ const social: { primary: Social[]; all: Social[] } = {
     },
     { label: "Threads", href: "https://www.threads.net/@dabaz_official" },
     { label: "DabMusic", href: "https://music.dabaz.me" },
+    { label: "CV", href: "https://cv.dabaz.me" },
   ],
 };
 
