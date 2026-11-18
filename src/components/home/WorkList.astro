@@ -1,0 +1,144 @@
+---
+/**
+ * Work list — DESIGN.md §7.4.
+ *
+ * Each row is one link: meta column (year · role), an optional 16:10 cover, and
+ * the title plus a one-sentence summary. Hover and focus underline the title
+ * only; the row never moves, tints, or lifts.
+ */
+import type { CollectionEntry } from "astro:content";
+import ContentImage from "../ContentImage.astro";
+import home from "../../content/profile";
+import type { Locale } from "../../lib/i18n";
+
+interface Props {
+  entries: CollectionEntry<"works">[];
+  locale: Locale;
+}
+
+const { entries, locale } = Astro.props;
+---
+
+<ul class="work-list">
+  {
+    entries.map((entry) => {
+      const { title, year, role, summary, href, cover, status } = entry.data;
+      const meta = [year, role[locale]].filter(Boolean).join(" · ");
+      const Tag = href ? "a" : "div";
+      return (
+        <li class="work-row">
+          <Tag class="work-row__link" href={href}>
+            <span class="type-caption tabular work-row__meta">{meta}</span>
+            <div class="work-row__body">
+              {cover && (
+                <ContentImage
+                  src={cover.src}
+                  alt={cover.alt[locale]}
+                  width={128}
+                  height={80}
+                  class="work-row__thumb"
+                />
+              )}
+              <div class="work-row__text">
+                <h3 class="type-h3 work-row__title">{title}</h3>
+                <p class="type-body-sm work-row__summary">
+                  {summary[locale]}
+                </p>
+                {status === "archived" && (
+                  <p class="type-caption work-row__status">
+                    {home.labels.archived[locale]}
+                  </p>
+                )}
+              </div>
+            </div>
+          </Tag>
+        </li>
+      );
+    })
+  }
+</ul>
+
+<style>
+  .work-list {
+    margin-block-start: var(--dab-space-8);
+    padding: 0;
+    list-style: none;
+  }
+
+  .work-row {
+    border-block-start: var(--dab-border-width) solid var(--dab-color-border);
+  }
+
+  .work-row:last-child {
+    border-block-end: var(--dab-border-width) solid var(--dab-color-border);
+  }
+
+  .work-row__link {
+    display: grid;
+    gap: var(--dab-space-2);
+    padding-block: var(--dab-space-6);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .work-row__meta {
+    color: var(--dab-color-text-tertiary);
+  }
+
+  .work-row__body {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--dab-space-5);
+  }
+
+  .work-row__thumb {
+    flex: none;
+    inline-size: 128px;
+    block-size: 80px;
+    object-fit: cover;
+  }
+
+  .work-row__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--dab-space-1);
+    min-inline-size: 0;
+  }
+
+  .work-row__title {
+    color: var(--dab-color-text-primary);
+  }
+
+  .work-row__summary {
+    max-width: var(--dab-measure);
+    color: var(--dab-color-text-secondary);
+  }
+
+  .work-row__status {
+    align-self: flex-start;
+    padding: var(--dab-space-1) var(--dab-space-2);
+    border: var(--dab-border-width) solid var(--dab-color-border-strong);
+    border-radius: var(--dab-radius-xs);
+    color: var(--dab-color-text-tertiary);
+  }
+
+  .work-row__link:hover .work-row__title,
+  .work-row__link:focus-visible .work-row__title {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* From 640 the row splits into a 9rem meta column and the content. The
+     9rem track is DESIGN.md §7.4's composition value. */
+  @media (min-width: 640px) {
+    .work-row__link {
+      grid-template-columns: 9rem minmax(0, 1fr);
+      column-gap: var(--dab-space-6);
+      align-items: start;
+    }
+
+    .work-row__meta {
+      padding-block-start: var(--dab-space-1);
+    }
+  }
+</style>

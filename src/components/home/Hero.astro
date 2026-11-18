@@ -1,0 +1,127 @@
+---
+/**
+ * Hero — DESIGN.md §7.2.
+ *
+ * Sequence: name, role line, intro, `now`, links, portrait. The portrait is a
+ * `space-24` square beside the text from 640 and above, never a background.
+ * Links reuse `.link`, so the accent stays inside its budget.
+ */
+import { Image } from "astro:assets";
+import Section from "../Section.astro";
+import home from "../../content/profile";
+import social from "../../data/social";
+import site from "../../data/site";
+import type { Locale } from "../../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const portrait = home.portrait;
+---
+
+<Section spacing="loose" class="hero">
+  <div class="hero__inner">
+    <div class="hero__text">
+      <h1 class="type-display hero__name">{site.name}</h1>
+      <p class="type-h4 hero__role">{home.role[locale]}</p>
+      <p class="type-body-lg measure hero__intro">{home.intro[locale]}</p>
+      <p class="type-caption hero__now">
+        <span class="hero__now-label">{home.labels.now[locale]}</span>
+        {home.now[locale]}
+      </p>
+      <ul class="type-label hero__links">
+        {
+          social.primary.map(({ label, href }) => (
+            <li>
+              <a class="link" href={href}>
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <Image
+      src={portrait.src}
+      alt={portrait.alt[locale]}
+      width={96}
+      height={96}
+      loading="eager"
+      class="hero__portrait"
+    />
+  </div>
+</Section>
+
+<style>
+  .hero__inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--dab-space-6);
+  }
+
+  /* Below 640 the portrait leads: a square avatar above the name. */
+  .hero__portrait {
+    order: -1;
+    flex: none;
+    inline-size: var(--dab-space-24);
+    block-size: var(--dab-space-24);
+    border: var(--dab-border-width) solid var(--dab-color-border);
+    border-radius: var(--dab-radius-full);
+    object-fit: cover;
+  }
+
+  .hero__text {
+    min-inline-size: 0;
+  }
+
+  .hero__name {
+    color: var(--dab-color-text-primary);
+  }
+
+  .hero__role {
+    margin-block-start: var(--dab-space-4);
+    color: var(--dab-color-text-primary);
+  }
+
+  .hero__intro {
+    margin-block-start: var(--dab-space-4);
+    color: var(--dab-color-text-secondary);
+  }
+
+  .hero__now {
+    margin-block-start: var(--dab-space-6);
+  }
+
+  .hero__now-label {
+    color: var(--dab-color-text-tertiary);
+    margin-inline-end: var(--dab-space-2);
+  }
+
+  .hero__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--dab-space-2) var(--dab-space-6);
+    margin-block-start: var(--dab-space-6);
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 640px) {
+    .hero__inner {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--dab-space-8);
+    }
+
+    .hero__text {
+      flex: 1;
+    }
+
+    .hero__portrait {
+      order: 0;
+    }
+  }
+</style>

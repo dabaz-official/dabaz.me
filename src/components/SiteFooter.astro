@@ -1,20 +1,36 @@
 ---
 /**
- * The site footer (DESIGN.md §7.9): copyright and contact, nothing else.
- * The social list is thread 2's call; the data is in `src/data/social.ts`.
+ * The site footer (DESIGN.md §7.9): copyright and build date on the left, the
+ * contact links on the right. Tertiary by default, primary on hover; the accent
+ * is not used here, so it stays inside its budget.
  */
 import Container from "./Container.astro";
+import home from "../content/profile";
+import social from "../data/social";
 import site from "../data/site";
+import { defaultLocale } from "../lib/i18n";
 
 const year = new Date().getFullYear();
+const built = new Date().toLocaleDateString("en-CA");
+const locale = defaultLocale;
 ---
 
 <footer class="site-footer">
   <Container class="site-footer__inner">
-    <p class="type-caption tabular">© {year} {site.name}</p>
-    <a class="link type-caption" href={`mailto:${site.email}`}>
-      {site.email}
-    </a>
+    <p class="type-caption tabular">
+      © {year} {site.name}
+      <span class="site-footer__separator" aria-hidden="true">·</span>
+      {home.labels.built[locale]} {built}
+    </p>
+    <ul class="type-caption site-footer__links">
+      {
+        social.primary.map(({ label, href }) => (
+          <li>
+            <a href={href}>{label}</a>
+          </li>
+        ))
+      }
+    </ul>
   </Container>
 </footer>
 
@@ -33,6 +49,26 @@ const year = new Date().getFullYear();
     justify-content: space-between;
     gap: var(--dab-space-2) var(--dab-space-6);
     padding-block: var(--dab-space-8);
+  }
+
+  .site-footer__separator {
+    margin-inline: var(--dab-space-1);
+  }
+
+  .site-footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--dab-space-2) var(--dab-space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-footer a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
   }
 
   .site-footer a:hover {
