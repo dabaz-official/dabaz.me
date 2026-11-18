@@ -1,0 +1,17 @@
+---
+/**
+ * Prose wrapper: the body measure plus the `type-body` role.
+ *
+ * Thread 3 uses it for post bodies and may extend the paragraph rhythm; no
+ * other measure may be introduced.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={["prose", "measure", "type-body", className]}>
+  <slot />
+</div>

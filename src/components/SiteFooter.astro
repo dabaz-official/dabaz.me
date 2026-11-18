@@ -1,0 +1,41 @@
+---
+/**
+ * The site footer (DESIGN.md §7.9): copyright and contact, nothing else.
+ * The social list is thread 2's call; the data is in `src/data/social.ts`.
+ */
+import Container from "./Container.astro";
+import site from "../data/site";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <Container class="site-footer__inner">
+    <p class="type-caption tabular">© {year} {site.name}</p>
+    <a class="link type-caption" href={`mailto:${site.email}`}>
+      {site.email}
+    </a>
+  </Container>
+</footer>
+
+<style>
+  .site-footer {
+    margin-block-start: var(--dab-space-16);
+    border-block-start: var(--dab-border-width) solid var(--dab-color-border);
+    color: var(--dab-color-text-tertiary);
+  }
+
+  /* `Container` renders this element; see the note in SiteHeader. */
+  :global(.site-footer__inner) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--dab-space-2) var(--dab-space-6);
+    padding-block: var(--dab-space-8);
+  }
+
+  .site-footer a:hover {
+    color: var(--dab-color-text-primary);
+  }
+</style>

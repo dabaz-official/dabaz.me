@@ -1,0 +1,313 @@
+/*
+ * dabaz.me — design tokens.
+ *
+ * The single source of truth for every design value on this site: semantic
+ * roles only, both themes. Mapped from DabDesign core v1.0.1 §3.3, §4, §5, §6,
+ * §7 and the personal-series theme (DabDesign.md v1.0.1 §2). Fonts and their
+ * loading are DabFonts v1.0.1 (TYPESETTING.md §2.1).
+ *
+ * Rules for every other file:
+ *   - Reference the semantic token (`var(--dab-color-text-primary)` or the
+ *     Tailwind utility it generates), never a primitive or a raw value.
+ *   - Never declare a color, type size, radius, shadow, or tracking value
+ *     outside this file.
+ *   - Primitives appear here once, with the DabDesign step name in a comment;
+ *     they are never used by a component.
+ */
+
+/* ---------------------------------------------------------------------------
+ * Fonts — DabFonts TYPESETTING.md §2.1, verbatim.
+ * `local("☺")` is first in every `src` so a locally installed family cannot
+ * win. The 400 face is preloaded in BaseLayout; the 600 face uses `swap`.
+ * ------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: "Dab Sans";
+  src: local("☺"), url("/fonts/DabSans-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Dab Sans";
+  src: local("☺"), url("/fonts/DabSans-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Dab Mono";
+  src: local("☺"), url("/fonts/DabMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Dab Mono";
+  src: local("☺"), url("/fonts/DabMono-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-sans: "Dab Sans", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+
+  /* Dab Mono is the monospace stack only: code, pre, kbd, samp, tabular data.
+     It never enters the body stack. */
+  --font-mono: "Dab Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* ---------------------------------------------------------------------------
+ * Color — core §3.3 plus the personal-series accent (DabDesign.md §2).
+ * Light is the fallback: no `data-theme` means light, both for a first paint
+ * and for a client with JavaScript disabled.
+ * ------------------------------------------------------------------------- */
+
+:root {
+  color-scheme: light;
+
+  --dab-color-background: #fafafa; /* gray-50 */
+  --dab-color-surface: #ffffff; /* white */
+  --dab-color-surface-secondary: #f5f5f5; /* gray-100 */
+
+  --dab-color-text-primary: #171717; /* gray-900 */
+  --dab-color-text-secondary: #404040; /* gray-700 */
+  --dab-color-text-tertiary: #525252; /* gray-600 */
+  --dab-color-text-inverse: #ffffff; /* white */
+  --dab-color-text-disabled: #a3a3a3; /* gray-400 */
+
+  --dab-color-border: #e5e5e5; /* gray-200 */
+  --dab-color-border-strong: #737373; /* gray-500 */
+
+  /* Accent: personal-series blue for text, neutral ink for fills. */
+  --dab-color-primary: #171717; /* gray-900 */
+  --dab-color-primary-hover: #0a0a0a; /* gray-950 */
+  --dab-color-primary-pressed: #000000; /* black */
+  --dab-color-primary-subtle: #f5f5f5; /* gray-100 */
+  --dab-color-on-primary: #ffffff; /* white */
+  --dab-color-primary-text: #1d4ed8; /* blue-700 */
+
+  /* Core-fixed: never overridden, never accented. */
+  --dab-color-focus: #4c89ef;
+  --dab-color-selection-bg: #171717; /* gray-900 */
+  --dab-color-selection-fg: #ffffff; /* white */
+  --dab-color-overlay: rgb(0 0 0 / 0.5);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --dab-color-background: #0a0a0a; /* gray-950 */
+  --dab-color-surface: #171717; /* gray-900 */
+  --dab-color-surface-secondary: #262626; /* gray-800 */
+
+  --dab-color-text-primary: #fafafa; /* gray-50 */
+  --dab-color-text-secondary: #d4d4d4; /* gray-300 */
+  --dab-color-text-tertiary: #a3a3a3; /* gray-400 */
+  --dab-color-text-inverse: #171717; /* gray-900 */
+  --dab-color-text-disabled: #525252; /* gray-600 */
+
+  --dab-color-border: #262626; /* gray-800 */
+  --dab-color-border-strong: #737373; /* gray-500 */
+
+  --dab-color-primary: #fafafa; /* gray-50 */
+  --dab-color-primary-hover: #ffffff; /* white */
+  --dab-color-primary-pressed: #e5e5e5; /* gray-200 */
+  --dab-color-primary-subtle: #262626; /* gray-800 */
+  --dab-color-on-primary: #171717; /* gray-900 */
+  --dab-color-primary-text: #93c5fd; /* blue-300 */
+
+  --dab-color-focus: #4c89ef;
+  --dab-color-selection-bg: #fafafa; /* gray-50 */
+  --dab-color-selection-fg: #171717; /* gray-900 */
+  --dab-color-overlay: rgb(0 0 0 / 0.5);
+}
+
+/* ---------------------------------------------------------------------------
+ * Space and shape — core §5.
+ * ------------------------------------------------------------------------- */
+
+:root {
+  --dab-space-0: 0px;
+  --dab-space-0-5: 2px;
+  --dab-space-1: 4px;
+  --dab-space-2: 8px;
+  --dab-space-3: 12px;
+  --dab-space-4: 16px;
+  --dab-space-5: 20px;
+  --dab-space-6: 24px;
+  --dab-space-8: 32px;
+  --dab-space-10: 40px;
+  --dab-space-12: 48px;
+  --dab-space-16: 64px;
+  --dab-space-20: 80px;
+  --dab-space-24: 96px;
+
+  --dab-size-icon-sm: 16px;
+  --dab-size-icon-md: 20px;
+  --dab-size-icon-lg: 24px;
+  --dab-size-icon-xl: 32px;
+  --dab-control-height-sm: 32px;
+  --dab-control-height-md: 40px;
+  --dab-control-height-lg: 48px;
+
+  /* House policy, core §9: 44×44 effective target on touch surfaces. */
+  --dab-target-min: 44px;
+
+  --dab-radius-none: 0px;
+  --dab-radius-xs: 5px;
+  --dab-radius-sm: 8px;
+  --dab-radius-md: 11px;
+  --dab-radius-lg: 18px;
+  --dab-radius-pill: 9999px;
+  --dab-radius-full: 50%;
+
+  --dab-border-width: 1px;
+
+  /* The one shadow: interactive-card hover and floating layers only. */
+  --dab-shadow-floating: 2px 4px 16px rgb(0 0 0 / 0.16);
+
+  --dab-duration-fast: 100ms;
+  --dab-duration-base: 200ms;
+  --dab-duration-slow: 300ms;
+  --dab-easing-standard: cubic-bezier(0, 0, 0.5, 1);
+  --dab-easing-linear: linear;
+}
+
+/* ---------------------------------------------------------------------------
+ * Layout — core §7, DESIGN.md §5.
+ * ------------------------------------------------------------------------- */
+
+:root {
+  --dab-container-lg: 1024px;
+  --dab-gutter: var(--dab-space-4);
+
+  /* Body measure: 34–38em, DESIGN.md §5 fixes it at the middle of the range. */
+  --dab-measure: 36em;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --dab-gutter: var(--dab-space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --dab-gutter: var(--dab-space-8);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Type roles — core §4.2. Sizes, weights, and line heights; tracking is zero
+ * everywhere and is therefore never declared.
+ * ------------------------------------------------------------------------- */
+
+@layer components {
+  .type-display {
+    font-size: clamp(2.25rem, 1.5rem + 3vw, 3rem);
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .type-h1 {
+    font-size: clamp(1.875rem, 1.5rem + 1.5vw, 2.25rem);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .type-h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .type-h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .type-h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .type-body-lg {
+    font-size: 1.125rem;
+    font-weight: 400;
+    line-height: 1.7;
+  }
+
+  .type-body {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.8;
+  }
+
+  .type-body-sm {
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  .type-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .type-caption {
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  /* Aligned numerals: years, dates, counts (core §4.2). */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Tailwind bridge — the only place utilities learn about DabDesign roles.
+ * `@theme inline` keeps one variable per role: utilities resolve to the
+ * semantic token, which is what flips between themes.
+ * ------------------------------------------------------------------------- */
+
+@theme inline {
+  --color-background: var(--dab-color-background);
+  --color-surface: var(--dab-color-surface);
+  --color-surface-secondary: var(--dab-color-surface-secondary);
+
+  --color-text-primary: var(--dab-color-text-primary);
+  --color-text-secondary: var(--dab-color-text-secondary);
+  --color-text-tertiary: var(--dab-color-text-tertiary);
+  --color-text-inverse: var(--dab-color-text-inverse);
+  --color-text-disabled: var(--dab-color-text-disabled);
+
+  --color-border: var(--dab-color-border);
+  --color-border-strong: var(--dab-color-border-strong);
+
+  --color-primary: var(--dab-color-primary);
+  --color-primary-hover: var(--dab-color-primary-hover);
+  --color-primary-pressed: var(--dab-color-primary-pressed);
+  --color-primary-subtle: var(--dab-color-primary-subtle);
+  --color-primary-text: var(--dab-color-primary-text);
+  --color-on-primary: var(--dab-color-on-primary);
+
+  --color-focus: var(--dab-color-focus);
+
+  --radius-xs: var(--dab-radius-xs);
+  --radius-sm: var(--dab-radius-sm);
+  --radius-md: var(--dab-radius-md);
+  --radius-lg: var(--dab-radius-lg);
+  --radius-pill: var(--dab-radius-pill);
+
+  --shadow-floating: var(--dab-shadow-floating);
+}

@@ -1,0 +1,87 @@
+---
+/**
+ * Theme toggle. The only interactive control in the v1 shell.
+ *
+ * The inline script in `BaseLayout.astro` owns the state: it sets
+ * `data-theme` on `<html>`, persists the choice under `theme`, and rewrites
+ * this button's label. This file renders markup only, so no client JavaScript
+ * ships beyond the inline theme script.
+ */
+---
+
+<button
+  type="button"
+  class="theme-toggle"
+  data-theme-toggle
+  aria-label="Switch colour theme"
+>
+  <svg
+    class="theme-toggle__icon"
+    data-icon="dark"
+    viewBox="0 0 24 24"
+    width="24"
+    height="24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313-12.454z"></path>
+  </svg>
+  <svg
+    class="theme-toggle__icon"
+    data-icon="light"
+    viewBox="0 0 24 24"
+    width="24"
+    height="24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"></path>
+  </svg>
+</button>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--dab-target-min);
+    block-size: var(--dab-target-min);
+    padding: 0;
+    border: 0;
+    border-radius: var(--dab-radius-md);
+    background-color: transparent;
+    color: var(--dab-color-text-secondary);
+    cursor: pointer;
+    transition:
+      color var(--dab-duration-fast) var(--dab-easing-linear),
+      background-color var(--dab-duration-fast) var(--dab-easing-linear);
+  }
+
+  .theme-toggle:hover {
+    background-color: var(--dab-color-primary-subtle);
+    color: var(--dab-color-text-primary);
+  }
+
+  .theme-toggle__icon {
+    display: none;
+    inline-size: var(--dab-size-icon-lg);
+    block-size: var(--dab-size-icon-lg);
+  }
+
+  :global(html:not([data-theme="dark"])) .theme-toggle__icon[data-icon="dark"] {
+    display: block;
+  }
+
+  :global(html[data-theme="dark"]) .theme-toggle__icon[data-icon="light"] {
+    display: block;
+  }
+</style>

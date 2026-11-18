@@ -1,0 +1,166 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+/* The theme is an attribute on <html>, not the media query. Roles flip on
+   their own; this variant exists only for the rare non-token exception. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/*
+ * Global base and the shared conventions components compose with.
+ * Colors, type sizes, spacing, radii, and motion come from tokens.css; nothing
+ * here declares a design value.
+ */
+
+@layer base {
+  html {
+    background-color: var(--dab-color-background);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    background-color: var(--dab-color-background);
+    color: var(--dab-color-text-primary);
+    /* DabFonts TYPESETTING §2.1; the body carries the `type-body` role. */
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-synthesis: none;
+  }
+
+  main {
+    flex: 1;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
+  code,
+  pre,
+  kbd,
+  samp {
+    font-family: var(--font-mono);
+  }
+
+  /* Core-fixed: never overridden, never accented. */
+  ::selection {
+    background-color: var(--dab-color-selection-bg);
+    color: var(--dab-color-selection-fg);
+  }
+
+  /* Core §9: 2px outline, 2px offset, 3:1 against adjacent colors. */
+  :focus-visible {
+    outline: 2px solid var(--dab-color-focus);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer components {
+  /* The page shell: container-lg plus core §7 gutters. */
+  .container-shell {
+    width: 100%;
+    max-width: var(--dab-container-lg);
+    margin-inline: auto;
+    padding-inline: var(--dab-gutter);
+  }
+
+  /* Body measure. Prose and any long-form copy stay inside it. */
+  .measure {
+    max-width: var(--dab-measure);
+  }
+
+  /* Inline links: accent text, always underlined, never color-only. */
+  .link {
+    color: var(--dab-color-primary-text);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  /* Primary action: neutral ink fill. Pair with `type-label` in markup.
+     44px minimum on every surface. */
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--dab-space-2);
+    min-height: max(var(--dab-control-height-md), var(--dab-target-min));
+    padding-inline: var(--dab-space-4);
+    border: var(--dab-border-width) solid transparent;
+    border-radius: var(--dab-radius-md);
+    background-color: var(--dab-color-primary);
+    color: var(--dab-color-on-primary);
+    text-decoration: none;
+    transition: background-color var(--dab-duration-fast) var(--dab-easing-linear);
+  }
+
+  .button:hover {
+    background-color: var(--dab-color-primary-hover);
+  }
+
+  .button:active {
+    background-color: var(--dab-color-primary-pressed);
+  }
+
+  /* Secondary action: transparent with a perceivable boundary. */
+  .button-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--dab-space-2);
+    min-height: max(var(--dab-control-height-md), var(--dab-target-min));
+    padding-inline: var(--dab-space-4);
+    border: var(--dab-border-width) solid var(--dab-color-border-strong);
+    border-radius: var(--dab-radius-md);
+    background-color: transparent;
+    color: var(--dab-color-text-primary);
+    text-decoration: none;
+    transition: border-color var(--dab-duration-fast) var(--dab-easing-linear);
+  }
+
+  .button-secondary:hover {
+    border-color: var(--dab-color-text-primary);
+  }
+
+  /* Imagery frame: 1px border, radius-lg, never a shadow at rest. */
+  .image-frame {
+    border: var(--dab-border-width) solid var(--dab-color-border);
+    border-radius: var(--dab-radius-lg);
+  }
+
+  /* Prose wrapper: measure plus paragraph rhythm. Thread 3 extends it for
+     post bodies; it never forks a second measure. */
+  .prose > * + * {
+    margin-block-start: var(--dab-space-4);
+  }
+
+  /* Skip link: hidden until focused, then the first thing on screen. */
+  .skip-link {
+    position: fixed;
+    inset-block-start: var(--dab-space-2);
+    inset-inline-start: var(--dab-space-2);
+    z-index: 100;
+    padding: var(--dab-space-2) var(--dab-space-4);
+    border: var(--dab-border-width) solid var(--dab-color-border-strong);
+    border-radius: var(--dab-radius-md);
+    background-color: var(--dab-color-surface);
+    color: var(--dab-color-text-primary);
+    text-decoration: none;
+    transform: translateY(-200%);
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+}

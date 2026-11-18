@@ -1,0 +1,43 @@
+---
+/**
+ * The site header: wordmark, the nav seam, and the theme toggle
+ * (DESIGN.md §7.1). Static, one hairline, no blur.
+ *
+ * The nav holds no items until the routes exist (threads 2 and 3). Adding one
+ * means `type-label`, `color-text-secondary`, and for the current item
+ * `color-text-primary` plus the accent marker — never a fourth accent.
+ */
+import Container from "./Container.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+import site from "../data/site";
+---
+
+<header class="site-header">
+  <Container class="site-header__inner">
+    <a class="site-header__wordmark type-h4" href="/">{site.name}</a>
+    <ThemeToggle />
+  </Container>
+</header>
+
+<style>
+  .site-header {
+    border-block-end: var(--dab-border-width) solid var(--dab-color-border);
+    background-color: var(--dab-color-background);
+  }
+
+  /* `Container` renders this element, so its class is outside this file's
+     style scope; `:global()` is the documented way to style a child
+     component's root. Keep the prefix unique. */
+  :global(.site-header__inner) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--dab-space-4);
+    min-block-size: var(--dab-space-16);
+  }
+
+  .site-header__wordmark {
+    color: var(--dab-color-text-primary);
+    text-decoration: none;
+  }
+</style>

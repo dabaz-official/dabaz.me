@@ -1,0 +1,57 @@
+---
+/**
+ * One section header row: index, label, and a hairline rule (DESIGN.md §7.3).
+ *
+ * The index is decorative for assistive technology; the heading carries the
+ * name. `label` is a content string, not a style.
+ */
+interface Props {
+  label: string;
+  index?: string;
+  id?: string;
+  as?: "h2" | "h3";
+  class?: string;
+}
+
+const {
+  label,
+  index,
+  id,
+  as: Tag = "h2",
+  class: className,
+} = Astro.props;
+---
+
+<div class:list={["section-header", className]}>
+  {
+    index && (
+      <span class="section-header__index type-caption tabular" aria-hidden="true">
+        {index}
+      </span>
+    )
+  }
+  <Tag id={id} class="type-label section-header__label">{label}</Tag>
+  <span class="section-header__rule" aria-hidden="true"></span>
+</div>
+
+<style>
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: var(--dab-space-3);
+  }
+
+  .section-header__index {
+    color: var(--dab-color-primary-text);
+  }
+
+  .section-header__label {
+    color: var(--dab-color-text-secondary);
+    font-weight: 600;
+  }
+
+  .section-header__rule {
+    flex: 1;
+    border-block-start: var(--dab-border-width) solid var(--dab-color-border);
+  }
+</style>
