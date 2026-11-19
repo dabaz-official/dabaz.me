@@ -11,7 +11,7 @@ commit. `DESIGN.md` owns composition; DabDesign, DabFonts, and DabAgents (pins i
 |---|---|---|
 | `src/styles/tokens.css` | every design value: colour roles, type roles, space, shape, motion, layout | foundation |
 | `src/styles/global.css` | base element styles, link/button conventions, container, prose rhythm, skip link | foundation |
-| `src/layouts/BaseLayout.astro` | document shell, head, theme script, skip link, slots | foundation |
+| `src/layouts/BaseLayout.astro` | document shell, head, skip link, slots, theme attribute | foundation |
 | `src/components/` | shared primitives and the header/footer shell | foundation; extension by later threads |
 | `src/lib/i18n.ts` | `Locale`, `Localized<T>`, `locales`, `defaultLocale` | foundation; routing by thread 4 |
 | `src/lib/metadata.ts` | `PageMeta`, `resolveMeta()` | foundation; OG by thread 5 |
@@ -60,14 +60,17 @@ movement, not colour feedback.
 
 - `<html data-theme="light" | "dark">`. Tokens flip on the attribute; components
   need no `dark:` classes.
-- Storage key: `theme`, value `light` or `dark`. Absent or unreadable means:
-  `prefers-color-scheme: dark` → dark, otherwise light. **Light is the
-  fallback.**
-- The inline script in `BaseLayout.astro` (824 bytes) sets the attribute in the
-  head before first paint, mirrors it to `color-scheme`, follows the system only
-  while no explicit choice is stored, and toggles plus persists on click.
-- It is the only client JavaScript on the site. A second inline script or a
-  hydrated island is an island-budget change, not an implementation detail.
+- **The site is pinned to `light` for now.** `BaseLayout` writes
+  `data-theme="light"` into the document and the toggle is not rendered. There
+  is no theme script, so nothing reads the old `theme` storage key: a visitor
+  who once chose dark gets light, and no client can change it.
+- Light is also the fallback by construction: `:root` in `tokens.css` is the
+  light theme, so a document with no attribute renders light too.
+- The dark token block, the `@custom-variant dark`, and any
+  `[data-theme="dark"]` styles stay in the tree. Restoring the toggle is a
+  component restore plus an inline script, not a token change; the last commits
+  that carry both are `71ac41f` and earlier
+  (`git log -- src/components/ThemeToggle.astro`).
 - A `dark:` Tailwind variant exists for the rare non-token case; do not use it
   to restate a role.
 
@@ -87,7 +90,7 @@ The `@font-face` quartet and the `--font-sans` stack are DabFonts 1.0.1
 
 | Component / module | Props / exports | Guarantees |
 |---|---|---|
-| `BaseLayout.astro` | `title`, `description`, `path?`, `lang?`; slots `head`, `header`, `footer`, default | charset/viewport, title/description/canonical, font preload, theme script, skip link, `#main`, header/footer fall back to the shell |
+| `BaseLayout.astro` | `title`, `description`, `path?`, `lang?`; slots `head`, `header`, `footer`, default | charset/viewport, title/description/canonical, font preload, `data-theme` pinned to light, skip link, `#main`, header/footer fall back to the shell |
 | `Container.astro` | `as?` (`div` default, `section`, `header`, `footer`, `main`, `nav`), `class?` | `container-lg` width and the 16/24/32 gutter |
 | `Section.astro` | `as?` (`section` default), `spacing?` (`standard` \| `loose` \| `none`), `id?`, `labelledby?`, `class?` | top rhythm: `space-16`, `space-24` from 640 for `loose`, none for `none`; wraps its content in `Container` |
 | `SectionHeader.astro` | `label`, `index?`, `id?`, `as?` (`h2` default), `class?` | index + label + 1px rule row; index is accent, decorative, tabular |
@@ -108,13 +111,12 @@ rows.
 
 ## 6. Islands budget
 
-One island of behaviour, zero shipped files:
+Zero client JavaScript. `dist/**/*.js` is empty and the document carries no
+inline script: the theme toggle is out and the theme is pinned to light.
 
-- the theme toggle, implemented as the inline theme script (824 bytes) plus a
-  button; `dist/**/*.js` is empty.
-
-Anything else — audio, command palette, analytics, interactive filter — needs a
-recorded decision and its own budget line before it ships.
+Anything else — the toggle's return, audio, command palette, analytics, an
+interactive filter — needs a recorded decision and its own budget line before it
+ships. Restoring the toggle adds one inline script, not a framework island.
 
 ## 7. File naming and structure
 

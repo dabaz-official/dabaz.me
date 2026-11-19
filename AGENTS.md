@@ -58,11 +58,10 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
   (`var(--dab-color-text-primary)`, `text-text-primary`, `type-body`).
   `pnpm lint` fails the build on a hex colour, `letter-spacing`, or a raw
   `font-size` anywhere else.
-- **Client JavaScript:** none beyond the inline theme script in
-  `BaseLayout.astro` (824 bytes). No framework integration without a recorded
-  decision.
-- **Theme:** `data-theme="light" | "dark"` on `<html>`, choice under the
-  `theme` key, light when no preference exists. Full contract in
+- **Client JavaScript:** none. The document ships no script and `dist/**/*.js`
+  is empty. No framework integration without a recorded decision.
+- **Theme:** pinned to `light`. `BaseLayout` sets `data-theme="light"` and the
+  toggle is out; the dark tokens stay for its return. Full contract in
   `src/CONVENTIONS.md`.
 - **Interfaces:** `Container`, `Section`, `SectionHeader`, `Prose`,
   `ContentImage`, `BaseLayout`, `src/lib/i18n.ts`, `src/lib/metadata.ts` are
@@ -87,7 +86,7 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
       overflow, and 200% zoom
 - [ ] Accessibility: keyboard path, visible focus, 44×44 targets, contrast on
       both themes (DabAgents rule 04, DabDesign `core.md` §9)
-- [ ] No client JavaScript beyond the theme script
+- [ ] No client JavaScript
 - [ ] Copy follows DabAgents rule 07; Chinese copy follows DabFonts
 - [ ] `src/CONVENTIONS.md` updated when an interface changes
 - [ ] Design sign-off recorded for every UI change, with screenshots at 375,

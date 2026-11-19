@@ -3,14 +3,13 @@
  * The document shell.
  *
  * Owns: charset/viewport, title/description/canonical from `resolveMeta`, the
- * font preload, the theme script (the only client JavaScript in v1), the skip
- * link, and the header/footer slots. Pages pass content and, when they need
- * more head tags, a `head` slot.
+ * font preload, the theme attribute, the skip link, and the header/footer
+ * slots. Pages pass content and, when they need more head tags, a `head` slot.
  *
- * Theme contract: `data-theme="light" | "dark"` on `<html>`; the choice is
- * stored under `theme`; no attribute means light; the script runs inline in
- * the head so a reload never flashes the wrong theme. Documented in
- * `src/CONVENTIONS.md`.
+ * Theme contract: `data-theme="light" | "dark"` on `<html>`. The site ships
+ * pinned to `light` while the toggle is out, so there is no theme script and
+ * no client JavaScript at all; the dark token block is untouched and ready for
+ * the toggle's return. Documented in `src/CONVENTIONS.md`.
  */
 import SiteFooter from "../components/SiteFooter.astro";
 import SiteHeader from "../components/SiteHeader.astro";
@@ -27,7 +26,7 @@ const meta = resolveMeta(Astro.props);
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={lang} data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -42,26 +41,6 @@ const meta = resolveMeta(Astro.props);
       type="font/woff2"
       crossorigin
     />
-    <script is:inline>
-      (() => {
-        const k = "theme", r = document.documentElement;
-        const q = matchMedia("(prefers-color-scheme: dark)");
-        const get = () => { try { return localStorage.getItem(k); } catch { return null; } };
-        const set = (t) => { r.dataset.theme = t; r.style.colorScheme = t; };
-        const init = () => {
-          const s = get();
-          set(s === "light" || s === "dark" ? s : q.matches ? "dark" : "light");
-        };
-        init();
-        q.addEventListener("change", () => { if (!get()) init(); });
-        document.addEventListener("click", (e) => {
-          if (!e.target.closest("[data-theme-toggle]")) return;
-          const t = r.dataset.theme === "dark" ? "light" : "dark";
-          try { localStorage.setItem(k, t); } catch {}
-          set(t);
-        });
-      })();
-    </script>
     <slot name="head" />
   </head>
   <body class="type-body">

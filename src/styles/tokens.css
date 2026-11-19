@@ -63,8 +63,9 @@
 
 /* ---------------------------------------------------------------------------
  * Color — core §3.3 plus the personal-series accent (DabDesign.md §2).
- * Light is the fallback: no `data-theme` means light, both for a first paint
- * and for a client with JavaScript disabled.
+ * Light is the fallback: no `data-theme` means light. The site currently pins
+ * `data-theme="light"` on `<html>` while the theme toggle is out; the dark
+ * block stays here, ready for the toggle's return.
  * ------------------------------------------------------------------------- */
 
 :root {

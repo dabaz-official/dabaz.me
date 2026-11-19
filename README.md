@@ -1,7 +1,7 @@
 # dabaz.me
 
 Personal site of DabAZ: work, writing, and contact. Static HTML, self-hosted
-fonts, no client runtime beyond the theme toggle.
+fonts, no client runtime.
 
 The rebuild is in progress on `rebuild`. This branch ships the foundation —
 tokens, fonts, the document shell, shared primitives, CI — and the home page:
@@ -52,7 +52,7 @@ src/
   components/     shared primitives, the shell, and the home sections
   content/        works, experience, and profile copy; writing lands in thread 3
   data/           site identity and social links
-  layouts/        BaseLayout — head, theme script, skip link, slots
+  layouts/        BaseLayout — head, skip link, slots, theme attribute
   lib/            i18n seam, metadata helper
   pages/          routes; `/` is the home page
   styles/         tokens.css (the only design values) and global.css
