@@ -25,7 +25,10 @@ Rules:
 - A post is `writing/<locale>/<slug>.mdx`. The directory must match the
   frontmatter `locale`; `date` is an ISO day (`YYYY-MM-DD` — quote it in YAML),
   `summary` is one sentence for the list and the feed, `tags` are display
-  strings, and `draft: true` keeps a post out of production builds.
+  strings written in that post's language, and `draft: true` keeps a post out
+  of production builds.
+- Work card tags are `Localized<string[]>` (`tags.en` / `tags.zh`), because a
+  category label is copy, not a proper noun. Work titles and orgs stay plain.
 - `entry.id` is `<locale>/<slug>`. Each locale renders its own prefix
   (`/writing/<slug>` for `en`, `/zh/writing/<slug>` for `zh`) and lists only its
   own posts; the same slug may exist once per locale. Translate a post by

@@ -101,9 +101,10 @@ English runs inside a Chinese page carry `lang="en"`. Chinese copy uses Chinese
 codepoints, one U+0020 after every sentence or closing mark that is followed by
 text, and one U+0020 between Han and Latin letters or digits — DabFonts
 `TYPESETTING.md` §3–§4. There is no `text-autospace`, no body
-`letter-spacing`, and no `word-break` override. `scripts/check-copy.mjs` fails
-`pnpm lint` when a Chinese string in `src/content/` or `src/data/` breaks the
-spacing rule.
+`letter-spacing`, and no `word-break` override. `type-label-caps` drops its
+Latin 0.06em tracking on a `zh-CN` document (the token file owns the rule);
+Han carries no uppercase. `scripts/check-copy.mjs` fails `pnpm lint` when a
+Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 
 ## 5. Interfaces
 
@@ -123,7 +124,7 @@ spacing rule.
 | `components/home/HomePage.astro` | `locale: Locale` | the home composition in DESIGN.md §6 order; a locale's Writing band only when that locale has a post |
 | `components/home/HeroStage.astro` | `locale?` | the cutout portrait over `type-wordmark`, art-directed across three widths, plus the scroll cue; sticky, clipped, `z-index: 0` |
 | `components/home/Intro.astro` | `locale: Locale` | the page's only `h1`: role (`type-h4`), name (`type-display-xl`, `lang="en"`), lede (`type-lede`) |
-| `components/home/WorkGrid.astro` | `entries: CollectionEntry<"works">[]`, `locale` | two-up card grid; card = 16:10 screenshot in its own clipped box, tags (`type-label-caps`), title (`type-h3`); hover scales the image 1.03 |
+| `components/home/WorkGrid.astro` | `entries: CollectionEntry<"works">[]`, `locale` | two-up card grid; card = 16:10 screenshot in its own clipped box, `tags[locale]` (`type-label-caps`), title (`type-h3`); hover scales the image 1.03 |
 | `components/home/MusicSection.astro` | `locale?` | streaming links, DabMusic as own player, three latest releases; kind labels and dates follow the locale |
 | `components/home/BlogSection.astro` | `entries: WritingEntry[]`, `hasMore: boolean`, `locale?` | the newest posts as home rows (`h3` titles, no tags), plus `All writing` only when more exist; the page renders the section only when a post exists |
 | `components/home/ContactSection.astro` | `locale?` | `site.email` and the contact subset of `social.all` |
@@ -186,8 +187,11 @@ ships. Restoring the toggle adds one inline script, not a framework island.
 - A post body renders inside `Prose`. Markdown carries no classes, so headings
   and links are mapped to components once, in the shared `PostArticle`; an
   image is imported by the author and rendered through `ContentImage`.
-- Tags are content strings, not translations; `tagSlug()` lowercases and
+- Writing tags are content strings written in the post's own language; the same
+  post's `en` and `zh` files may use different tags. `tagSlug()` lowercases and
   hyphenates, CJK stays as written. Posts paginate at 10 per page.
+- Work card tags are `Localized<string[]>` in the record, so each locale reads
+  its own labels (`Product` / `产品`). They are not proper nouns.
 - `src/data/site.ts` and `src/data/social.ts` hold identity constants only;
   `site.role` and `site.description` are copy, so they are `Localized`.
 - Proper nouns stay untranslated; every other field is `Localized<T>`.

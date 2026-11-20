@@ -10,7 +10,7 @@ import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import Container from "../Container.astro";
 import ui from "../../content/ui";
-import type { Locale } from "../../lib/i18n";
+import { htmlLang, type Locale } from "../../lib/i18n";
 
 interface Props {
   entries: CollectionEntry<"works">[];
@@ -44,9 +44,9 @@ const { entries, locale } = Astro.props;
                 </div>
               )}
               <div class="card__body">
-                {tags.length > 0 && (
-                  <p class="type-label-caps card__tags" lang="en">
-                    {tags.join(" · ")}
+                {tags[locale].length > 0 && (
+                  <p class="type-label-caps card__tags" lang={htmlLang(locale)}>
+                    {tags[locale].join(" · ")}
                   </p>
                 )}
                 <h3 class="type-h3 card__name" lang="en">{title}</h3>
