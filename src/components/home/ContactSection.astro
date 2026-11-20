@@ -1,0 +1,77 @@
+---
+/**
+ * Contact: one address, then the profiles.
+ *
+ * The profiles are the subset of `social.all` that belongs on a contact card;
+ * YouTube and Spotify live in the music section instead.
+ */
+import Container from "../Container.astro";
+import site from "../../data/site";
+import social, { type Social } from "../../data/social";
+
+const labels = ["X", "GitHub", "LinkedIn", "Instagram", "TikTok", "Threads", "CV"];
+
+const links = labels
+  .map((label) => social.all.find((socialLink) => socialLink.label === label))
+  .filter((socialLink): socialLink is Social => Boolean(socialLink));
+---
+
+<section class="contact" id="contact" aria-labelledby="contact-title">
+  <Container>
+    <h2 class="contact__title type-h2" id="contact-title">Contact</h2>
+    <a class="type-h3 contact__email" href={`mailto:${site.email}`}>{site.email}</a>
+    <ul class="contact__links">
+      {
+        links.map(({ label, href }) => (
+          <li>
+            <a class="type-h3" href={href} target="_blank" rel="noreferrer">{label}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </Container>
+</section>
+
+<style>
+  .contact {
+    padding-block: var(--dab-space-24);
+    scroll-margin-block-start: calc(var(--dab-space-16) + var(--dab-space-4));
+  }
+
+  .contact__title {
+    margin: 0;
+    margin-block-end: var(--dab-space-8);
+    color: var(--dab-color-text-primary);
+  }
+
+  .contact__email {
+    display: inline-block;
+    color: var(--dab-color-text-primary);
+    text-decoration: none;
+  }
+
+  .contact__email:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .contact__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--dab-space-2) var(--dab-space-6);
+    margin: var(--dab-space-6) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .contact__links a {
+    color: var(--dab-color-text-secondary);
+    text-decoration: none;
+  }
+
+  .contact__links a:hover {
+    color: var(--dab-color-text-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>
