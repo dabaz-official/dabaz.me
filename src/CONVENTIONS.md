@@ -95,9 +95,8 @@ The `@font-face` quartet and the `--font-sans` stack are DabFonts 1.0.1
 `TYPESETTING.md` §2.1, copied verbatim into `tokens.css`: four faces, 400 and
 600, `local("☺")` first in every `src`, `font-display: swap`.
 
-- `BaseLayout` preloads both faces at `fetchpriority="low"`: the home LCP image
-  keeps the critical bandwidth, and `font-display: swap` paints the fallback
-  immediately.
+- `BaseLayout` does not preload either 821 KB face: the home LCP image owns the
+  critical bandwidth, and `font-display: swap` paints the fallback immediately.
 - `--font-mono` is Dab Mono plus system monospace and is used only for `code`,
   `pre`, `kbd`, `samp`, and tabular data. Never in the body stack.
 - No italics, no synthesized weights, no Astro font pipeline, no CDN.
@@ -179,10 +178,9 @@ the whole stylesheet is small, and inlining removes the render-blocking CSS
 request that cost a cold mobile round trip. The two home routes render
 `components/home/HeroPreload.astro` into the `head` slot, which preloads the
 exact art-directed hero file for each breakpoint so the LCP image is discovered
-before the parser reaches the body. Both font faces preload at
-`fetchpriority="low"` so their 1.6 MB cannot take the LCP image's bandwidth;
-`font-display: swap` paints the fallback immediately. Neither changes the
-composition; both are performance decisions.
+before the parser reaches the body. Neither 821 KB face is preloaded: the image
+keeps the critical bandwidth, and `font-display: swap` paints the fallback
+immediately. Neither changes the composition; both are performance decisions.
 
 ## 7. File naming and structure
 
