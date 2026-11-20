@@ -120,6 +120,7 @@ const jsonLd = Astro.props.jsonLd
       content={site.themeColorDark}
     />
 
+    <slot name="head" />
     {jsonLd && <script type="application/ld+json" is:inline set:html={jsonLd} />}
     <link
       rel="preload"
@@ -137,7 +138,6 @@ const jsonLd = Astro.props.jsonLd
       crossorigin
       fetchpriority="low"
     />
-    <slot name="head" />
   </head>
   <body class="type-body">
     <a class="skip-link type-label" href="#main">{ui.skipToContent[locale]}</a>
