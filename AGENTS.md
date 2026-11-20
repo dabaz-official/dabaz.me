@@ -119,9 +119,13 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
   values mirror `--dab-color-background` and appear only in `src/data/site.ts`
   and `public/site.webmanifest`. The token guard does not scan `public/`.
   Owner: HQ. Review: 2026-12-19.
-- **Lighthouse method.** Rule: DabAgents rule 04 §6 asks for a mobile Lighthouse
-  run. Reason: the pinned DabFonts regular face is 821 KB, and Lighthouse's
-  default Lantern simulation extrapolates it as paint-blocking, reporting
-  performance 62 while a real-throttled mobile run reports 99 with LCP 1.8 s.
-  The gate is measured with `--throttling-method=devtools`; the simulated
-  number is reported alongside it, not hidden. Owner: HQ. Review: 2026-12-19.
+- **Lighthouse method and LCP variance.** Rule: DabAgents rule 04 §6 asks for a
+  mobile Lighthouse run with LCP ≤ 2.5 s. Reason: the pinned DabFonts 400 and
+  600 faces total 1.6 MB; Lighthouse's default Lantern simulation extrapolates
+  them as paint-blocking and reports performance 62, while real-throttled mobile
+  runs report 98 with a median LCP of 2.25 s. Seven of eight cold production
+  runs clear 2.5 s; the remaining outlier (5.0 s) is the font pair competing
+  with the 51 KB hero for bandwidth. Fixing that needs a subset decision in
+  DabFonts, not a local font build. The gate is measured with
+  `--throttling-method=devtools`; simulated numbers and the outlier are
+  reported, not hidden. Owner: HQ. Review: 2026-12-19.
