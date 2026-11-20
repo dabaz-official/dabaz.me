@@ -177,8 +177,10 @@ the whole stylesheet is small, and inlining removes the render-blocking CSS
 request that cost a cold mobile round trip. The two home routes render
 `components/home/HeroPreload.astro` into the `head` slot, which preloads the
 exact art-directed hero file for each breakpoint so the LCP image is discovered
-before the parser reaches the body. Neither changes the composition; both are
-performance decisions.
+before the parser reaches the body. The regular font preload carries
+`fetchpriority="low"` so the 821 KB face cannot take the LCP image's bandwidth;
+`font-display: swap` still paints the fallback immediately. Neither changes the
+composition; all three are performance decisions.
 
 ## 7. File naming and structure
 
