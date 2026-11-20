@@ -1,0 +1,34 @@
+---
+/**
+ * The writing list. Rows share their hairlines, so the list closes the last
+ * one with a bottom border (DESIGN.md §7.5).
+ */
+import type { WritingEntry } from "../../lib/writing";
+import PostRow from "./PostRow.astro";
+
+interface Props {
+  entries: WritingEntry[];
+  class?: string;
+}
+
+const { entries, class: className } = Astro.props;
+---
+
+<ol class:list={["post-list", className]}>
+  {
+    entries.map((entry) => (
+      <li>
+        <PostRow entry={entry} />
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .post-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-block-end: var(--dab-border-width) solid var(--dab-color-border);
+  }
+</style>

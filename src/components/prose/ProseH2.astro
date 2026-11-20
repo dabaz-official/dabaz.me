@@ -1,0 +1,6 @@
+---
+/** Body `h2`: a section heading at the `type-h2` role (DESIGN.md §4). */
+const { ...rest } = Astro.props;
+---
+
+<h2 class="type-h2" {...rest}><slot /></h2>
