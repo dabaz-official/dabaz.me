@@ -12,8 +12,10 @@ import {
   postSlug,
   postsForLocale,
   publishedPosts,
+  translationPostPath,
 } from "../../lib/writing";
 import { defaultLocale } from "../../lib/i18n";
+import { postJsonLd } from "../../lib/structured-data";
 
 const locale = defaultLocale;
 
@@ -34,6 +36,9 @@ const { entry, all } = Astro.props;
   path={postPath(entry)}
   locale={entry.data.locale}
   alternatePath={alternatePostPath(entry, all)}
+  translationPath={translationPostPath(entry, all)}
+  ogType="article"
+  jsonLd={postJsonLd(entry)}
 >
   <PostArticle entry={entry} />
 </BaseLayout>

@@ -9,6 +9,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import HomePage from "../components/home/HomePage.astro";
 import site from "../data/site";
 import { defaultLocale, homePath, otherLocale } from "../lib/i18n";
+import { homeJsonLd } from "../lib/structured-data";
 
 const locale = defaultLocale;
 ---
@@ -19,6 +20,8 @@ const locale = defaultLocale;
   path={homePath(locale)}
   locale={locale}
   alternatePath={homePath(otherLocale(locale))}
+  translationPath={homePath(otherLocale(locale))}
+  jsonLd={homeJsonLd(locale)}
 >
   <HomePage locale={locale} />
 </BaseLayout>

@@ -41,6 +41,8 @@ export interface UiCopy {
   };
   writing: {
     title: Localized;
+    description: Localized;
+    pageDescription: Localized<(page: number) => string>;
     all: Localized;
     empty: Localized;
     newer: Localized;
@@ -51,6 +53,11 @@ export interface UiCopy {
     tagTitle: Localized<(label: string) => string>;
     tagDescription: Localized<(label: string) => string>;
     pageTitle: Localized<(page: number) => string>;
+  };
+  notFound: {
+    title: Localized;
+    description: Localized;
+    back: Localized;
   };
   footer: {
     writing: Localized;
@@ -89,6 +96,15 @@ const ui: UiCopy = {
   },
   writing: {
     title: { en: "Writing", zh: "写作" },
+    description: {
+      en: "Notes on hardware, software, music, and the web: long-form writing by DabAZ about the things he builds, uses, and breaks in practice.",
+      zh: "关于硬件、 软件、 音乐与网页的长文笔记， 记录我做过的东西、 正在做的事， 以及一路上学到的东西， 由 DabAZ 撰写。",
+    },
+    pageDescription: {
+      en: (page) =>
+        `Writing, page ${page}: the archive of long-form notes by DabAZ on hardware, software, music, and the web.`,
+      zh: (page) => `写作——第 ${page} 页： DabAZ 的长文笔记归档。`,
+    },
     all: { en: "All writing", zh: "全部文章" },
     empty: { en: "No posts yet.", zh: "暂无文章。" },
     newer: { en: "Newer posts", zh: "较新的文章" },
@@ -108,6 +124,14 @@ const ui: UiCopy = {
       en: (page) => `Writing — page ${page}`,
       zh: (page) => `写作——第 ${page} 页`,
     },
+  },
+  notFound: {
+    title: { en: "Not found", zh: "页面不存在" },
+    description: {
+      en: "The page you asked for is not here.",
+      zh: "你要找的页面不在这里。",
+    },
+    back: { en: "Back to home", zh: "回到首页" },
   },
   footer: {
     writing: { en: "Writing", zh: "写作" },

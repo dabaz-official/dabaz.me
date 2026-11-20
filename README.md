@@ -43,12 +43,14 @@ Node 24 (`.nvmrc`), pnpm 12.
 | `pnpm preview` | Serve `dist/` locally |
 | `pnpm lint` | Token guard plus the Chinese copy-spacing guard |
 | `pnpm typecheck` | `astro sync && tsc --noEmit` |
-| `pnpm check` | Gate: lint, typecheck, build. CI runs this. |
+| `pnpm icons` | Export the favicon, Apple icon, and manifest icons from `public/icon.svg` |
+| `pnpm og` | Render the two 1200×630 OG cards (needs Chrome) |
+| `pnpm check` | Gate: lint, typecheck, build, then the metadata guard |
 
 ## Structure
 
 ```text
-public/           fonts and favicon — served as-is
+public/           fonts, the supplied icon master and exports, OG cards, robots, manifest — served as-is
 src/
   assets/         the portrait, imported through astro:assets
   components/     shared primitives, the shell, home sections, and writing rows

@@ -1,0 +1,47 @@
+---
+/**
+ * The 404. Static hosting serves `404.html` for an unknown path; the page is
+ * English because the requested URL carries no locale. It stays out of the
+ * index and offers the only useful next step.
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Section from "../components/Section.astro";
+import ui from "../content/ui";
+import { defaultLocale, homePath } from "../lib/i18n";
+
+const locale = defaultLocale;
+---
+
+<BaseLayout
+  title={ui.notFound.title[locale]}
+  description={ui.notFound.description[locale]}
+  path="/404"
+  locale={locale}
+>
+  <meta slot="head" name="robots" content="noindex" />
+  <Section>
+    <h1 class="type-h1 not-found__title">{ui.notFound.title[locale]}</h1>
+    <p class="type-body-lg not-found__body">{ui.notFound.description[locale]}</p>
+    <p class="not-found__back">
+      <a class="link type-label" href={homePath(locale)}>
+        {ui.notFound.back[locale]}
+      </a>
+    </p>
+  </Section>
+</BaseLayout>
+
+<style>
+  .not-found__title {
+    margin: 0;
+  }
+
+  .not-found__body {
+    max-inline-size: 34em;
+    margin: var(--dab-space-4) 0 0;
+    color: var(--dab-color-text-secondary);
+  }
+
+  .not-found__back {
+    margin: var(--dab-space-8) 0 0;
+  }
+</style>

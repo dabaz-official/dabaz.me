@@ -7,12 +7,14 @@ import BaseLayout from "../../../../layouts/BaseLayout.astro";
 import WritingTagPage from "../../../../components/writing/WritingTagPage.astro";
 import ui from "../../../../content/ui";
 import type { Locale } from "../../../../lib/i18n";
+import { collectionJsonLd } from "../../../../lib/structured-data";
 import {
   alternateTagPath,
   collectTags,
   tagPathFromSlug,
   postsForLocale,
   publishedPosts,
+  translationTagPath,
   type WritingEntry,
 } from "../../../../lib/writing";
 
@@ -42,6 +44,13 @@ const { label, slug, entries, all } = Astro.props;
   path={tagPathFromSlug(slug, locale)}
   locale={locale}
   alternatePath={alternateTagPath(slug, locale, all)}
+  translationPath={translationTagPath(slug, locale, all)}
+  jsonLd={collectionJsonLd({
+    locale,
+    path: tagPathFromSlug(slug, locale),
+    name: ui.writing.tagTitle[locale](label),
+    description: ui.writing.tagDescription[locale](label),
+  })}
 >
   <WritingTagPage label={label} locale={locale} entries={entries} />
 </BaseLayout>

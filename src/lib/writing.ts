@@ -151,6 +151,24 @@ export function pagePath(page: number, locale: Locale): string {
 }
 
 /**
+ * The translated twin of a post, when one exists. `hreflang` uses this: a
+ * missing translation is not an alternate of anything, and the build must not
+ * advertise the fallback list as if it were the same page.
+ */
+export function translationPostPath(
+  entry: WritingEntry,
+  published: WritingEntry[],
+): string | undefined {
+  const target = otherLocale(entry.data.locale);
+  const twin = published.find(
+    (candidate) =>
+      candidate.data.locale === target &&
+      postSlug(candidate) === postSlug(entry),
+  );
+  return twin ? postPath(twin) : undefined;
+}
+
+/**
  * The language switch's target for a post: the translation when it exists,
  * otherwise the other locale's writing list. A missing translation never
  * links to a 404.
@@ -159,13 +177,29 @@ export function alternatePostPath(
   entry: WritingEntry,
   published: WritingEntry[],
 ): string {
-  const target = otherLocale(entry.data.locale);
-  const twin = published.find(
-    (candidate) =>
-      candidate.data.locale === target &&
-      postSlug(candidate) === postSlug(entry),
+  return (
+    translationPostPath(entry, published) ??
+    writingPath(otherLocale(entry.data.locale))
   );
-  return twin ? postPath(twin) : writingPath(target);
+}
+
+/**
+ * The same tag in the other locale, when it exists. Tags are author strings,
+ * so a translation may use a different label and therefore a different slug;
+ * in that case there is no alternate.
+ */
+export function translationTagPath(
+  slug: string,
+  locale: Locale,
+  published: WritingEntry[],
+): string | undefined {
+  const target = otherLocale(locale);
+  const exists = published.some(
+    (entry) =>
+      entry.data.locale === target &&
+      entry.data.tags.some((tag) => tagSlug(tag) === slug),
+  );
+  return exists ? tagPathFromSlug(slug, target) : undefined;
 }
 
 /** The language switch's target for a tag page: the same tag there, or the list. */
@@ -174,11 +208,8 @@ export function alternateTagPath(
   locale: Locale,
   published: WritingEntry[],
 ): string {
-  const target = otherLocale(locale);
-  const exists = published.some(
-    (entry) =>
-      entry.data.locale === target &&
-      entry.data.tags.some((tag) => tagSlug(tag) === slug),
+  return (
+    translationTagPath(slug, locale, published) ??
+    writingPath(otherLocale(locale))
   );
-  return exists ? tagPathFromSlug(slug, target) : writingPath(target);
 }
