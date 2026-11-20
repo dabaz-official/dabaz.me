@@ -1,0 +1,742 @@
+/*
+ * throwaway comp scaffolding — NOT production, NOT a source of truth.
+ *
+ * Values come from /src/styles/tokens.css, which every comp links directly.
+ * The only new declarations are the three header-glass tokens DESIGN.md §7.1
+ * already requires; they are proposed here for HQ approval and marked below.
+ *
+ * Three variants share this file:
+ *   .d-base  the current build, for comparison only
+ *   .d-a     direction A — "The Column" (identity column, sticky from 1024)
+ *   .d-b     direction B — "The Sheet"  (full-bleed rules, facts at both edges)
+ */
+
+/* ---------------------------------------------------------------------------
+ * Proposed header tokens (DESIGN.md §7.1). Scrim ≥ 80% of the page background.
+ * ------------------------------------------------------------------------- */
+:root {
+  --dab-header-bg: rgb(250 250 250 / 0.82);
+  --dab-header-blur: blur(16px) saturate(1.8);
+  --dab-header-border: var(--dab-color-border);
+}
+
+[data-theme="dark"] {
+  --dab-header-bg: rgb(10 10 10 / 0.82);
+}
+
+/* ---------------------------------------------------------------------------
+ * Base
+ * ------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--dab-color-background);
+}
+
+body {
+  margin: 0;
+  background-color: var(--dab-color-background);
+  color: var(--dab-color-text-primary);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--dab-color-focus);
+  outline-offset: 2px;
+}
+
+.shell {
+  inline-size: 100%;
+  max-inline-size: var(--dab-container-lg);
+  margin-inline: auto;
+  padding-inline: var(--dab-gutter);
+}
+
+.link {
+  color: var(--dab-color-primary-text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.skip-link {
+  position: fixed;
+  inset-block-start: var(--dab-space-2);
+  inset-inline-start: var(--dab-space-2);
+  z-index: 100;
+  padding: var(--dab-space-2) var(--dab-space-4);
+  border: var(--dab-border-width) solid var(--dab-color-border-strong);
+  border-radius: var(--dab-radius-md);
+  background-color: var(--dab-color-surface);
+  color: var(--dab-color-text-primary);
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* ---------------------------------------------------------------------------
+ * Header — sticky, 64 tall, one hairline, the only glass surface.
+ * ------------------------------------------------------------------------- */
+.site-header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 20;
+  border-block-end: var(--dab-border-width) solid var(--dab-header-border);
+  background-color: var(--dab-header-bg);
+  -webkit-backdrop-filter: var(--dab-header-blur);
+  backdrop-filter: var(--dab-header-blur);
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .site-header {
+    background-color: var(--dab-color-background);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .site-header {
+    background-color: var(--dab-color-background);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dab-space-4);
+  min-block-size: var(--dab-space-16);
+}
+
+.wordmark {
+  color: var(--dab-color-text-primary);
+  text-decoration: none;
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--dab-space-2);
+}
+
+.toggle {
+  display: grid;
+  place-items: center;
+  inline-size: var(--dab-target-min);
+  block-size: var(--dab-target-min);
+  margin-inline-end: calc(var(--dab-space-2) * -1);
+  padding: 0;
+  border: 0;
+  border-radius: var(--dab-radius-md);
+  background: none;
+  color: var(--dab-color-text-secondary);
+  cursor: pointer;
+}
+
+.toggle:hover {
+  color: var(--dab-color-text-primary);
+}
+
+/* ---------------------------------------------------------------------------
+ * Hero — shared anatomy
+ * ------------------------------------------------------------------------- */
+.hero {
+  padding-block: var(--dab-space-16) var(--dab-space-24);
+}
+
+.hero__portrait {
+  display: block;
+  inline-size: var(--dab-space-24);
+  block-size: var(--dab-space-24);
+  border: var(--dab-border-width) solid var(--dab-color-border);
+  border-radius: var(--dab-radius-full);
+  object-fit: cover;
+}
+
+.hero__name {
+  margin: 0;
+  color: var(--dab-color-text-primary);
+}
+
+.hero__role {
+  margin: 0;
+  margin-block-start: var(--dab-space-3);
+  color: var(--dab-color-text-primary);
+}
+
+.hero__intro {
+  margin: 0;
+  margin-block-start: var(--dab-space-4);
+  max-inline-size: 34em;
+  color: var(--dab-color-text-secondary);
+}
+
+.hero__now {
+  margin: 0;
+  margin-block-start: var(--dab-space-6);
+  color: var(--dab-color-text-primary);
+}
+
+.hero__now-label {
+  color: var(--dab-color-text-tertiary);
+  margin-inline-end: var(--dab-space-2);
+}
+
+.hero__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dab-space-2) var(--dab-space-6);
+  margin: 0;
+  margin-block-start: var(--dab-space-6);
+  padding: 0;
+  list-style: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * Section anatomy — shared markup, per-direction composition
+ * ------------------------------------------------------------------------- */
+.section__rule {
+  flex: 1;
+  border-block-start: var(--dab-border-width) solid var(--dab-color-border);
+}
+
+.section__index {
+  color: var(--dab-color-primary-text);
+}
+
+.section__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  border-block-start: var(--dab-border-width) solid var(--dab-color-border);
+  transition: border-color var(--dab-duration-fast) var(--dab-easing-linear);
+}
+
+.section__list > .row:last-child {
+  border-block-end: var(--dab-border-width) solid var(--dab-color-border);
+}
+
+.row__link {
+  display: grid;
+  gap: var(--dab-space-2);
+  padding-block: var(--dab-space-6);
+  color: inherit;
+  text-decoration: none;
+}
+
+.row__meta {
+  color: var(--dab-color-text-tertiary);
+}
+
+.row__body {
+  min-inline-size: 0;
+}
+
+.row__title {
+  margin: 0;
+  color: var(--dab-color-text-primary);
+}
+
+.row__summary {
+  margin: 0;
+  margin-block-start: var(--dab-space-1);
+  max-inline-size: 38em;
+  color: var(--dab-color-text-secondary);
+}
+
+.row__thumb {
+  display: block;
+  inline-size: 128px;
+  block-size: 80px;
+  border: var(--dab-border-width) solid var(--dab-color-border);
+  border-radius: var(--dab-radius-lg);
+  object-fit: cover;
+}
+
+.row__link:hover .row__title,
+.row__link:focus-visible .row__title {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.about__body {
+  margin: 0;
+  max-inline-size: var(--dab-measure);
+  color: var(--dab-color-text-secondary);
+}
+
+/* ---------------------------------------------------------------------------
+ * Footer — shared
+ * ------------------------------------------------------------------------- */
+.site-footer {
+  margin-block-start: var(--dab-space-16);
+  border-block-start: var(--dab-border-width) solid var(--dab-color-border);
+  color: var(--dab-color-text-tertiary);
+}
+
+.site-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dab-space-2) var(--dab-space-6);
+  padding-block: var(--dab-space-8);
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dab-space-2) var(--dab-space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-footer a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.site-footer a:hover {
+  color: var(--dab-color-text-primary);
+}
+
+/* ---------------------------------------------------------------------------
+ * .d-base — today's build, for the before/after comparison only.
+ * ------------------------------------------------------------------------- */
+.d-base .hero__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dab-space-6);
+}
+
+.d-base .hero__text {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+.d-base .hero__portrait {
+  order: -1;
+}
+
+.d-base .hero__name {
+  margin-block-start: 0;
+}
+
+.d-base .section {
+  margin-block-start: var(--dab-space-16);
+}
+
+.d-base .section__head {
+  display: flex;
+  align-items: center;
+  gap: var(--dab-space-3);
+}
+
+.d-base .section__title {
+  margin: 0;
+  color: var(--dab-color-text-secondary);
+}
+
+.d-base .section__list {
+  margin-block-start: var(--dab-space-8);
+}
+
+.d-base .row__link {
+  padding-block: var(--dab-space-6);
+}
+
+@media (min-width: 640px) {
+  .d-base .hero__inner {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--dab-space-8);
+  }
+
+  .d-base .hero__portrait {
+    order: 0;
+  }
+
+  .d-base .row__link {
+    grid-template-columns: 9rem 128px minmax(0, 1fr);
+    column-gap: var(--dab-space-6);
+    align-items: start;
+  }
+
+  .d-base .row__meta {
+    grid-column: 1;
+    grid-row: 1;
+    padding-block-start: var(--dab-space-1);
+  }
+
+  .d-base .row__body {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .d-base .row__thumb {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
+/* ===========================================================================
+ * DIRECTION A — "The Column"
+ * One identity column at 20rem from 1024, sticky below the header; the record
+ * column carries the intro and every section. A drops row thumbnails: at 608
+ * the record is a text column and the identity is the page's only image.
+ * =========================================================================== */
+.d-a .identity {
+  padding-block: var(--dab-space-16) 0;
+}
+
+.d-a .identity__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dab-space-6);
+}
+
+.d-a .identity__portrait {
+  order: -1;
+}
+
+.d-a .identity__text {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+.d-a .identity .hero__name {
+  margin-block-start: 0;
+}
+
+.d-a .record {
+  padding-block-start: 0;
+}
+
+.d-a .record > .hero__intro {
+  margin: var(--dab-space-6) 0 0;
+}
+
+.d-a .section {
+  margin-block-start: var(--dab-space-16);
+}
+
+/* The statement is the hero's last line, so the first section keeps the
+   hero-to-section 96. */
+.d-a .record > .section:first-of-type {
+  margin-block-start: var(--dab-space-24);
+}
+
+.d-a .section__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--dab-space-3);
+}
+
+.d-a .section__title {
+  margin: 0;
+  color: var(--dab-color-text-primary);
+}
+
+.d-a .section__list {
+  margin-block-start: var(--dab-space-8);
+}
+
+.d-a .about__body {
+  margin-block-start: var(--dab-space-8);
+}
+
+@media (min-width: 640px) {
+  .d-a .identity {
+    padding-block-end: var(--dab-space-4);
+  }
+
+  .d-a .identity__inner {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--dab-space-8);
+  }
+
+  .d-a .identity__portrait {
+    order: 0;
+  }
+
+  .d-a .row__link {
+    grid-template-columns: 9rem minmax(0, 1fr);
+    column-gap: var(--dab-space-6);
+    align-items: start;
+  }
+
+  .d-a .row__meta {
+    padding-block-start: var(--dab-space-1);
+  }
+}
+
+@media (min-width: 1024px) {
+  .d-a .page {
+    display: grid;
+    grid-template-columns: 20rem minmax(0, 1fr);
+    column-gap: var(--dab-space-8);
+    align-items: start;
+  }
+
+  .d-a .identity {
+    padding-block: var(--dab-space-24) 0;
+  }
+
+  /* The wrapper, not the column, is sticky: at rest it sits at the column's
+     top padding, and it never gets displaced by its own inset. */
+  .d-a .identity__inner {
+    flex-direction: column;
+    gap: 0;
+    position: sticky;
+    inset-block-start: var(--dab-space-24);
+  }
+
+  .d-a .identity__portrait {
+    order: 0;
+    margin-block: var(--dab-space-6) 0;
+  }
+
+  .d-a .identity .hero__name {
+    margin-block-start: 0;
+  }
+
+  .d-a .record {
+    padding-block-start: var(--dab-space-24);
+  }
+
+  .d-a .record > .hero__intro {
+    margin: 0;
+  }
+}
+
+/* A's footer closes the same split: © in the identity column, links at the
+   right edge of the record column. */
+@media (min-width: 1024px) {
+  .d-a .site-footer__inner {
+    display: grid;
+    grid-template-columns: 20rem minmax(0, 1fr);
+    column-gap: var(--dab-space-8);
+    align-items: center;
+  }
+
+  .d-a .site-footer__links {
+    justify-content: flex-end;
+  }
+}
+
+/* ===========================================================================
+ * DIRECTION B — "The Sheet"
+ * Every section boundary is a full-bleed hairline; the index rides the rule,
+ * the section title sits at the edge below it, and the record hangs off one
+ * text axis at 9rem + 24. Facts answer at both margins.
+ * =========================================================================== */
+
+/* Full-bleed band: the section element is the band, its container sits inside. */
+.d-b .section {
+  border-block-start: var(--dab-border-width) solid var(--dab-color-border);
+  padding-block: 0 var(--dab-space-16);
+}
+
+/* Row 1 is zero-height so the index sits exactly on the rule. */
+.d-b .section__head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: 0 auto;
+  column-gap: var(--dab-space-3);
+}
+
+.d-b .section__index {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  position: relative;
+  inset-block-start: -0.25em;
+  background-color: var(--dab-color-background);
+  padding-inline-end: var(--dab-space-3);
+}
+
+.d-b .section__rule {
+  display: none;
+}
+
+.d-b .section__title {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin: 0;
+  margin-block-start: var(--dab-space-8);
+  color: var(--dab-color-text-primary);
+}
+
+.d-b .section__list {
+  margin-block-start: var(--dab-space-8);
+}
+
+.d-b .row__link {
+  padding-block: var(--dab-space-6);
+}
+
+/* Hover strengthens the row's own rule — colour only, no lift. */
+.d-b .row:has(.row__link:hover),
+.d-b .row:has(.row__link:focus-visible) {
+  border-block-start-color: var(--dab-color-border-strong);
+}
+
+.d-b .about__body {
+  margin-block-start: var(--dab-space-8);
+}
+
+/* The last section already ends with its own bottom air. */
+.d-b .site-footer {
+  margin-block-start: 0;
+}
+
+@media (min-width: 768px) {
+  /* The record hangs off one text axis: section titles, row titles and About
+     all start at 9rem + 24, the margin column carries the numbers. */
+  .d-b .section__title {
+    margin-inline-start: calc(9rem + var(--dab-space-6));
+  }
+
+  .d-b .about__body {
+    margin-inline-start: calc(9rem + var(--dab-space-6));
+  }
+}
+
+@media (min-width: 768px) {
+  .d-b .row__link {
+    grid-template-columns: 9rem minmax(0, 1fr) auto;
+    column-gap: var(--dab-space-6);
+    align-items: start;
+  }
+
+  .d-b .row__meta {
+    padding-block-start: var(--dab-space-1);
+  }
+
+  .d-b .row__thumb {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+  }
+}
+
+/* Below 768 the cover is not shown: at 375 it would take a third of the
+   measure, and the mark repeats the row title. The row keeps its text. */
+@media (max-width: 767.98px) {
+  .d-b .row__thumb {
+    display: none;
+  }
+}
+
+/* Hero title block: name at the left edge, role at the right edge, from 1024. */
+@media (min-width: 1024px) {
+  .d-b .hero {
+    padding-block: var(--dab-space-24);
+  }
+
+  .d-b .hero__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "name role"
+      "intro portrait"
+      "now portrait"
+      "links portrait";
+    align-items: start;
+    column-gap: var(--dab-space-8);
+  }
+
+  /* The text wrapper dissolves so its children can take their own areas. */
+  .d-b .hero__text {
+    display: contents;
+  }
+
+  .d-b .hero__name {
+    grid-area: name;
+    margin: 0;
+    align-self: baseline;
+  }
+
+  .d-b .hero__role {
+    grid-area: role;
+    margin: 0;
+    align-self: baseline;
+    justify-self: end;
+    text-align: end;
+  }
+
+  .d-b .hero__intro {
+    grid-area: intro;
+    margin-block-start: var(--dab-space-6);
+  }
+
+  .d-b .hero__now {
+    grid-area: now;
+    margin-block-start: var(--dab-space-6);
+  }
+
+  .d-b .hero__links {
+    grid-area: links;
+    margin-block-start: var(--dab-space-6);
+  }
+
+  .d-b .hero__portrait {
+    grid-area: portrait;
+    justify-self: end;
+    margin-block-start: var(--dab-space-6);
+  }
+}
+
+@media (max-width: 1023.98px) and (min-width: 640px) {
+  .d-b .hero__inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--dab-space-8);
+  }
+
+  .d-b .hero__portrait {
+    order: 1;
+  }
+}
+
+@media (max-width: 639.98px) {
+  .d-b .hero__inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--dab-space-6);
+  }
+
+  .d-b .hero__portrait {
+    order: -1;
+  }
+}

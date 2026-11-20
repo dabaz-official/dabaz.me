@@ -11,12 +11,13 @@ commit. `DESIGN.md` owns composition; DabDesign, DabFonts, and DabAgents (pins i
 |---|---|---|
 | `src/styles/tokens.css` | every design value: colour roles, type roles, space, shape, motion, layout | foundation |
 | `src/styles/global.css` | base element styles, link/button conventions, container, prose rhythm, skip link | foundation |
-| `src/layouts/BaseLayout.astro` | document shell, head, theme script, skip link, slots | foundation |
+| `src/layouts/BaseLayout.astro` | document shell, head, skip link, slots, theme attribute | foundation |
 | `src/components/` | shared primitives and the header/footer shell | foundation; extension by later threads |
 | `src/lib/i18n.ts` | `Locale`, `Localized<T>`, `locales`, `defaultLocale` | foundation; routing by thread 4 |
 | `src/lib/metadata.ts` | `PageMeta`, `resolveMeta()` | foundation; OG by thread 5 |
 | `src/data/site.ts` | site name, URL, email, role, description | foundation |
-| `src/data/social.ts` | `Social[]`, `primary` and `all` | thread 2 renders |
+| `src/data/social.ts` | `Social[]`, `primary` and `all` | foundation |
+| `src/data/music.ts` | `platforms`, `ownPlayer`, `releases` | thread 2 renders |
 | `src/content/` | content records and copy; collections land in `src/content.config.ts` | threads 2–3 |
 | `src/pages/` | routes | threads 2–4 |
 | `scripts/check-tokens.mjs` | the token guard behind `pnpm lint` | foundation |
@@ -60,14 +61,17 @@ movement, not colour feedback.
 
 - `<html data-theme="light" | "dark">`. Tokens flip on the attribute; components
   need no `dark:` classes.
-- Storage key: `theme`, value `light` or `dark`. Absent or unreadable means:
-  `prefers-color-scheme: dark` → dark, otherwise light. **Light is the
-  fallback.**
-- The inline script in `BaseLayout.astro` (824 bytes) sets the attribute in the
-  head before first paint, mirrors it to `color-scheme`, follows the system only
-  while no explicit choice is stored, and toggles plus persists on click.
-- It is the only client JavaScript on the site. A second inline script or a
-  hydrated island is an island-budget change, not an implementation detail.
+- **The site is pinned to `light` for now.** `BaseLayout` writes
+  `data-theme="light"` into the document and the toggle is not rendered. There
+  is no theme script, so nothing reads the old `theme` storage key: a visitor
+  who once chose dark gets light, and no client can change it.
+- Light is also the fallback by construction: `:root` in `tokens.css` is the
+  light theme, so a document with no attribute renders light too.
+- The dark token block, the `@custom-variant dark`, and any
+  `[data-theme="dark"]` styles stay in the tree. Restoring the toggle is a
+  component restore plus an inline script, not a token change; the last commits
+  that carry both are `71ac41f` and earlier
+  (`git log -- src/components/ThemeToggle.astro`).
 - A `dark:` Tailwind variant exists for the rare non-token case; do not use it
   to restate a role.
 
@@ -87,7 +91,7 @@ The `@font-face` quartet and the `--font-sans` stack are DabFonts 1.0.1
 
 | Component / module | Props / exports | Guarantees |
 |---|---|---|
-| `BaseLayout.astro` | `title`, `description`, `path?`, `lang?`; slots `head`, `header`, `footer`, default | charset/viewport, title/description/canonical, font preload, theme script, skip link, `#main`, header/footer fall back to the shell |
+| `BaseLayout.astro` | `title`, `description`, `path?`, `lang?`; slots `head`, `header`, `footer`, default | charset/viewport, title/description/canonical, font preload, `data-theme` pinned to light, skip link, `#main`, header/footer fall back to the shell |
 | `Container.astro` | `as?` (`div` default, `section`, `header`, `footer`, `main`, `nav`), `class?` | `container-lg` width and the 16/24/32 gutter |
 | `Section.astro` | `as?` (`section` default), `spacing?` (`standard` \| `loose` \| `none`), `id?`, `labelledby?`, `class?` | top rhythm: `space-16`, `space-24` from 640 for `loose`, none for `none`; wraps its content in `Container` |
 | `SectionHeader.astro` | `label`, `index?`, `id?`, `as?` (`h2` default), `class?` | index + label + 1px rule row; index is accent, decorative, tabular |
@@ -96,20 +100,27 @@ The `@font-face` quartet and the `--font-sans` stack are DabFonts 1.0.1
 | `.link`, `.button`, `.button-secondary` | classes | link: accent + underline, 2px offset; buttons: `type-label` typography in markup, 44px minimum, neutral ink or 1px boundary |
 | `src/lib/i18n.ts` | `locales`, `Locale`, `defaultLocale`, `Localized<T>` | one vocabulary for locales; no routing |
 | `src/lib/metadata.ts` | `PageMeta`, `ResolvedMeta`, `resolveMeta()` | title suffix, absolute canonical from `site.url` |
+| `components/home/HeroStage.astro` | — | the cutout portrait over `type-wordmark`, art-directed across three widths, plus the scroll cue; sticky, clipped, `z-index: 0` |
+| `components/home/Intro.astro` | `locale: Locale` | the page's only `h1`: role (`type-h4`), name (`type-display-xl`), lede (`type-lede`) |
+| `components/home/WorkGrid.astro` | `entries: CollectionEntry<"works">[]`, `locale` | two-up card grid; card = 16:10 screenshot in its own clipped box, tags (`type-label-caps`), title (`type-h3`); hover scales the image 1.03 |
+| `components/home/MusicSection.astro` | — | streaming links, DabMusic as own player, three latest releases with ISO dates formatted in the component |
+| `components/home/BlogSection.astro` | — | "Coming soon…" plus the `/rss.xml` link while no post exists |
+| `components/home/ContactSection.astro` | — | `site.email` and the contact subset of `social.all` |
+| `src/content.config.ts` | `works`, `experience` collections | Zod schemas mirroring DESIGN.md §10; thread 3 adds `writing` |
+| `src/content/profile.ts` | `HomeCopy` and default export | home copy per locale: role, intro, `now`, about, section labels |
 
 Rules: extend a primitive rather than forking it; a new visual need is a token
-decision, not a local value; a section composes `Section` + `SectionHeader` +
-rows.
+decision, not a local value. Home sections after the hero are opaque and sit at
+`z-index: 1` (`global.css`), because the hero stays pinned at `z-index: 0`.
 
 ## 6. Islands budget
 
-One island of behaviour, zero shipped files:
+Zero client JavaScript. `dist/**/*.js` is empty and the document carries no
+inline script: the theme toggle is out and the theme is pinned to light.
 
-- the theme toggle, implemented as the inline theme script (824 bytes) plus a
-  button; `dist/**/*.js` is empty.
-
-Anything else — audio, command palette, analytics, interactive filter — needs a
-recorded decision and its own budget line before it ships.
+Anything else — the toggle's return, audio, command palette, analytics, an
+interactive filter — needs a recorded decision and its own budget line before it
+ships. Restoring the toggle adds one inline script, not a framework island.
 
 ## 7. File naming and structure
 
@@ -125,9 +136,13 @@ recorded decision and its own budget line before it ships.
 
 ## 8. Content
 
-- `src/content/` is the only home for records and copy. Thread 2 adds `works/`
-  and `experience/`, thread 3 adds `writing/<locale>/`; collections are defined
-  once in `src/content.config.ts` with a schema mirroring `DESIGN.md` §10.
+- `src/content/` is the only home for records and copy. Thread 2 created
+  `src/content.config.ts` with `works` and `experience`; thread 3 adds
+  `writing/<locale>/` to the same file, never a second config.
+- Works are ordered newest first by `year`; experience newest first by `start`.
+  Both are sorted at the page, not in the loader.
+- A work cover lives beside its record (`src/content/works/<slug>.webp`) so the
+  `image()` schema helper resolves it; images are not kept in `public/`.
 - `src/data/site.ts` and `src/data/social.ts` hold identity constants only.
 - Proper nouns stay untranslated; every other field is `Localized<T>`.
 - A missing fact is omitted, never replaced by a placeholder in production.
@@ -206,6 +221,12 @@ or 1536 CSS pixels (200% zoom on a 1280px window is the 640px case).
 
 ## 14. Not built here
 
-Home sections (thread 2), posts and RSS (thread 3), `/zh` routing (thread 4),
-OG art, sitemap, robots, Lighthouse and the domain switch (thread 5), and the
-portrait asset, first post, and work years listed in `DESIGN.md` §14.
+Home sections are built (thread 2): hero, work, earlier, and about, with contact
+links in the hero and the footer. Not built here: the writing list and posts
+(thread 3), `/zh` routing (thread 4), OG art, sitemap, robots, Lighthouse and the
+domain switch (thread 5).
+
+Open content items, all owner-supplied: a final portrait to replace the CV photo,
+real 16:10 work covers, and the `02` section slot, which DESIGN.md §6 reserves
+for Writing and thread 3 fills. Works and roles show years by owner decision;
+the CV's month ranges are not modelled.

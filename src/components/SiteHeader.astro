@@ -1,33 +1,73 @@
 ---
 /**
- * The site header: wordmark, the nav seam, and the theme toggle
- * (DESIGN.md §7.1). Static, one hairline, no blur.
+ * The site header: the mark, the section nav, one hairline, glass.
  *
- * The nav holds no items until the routes exist (threads 2 and 3). Adding one
- * means `type-label`, `color-text-secondary`, and for the current item
- * `color-text-primary` plus the accent marker — never a fourth accent.
+ * Sticky at every width; the scrim is the only translucent surface on the
+ * site (DESIGN.md §7.1, AGENTS.md → Exceptions). The nav points at the home
+ * anchors, so a click lands under the bar via `scroll-margin` on the sections.
  */
 import Container from "./Container.astro";
-import ThemeToggle from "./ThemeToggle.astro";
 import site from "../data/site";
 ---
 
 <header class="site-header">
   <Container class="site-header__inner">
-    <a class="site-header__wordmark type-h4" href="/">{site.name}</a>
-    <ThemeToggle />
+    <a class="logo" href="/" aria-label={`${site.name} — home`}>
+      <svg
+        class="logo__mark"
+        viewBox="0 0 360 360"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path
+          d="M24.1155 90C39.9137 62.6366 62.6366 39.9137 90 24.1155C117.363 8.31721 148.403 0 180 0C211.597 0 242.636 8.3171 270 24.1153C297.364 39.9136 320.087 62.6364 335.884 89.9998C351.682 117.364 360 148.404 360 180C360 211.597 351.682 242.636 335.885 270L180 180V360C148.404 360 117.364 351.682 90.0002 335.885C62.6366 320.087 39.9137 297.364 24.1155 270C8.31721 242.636 0 211.597 0 180C0 148.404 8.3171 117.364 24.1155 90Z"
+          fill="currentColor"
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+        />
+      </svg>
+    </a>
+
+    <nav class="site-nav" aria-label="Primary">
+      <ul class="site-nav__list type-label">
+        <li><a href="#work">Work</a></li>
+        <li><a href="#music">Music</a></li>
+        <li><a href="#blog">Blog</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
   </Container>
 </header>
 
 <style>
   .site-header {
-    border-block-end: var(--dab-border-width) solid var(--dab-color-border);
-    background-color: var(--dab-color-background);
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 20;
+    border-block-end: var(--dab-border-width) solid var(--dab-header-border);
+    background-color: var(--dab-header-bg);
+    -webkit-backdrop-filter: var(--dab-header-blur);
+    backdrop-filter: var(--dab-header-blur);
   }
 
-  /* `Container` renders this element, so its class is outside this file's
-     style scope; `:global()` is the documented way to style a child
-     component's root. Keep the prefix unique. */
+  @supports not (backdrop-filter: blur(1px)) {
+    .site-header {
+      background-color: var(--dab-color-background);
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .site-header {
+      background-color: var(--dab-color-background);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+
+  /* `Container` renders this element; `:global()` is the documented way to
+     style a child component's root (src/CONVENTIONS.md §7). */
   :global(.site-header__inner) {
     display: flex;
     align-items: center;
@@ -36,8 +76,61 @@ import site from "../data/site";
     min-block-size: var(--dab-space-16);
   }
 
-  .site-header__wordmark {
+  .logo {
+    --logo-size: 32px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--dab-target-min);
+    block-size: var(--dab-target-min);
+    /* the 44px target is wider than the mark: keep the mark on the shell edge */
+    margin-inline-start: calc((var(--dab-target-min) - var(--logo-size)) / -2);
     color: var(--dab-color-text-primary);
     text-decoration: none;
+  }
+
+  .logo__mark {
+    display: block;
+    inline-size: var(--logo-size);
+    block-size: var(--logo-size);
+  }
+
+  .site-nav__list {
+    display: flex;
+    align-items: center;
+    gap: var(--dab-space-2);
+    margin: 0;
+    /* the last item's padding would push its text off the shell edge */
+    margin-inline-end: calc(var(--dab-space-2) * -1);
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--dab-target-min);
+    padding-inline: var(--dab-space-2);
+    border-radius: var(--dab-radius-sm);
+    color: var(--dab-color-text-secondary);
+    text-decoration: none;
+    transition: color var(--dab-duration-fast) var(--dab-easing-linear);
+  }
+
+  .site-nav a:hover {
+    color: var(--dab-color-text-primary);
+  }
+
+  /* Four items plus the mark do not fit at 320 with 8px padding. */
+  @media (max-width: 350px) {
+    .site-nav__list {
+      gap: var(--dab-space-1);
+      margin-inline-end: calc(var(--dab-space-1) * -1);
+    }
+
+    .site-nav a {
+      padding-inline: var(--dab-space-1);
+    }
   }
 </style>

@@ -25,3 +25,7 @@ pnpm-debug.log*
 
 # macOS
 .DS_Store
+
+# design scratch — comps, screenshots and source images; nothing under /docs ships
+# (narrow to /docs/design/ if a real document ever belongs in the repo)
+/docs/

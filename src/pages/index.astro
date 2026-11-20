@@ -1,12 +1,35 @@
 ---
 /**
- * Home. The shell only: thread 2 adds the hero, work, writing, earlier, and
- * about sections here. No placeholder content ships.
+ * Home.
+ *
+ * The page is one pinned portrait, then the record: statement, work, music,
+ * blog, contact. Sections after the hero are opaque and sit above it, which is
+ * what makes the scroll-over work in `global.css`.
  */
+import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import HeroStage from "../components/home/HeroStage.astro";
+import Intro from "../components/home/Intro.astro";
+import WorkGrid from "../components/home/WorkGrid.astro";
+import MusicSection from "../components/home/MusicSection.astro";
+import BlogSection from "../components/home/BlogSection.astro";
+import ContactSection from "../components/home/ContactSection.astro";
 import site from "../data/site";
+import { defaultLocale } from "../lib/i18n";
+
+const locale = defaultLocale;
+
+// Newest first; `year` drives the order (§10).
+const works = (await getCollection("works")).sort(
+  (a, b) => (b.data.year ?? 0) - (a.data.year ?? 0),
+);
 ---
 
 <BaseLayout title={site.name} description={site.description} path="/">
-  <!-- Thread 2: home sections. -->
+  <HeroStage />
+  <Intro locale={locale} />
+  <WorkGrid entries={works} locale={locale} />
+  <MusicSection />
+  <BlogSection />
+  <ContactSection />
 </BaseLayout>
