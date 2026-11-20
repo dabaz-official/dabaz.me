@@ -16,7 +16,8 @@ commit. `DESIGN.md` owns composition; DabDesign, DabFonts, and DabAgents (pins i
 | `src/lib/i18n.ts` | `Locale`, `Localized<T>`, `locales`, `defaultLocale` | foundation; routing by thread 4 |
 | `src/lib/metadata.ts` | `PageMeta`, `resolveMeta()` | foundation; OG by thread 5 |
 | `src/data/site.ts` | site name, URL, email, role, description | foundation |
-| `src/data/social.ts` | `Social[]`, `primary` and `all` | thread 2 renders |
+| `src/data/social.ts` | `Social[]`, `primary` and `all` | foundation |
+| `src/data/music.ts` | `platforms`, `ownPlayer`, `releases` | thread 2 renders |
 | `src/content/` | content records and copy; collections land in `src/content.config.ts` | threads 2–3 |
 | `src/pages/` | routes | threads 2–4 |
 | `scripts/check-tokens.mjs` | the token guard behind `pnpm lint` | foundation |
@@ -99,15 +100,18 @@ The `@font-face` quartet and the `--font-sans` stack are DabFonts 1.0.1
 | `.link`, `.button`, `.button-secondary` | classes | link: accent + underline, 2px offset; buttons: `type-label` typography in markup, 44px minimum, neutral ink or 1px boundary |
 | `src/lib/i18n.ts` | `locales`, `Locale`, `defaultLocale`, `Localized<T>` | one vocabulary for locales; no routing |
 | `src/lib/metadata.ts` | `PageMeta`, `ResolvedMeta`, `resolveMeta()` | title suffix, absolute canonical from `site.url` |
-| `components/home/Hero.astro` | `locale: Locale` | name, role, intro, `now`, contact links, and the portrait in the DESIGN.md §7.2 sequence |
-| `components/home/WorkList.astro` | `entries: CollectionEntry<"works">[]`, `locale` | one-link rows, 9rem meta column from 640, optional 16:10 cover |
-| `components/home/ExperienceList.astro` | `entries: CollectionEntry<"experience">[]`, `locale` | year-range meta, role title, org, summary; same row grammar |
+| `components/home/HeroStage.astro` | — | the cutout portrait over `type-wordmark`, art-directed across three widths, plus the scroll cue; sticky, clipped, `z-index: 0` |
+| `components/home/Intro.astro` | `locale: Locale` | the page's only `h1`: role (`type-h4`), name (`type-display-xl`), lede (`type-lede`) |
+| `components/home/WorkGrid.astro` | `entries: CollectionEntry<"works">[]`, `locale` | two-up card grid; card = 16:10 screenshot in its own clipped box, tags (`type-label-caps`), title (`type-h3`); hover scales the image 1.03 |
+| `components/home/MusicSection.astro` | — | streaming links, DabMusic as own player, three latest releases with ISO dates formatted in the component |
+| `components/home/BlogSection.astro` | — | "Coming soon…" plus the `/rss.xml` link while no post exists |
+| `components/home/ContactSection.astro` | — | `site.email` and the contact subset of `social.all` |
 | `src/content.config.ts` | `works`, `experience` collections | Zod schemas mirroring DESIGN.md §10; thread 3 adds `writing` |
 | `src/content/profile.ts` | `HomeCopy` and default export | home copy per locale: role, intro, `now`, about, section labels |
 
 Rules: extend a primitive rather than forking it; a new visual need is a token
-decision, not a local value; a section composes `Section` + `SectionHeader` +
-rows.
+decision, not a local value. Home sections after the hero are opaque and sit at
+`z-index: 1` (`global.css`), because the hero stays pinned at `z-index: 0`.
 
 ## 6. Islands budget
 
