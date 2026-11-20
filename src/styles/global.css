@@ -139,6 +139,15 @@
     border-radius: var(--dab-radius-lg);
   }
 
+  /* The hero is pinned at z-index 0; every section after it paints above and
+     is opaque, or the pinned photo shows through the section scrolling over
+     it. Any new section that follows the hero inherits this. */
+  main > section + section {
+    position: relative;
+    z-index: 1;
+    background-color: var(--dab-color-background);
+  }
+
   /* Prose wrapper: measure plus paragraph rhythm. Thread 3 extends it for
      post bodies; it never forks a second measure. */
   .prose > * + * {

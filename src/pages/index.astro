@@ -1,76 +1,35 @@
 ---
 /**
- * Home — DESIGN.md §6.
+ * Home.
  *
- * Work (01), Writing (02, thread 3), Earlier (03), About (04). The indexes are
- * the ones DESIGN.md §6 assigns, so thread 3 inserts Writing without
- * renumbering; no section renders a heading without records.
+ * The page is one pinned portrait, then the record: statement, work, music,
+ * blog, contact. Sections after the hero are opaque and sit above it, which is
+ * what makes the scroll-over work in `global.css`.
  */
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Prose from "../components/Prose.astro";
-import Section from "../components/Section.astro";
-import SectionHeader from "../components/SectionHeader.astro";
-import ExperienceList from "../components/home/ExperienceList.astro";
-import Hero from "../components/home/Hero.astro";
-import WorkList from "../components/home/WorkList.astro";
-import home from "../content/profile";
+import HeroStage from "../components/home/HeroStage.astro";
+import Intro from "../components/home/Intro.astro";
+import WorkGrid from "../components/home/WorkGrid.astro";
+import MusicSection from "../components/home/MusicSection.astro";
+import BlogSection from "../components/home/BlogSection.astro";
+import ContactSection from "../components/home/ContactSection.astro";
 import site from "../data/site";
 import { defaultLocale } from "../lib/i18n";
 
 const locale = defaultLocale;
 
-// Newest first; `year` drives the order and the visible meta (§10).
+// Newest first; `year` drives the order (§10).
 const works = (await getCollection("works")).sort(
   (a, b) => (b.data.year ?? 0) - (a.data.year ?? 0),
-);
-
-const experience = (await getCollection("experience")).sort(
-  (a, b) => b.data.start - a.data.start,
 );
 ---
 
 <BaseLayout title={site.name} description={site.description} path="/">
-  <Hero locale={locale} />
-
-  <Section id="work" labelledby="work-heading" spacing="loose">
-    <SectionHeader
-      id="work-heading"
-      index="01"
-      label={home.sections.work[locale]}
-    />
-    <WorkList entries={works} locale={locale} />
-  </Section>
-
-  {
-    experience.length > 0 && (
-      <Section id="earlier" labelledby="earlier-heading">
-        <SectionHeader
-          id="earlier-heading"
-          index="03"
-          label={home.sections.experience[locale]}
-        />
-        <ExperienceList entries={experience} locale={locale} />
-      </Section>
-    )
-  }
-
-  <Section id="about" labelledby="about-heading">
-    <SectionHeader
-      id="about-heading"
-      index="04"
-      label={home.sections.about[locale]}
-    />
-    <Prose class="about__body">
-      <p>{home.about[locale]}</p>
-    </Prose>
-  </Section>
+  <HeroStage />
+  <Intro locale={locale} />
+  <WorkGrid entries={works} locale={locale} />
+  <MusicSection />
+  <BlogSection />
+  <ContactSection />
 </BaseLayout>
-
-<style>
-  /* `Prose` renders this element; `:global()` is the documented way to style a
-     child component's root (src/CONVENTIONS.md §7). */
-  :global(.about__body) {
-    margin-block-start: var(--dab-space-8);
-  }
-</style>
