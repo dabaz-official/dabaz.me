@@ -4,13 +4,14 @@ Personal site of DabAZ: work, writing, and contact. Static HTML, self-hosted
 fonts, no client runtime.
 
 The rebuild is in progress on `rebuild`. This branch ships the foundation —
-tokens, fonts, the document shell, shared primitives, CI — and the home page:
-hero, work, earlier roles, about, and contact. Writing and `/zh` follow in their
-own threads.
+tokens, fonts, the document shell, shared primitives, CI — the home page (hero,
+work, music, blog, contact), and the blog: `/writing`, post pages, tags,
+pagination, and RSS. `/zh` follows in its own thread.
 
 ## Stack
 
-- **Framework:** Astro 7.4.12, fully static, no adapter
+- **Framework:** Astro 7.4.12, fully static, no adapter; MDX for post bodies
+  (`@astrojs/mdx`, build-time only)
 - **Language:** TypeScript, `strict: true`
 - **Styling:** Tailwind CSS 4.3.5 (`@tailwindcss/vite`) over DabDesign tokens in
   `src/styles/tokens.css`
@@ -49,12 +50,12 @@ Node 24 (`.nvmrc`), pnpm 12.
 public/           fonts and favicon — served as-is
 src/
   assets/         the portrait, imported through astro:assets
-  components/     shared primitives, the shell, and the home sections
-  content/        works, experience, and profile copy; writing lands in thread 3
+  components/     shared primitives, the shell, home sections, and writing rows
+  content/        works, experience, profile copy, and writing posts
   data/           site identity and social links
   layouts/        BaseLayout — head, skip link, slots, theme attribute
-  lib/            i18n seam, metadata helper
-  pages/          routes; `/` is the home page
+  lib/            i18n seam, metadata helper, writing helpers
+  pages/          routes: `/`, `/writing`, posts, tags, `/rss.xml`
   styles/         tokens.css (the only design values) and global.css
 scripts/          check-tokens.mjs, the lint gate
 docs/             working handoff for the rebuild (deleted after merge)
