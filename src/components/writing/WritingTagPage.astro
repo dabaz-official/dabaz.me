@@ -1,0 +1,54 @@
+---
+/**
+ * Every post that carries one tag, for one locale. The tag's display form
+ * comes from the content; the URL segment is normalised by `tagSlug()`.
+ */
+import Section from "../Section.astro";
+import PostList from "./PostList.astro";
+import ui from "../../content/ui";
+import type { Locale } from "../../lib/i18n";
+import { writingPath, type WritingEntry } from "../../lib/writing";
+
+interface Props {
+  label: string;
+  locale: Locale;
+  entries: WritingEntry[];
+}
+
+const { label, locale, entries } = Astro.props;
+---
+
+<Section class="writing-tag">
+  <header class="writing-tag__head">
+    <h1 class="type-h1">
+      <span class="writing-tag__label">{ui.writing.tagPrefix[locale]}</span> {label}
+    </h1>
+  </header>
+
+  <PostList entries={entries} />
+
+  <nav class="writing-tag__foot" aria-label={ui.writing.postNav[locale]}>
+    <a class="link type-label" href={writingPath(locale)}>
+      {ui.writing.all[locale]}
+    </a>
+  </nav>
+</Section>
+
+<style>
+  .writing-tag {
+    padding-block-end: var(--dab-space-16);
+  }
+
+  .writing-tag__head {
+    margin: 0;
+    margin-block-end: var(--dab-space-8);
+  }
+
+  .writing-tag__label {
+    color: var(--dab-color-text-tertiary);
+  }
+
+  .writing-tag__foot {
+    margin-block-start: var(--dab-space-12);
+  }
+</style>

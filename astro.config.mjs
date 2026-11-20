@@ -9,6 +9,13 @@ export default defineConfig({
   // makes canonical URLs absolute.
   site: "https://dabaz.me",
   output: "static",
+  // `/` is English, `/zh` is Chinese (DESIGN.md §11). Astro's routing only
+  // checks the prefix; the pages themselves live in `src/pages/zh/`.
+  i18n: {
+    defaultLocale: "en",
+    locales: ["en", "zh"],
+    routing: { prefixDefaultLocale: false },
+  },
   // Posts are authored in MDX so a body can embed the shared components
   // (`ContentImage`, the prose element map). Build-time only: no client runtime.
   integrations: [mdx()],

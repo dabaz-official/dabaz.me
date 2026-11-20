@@ -6,13 +6,42 @@
  * site (DESIGN.md §7.1, AGENTS.md → Exceptions). The nav points at the home
  * anchors, so a click lands under the bar via `scroll-margin` on the sections.
  */
+import { getCollection } from "astro:content";
 import Container from "./Container.astro";
+import ui from "../content/ui";
 import site from "../data/site";
+import {
+  defaultLocale,
+  homeAnchorPath,
+  homePath,
+  type Locale,
+} from "../lib/i18n";
+import { postsForLocale, publishedPosts, writingPath } from "../lib/writing";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = defaultLocale } = Astro.props;
+// DESIGN.md §6 forbids an empty Writing section. Without a post the anchor
+// would be dead, so the same item points at the locale's writing list instead.
+const posts = postsForLocale(
+  publishedPosts(await getCollection("writing")),
+  locale,
+);
+const blogHref =
+  posts.length > 0
+    ? homeAnchorPath(locale, "blog")
+    : writingPath(locale);
 ---
 
 <header class="site-header">
   <Container class="site-header__inner">
-    <a class="logo" href="/" aria-label={`${site.name} — home`}>
+    <a
+      class="logo"
+      href={homePath(locale)}
+      aria-label={ui.home.logo[locale](site.name)}
+    >
       <svg
         class="logo__mark"
         viewBox="0 0 360 360"
@@ -30,12 +59,16 @@ import site from "../data/site";
       </svg>
     </a>
 
-    <nav class="site-nav" aria-label="Primary">
+    <nav class="site-nav" aria-label={ui.primaryNav[locale]}>
       <ul class="site-nav__list type-label">
-        <li><a href="/#work">Work</a></li>
-        <li><a href="/#music">Music</a></li>
-        <li><a href="/#blog">Blog</a></li>
-        <li><a href="/#contact">Contact</a></li>
+        <li><a href={homeAnchorPath(locale, "work")}>{ui.nav.work[locale]}</a></li>
+        <li><a href={homeAnchorPath(locale, "music")}>{ui.nav.music[locale]}</a></li>
+        <li><a href={blogHref}>{ui.nav.blog[locale]}</a></li>
+        <li>
+          <a href={homeAnchorPath(locale, "contact")}
+            >{ui.nav.contact[locale]}</a
+          >
+        </li>
       </ul>
     </nav>
   </Container>

@@ -47,6 +47,13 @@
     font-family: var(--font-mono);
   }
 
+  /* Dab Sans has no italic; never let the browser synthesize an oblique
+     (DabFonts TYPESETTING.md §5.2). The emphasis treatment is still open. */
+  em,
+  i {
+    font-style: normal;
+  }
+
   /* Core-fixed: never overridden, never accented. */
   ::selection {
     background-color: var(--dab-color-selection-bg);

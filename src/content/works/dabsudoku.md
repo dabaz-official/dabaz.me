@@ -6,7 +6,7 @@ role:
   zh: 独立开发者
 summary:
   en: A quiet, focused Sudoku with four difficulty levels and full keyboard controls.
-  zh: 一款安静、专注的数独游戏，提供四档难度和完整的键盘操作。
+  zh: 一款安静、 专注的数独游戏， 提供四档难度和完整的键盘操作。
 tags: ["Puzzle", "Web"]
 href: https://sudoku.dabaz.me
 cover:

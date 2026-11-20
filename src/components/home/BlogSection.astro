@@ -10,27 +10,30 @@
  */
 import Container from "../Container.astro";
 import PostList from "../writing/PostList.astro";
-import type { WritingEntry } from "../../lib/writing";
+import ui from "../../content/ui";
+import { defaultLocale, type Locale } from "../../lib/i18n";
+import { writingPath, type WritingEntry } from "../../lib/writing";
 
 interface Props {
   entries: WritingEntry[];
   hasMore: boolean;
+  locale?: Locale;
 }
 
-const { entries, hasMore } = Astro.props;
+const { entries, hasMore, locale = defaultLocale } = Astro.props;
 ---
 
 <section class="blog" id="blog" aria-labelledby="blog-title">
   <Container>
-    <h2 class="blog__title type-h2" id="blog-title">Blog</h2>
+    <h2 class="blog__title type-h2" id="blog-title">{ui.nav.blog[locale]}</h2>
 
     <PostList entries={entries} headingLevel="h3" showTags={false} />
 
     {
       hasMore && (
         <p class="blog__more">
-          <a class="link type-label" href="/writing">
-            All writing
+          <a class="link type-label" href={writingPath(locale)}>
+            {ui.writing.all[locale]}
           </a>
         </p>
       )

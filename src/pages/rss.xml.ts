@@ -1,11 +1,15 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 import site from "../data/site";
-import { postPath, publishedPosts, rssDate } from "../lib/writing";
+import { rssDate } from "../lib/dates";
+import { postPath, publishedPosts } from "../lib/writing";
 
 /**
  * The feed. One channel for the site; items are every published post, newest
  * first, with the summary as the description and the tags as categories.
+ *
+ * The channel itself stays English while the site has one feed; a post's link
+ * carries its own `/zh` prefix, so a Chinese post is reachable from it.
  *
  * Dates come from the records, never from the build clock, so the same commit
  * produces the same feed.
@@ -47,7 +51,7 @@ ${tags.map((tag) => `      <category>${escapeXml(tag)}</category>`).join("\n")}
   <channel>
     <title>${escapeXml(site.name)} — Writing</title>
     <link>${site.url}/writing</link>
-    <description>${escapeXml(site.description)}</description>
+    <description>${escapeXml(site.description.en)}</description>
     <atom:link href="${site.url}/rss.xml" rel="self" type="application/rss+xml"/>
 ${newest ? `    <lastBuildDate>${rssDate(newest)}</lastBuildDate>\n` : ""}${items}
   </channel>

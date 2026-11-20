@@ -13,17 +13,21 @@ commit. `DESIGN.md` owns composition; DabDesign, DabFonts, and DabAgents (pins i
 | `src/styles/global.css` | base element styles, link/button conventions, container, prose rhythm, skip link | foundation |
 | `src/layouts/BaseLayout.astro` | document shell, head, skip link, slots, theme attribute | foundation |
 | `src/components/` | shared primitives and the header/footer shell | foundation; extension by later threads |
-| `src/lib/i18n.ts` | `Locale`, `Localized<T>`, `locales`, `defaultLocale` | foundation; routing by thread 4 |
+| `src/lib/i18n.ts` | `Locale`, `Localized<T>`, `locales`, `defaultLocale`, `htmlLang()`, `localePath()`, `homePath()`, `homeAnchorPath()`, `otherLocale()` | foundation; thread 4 |
 | `src/lib/metadata.ts` | `PageMeta`, `resolveMeta()` | foundation; OG by thread 5 |
-| `src/data/site.ts` | site name, URL, email, role, description | foundation |
+| `src/lib/dates.ts` | `formatDate(isoDay, locale)`, `dateTime()`, `rssDate()` | foundation; thread 4 |
+| `src/lib/writing.ts` | post URLs and ordering per locale, tags, pagination, alternate-language targets | thread 3; thread 4 |
+| `src/data/site.ts` | site name, URL, email, `role` and `description` (`Localized`) | foundation |
 | `src/data/social.ts` | `Social[]`, `primary` and `all` | foundation |
-| `src/data/music.ts` | `platforms`, `ownPlayer`, `releases` | thread 2 renders |
-| `src/content/` | content records and copy; collections land in `src/content.config.ts` | threads 2–3 |
-| `src/lib/writing.ts` | post URLs, ordering, tags, pagination, date formatting | thread 3 |
+| `src/data/music.ts` | `platforms`, `ownPlayer` (`note` is `Localized`), `releases` | thread 2 renders |
+| `src/content/ui.ts` | every interface string the shell and shared components render | thread 4 |
+| `src/content/` | content records and copy; collections land in `src/content.config.ts` | threads 2–4 |
 | `src/pages/writing/` | `/writing`, `/writing/page/<n>`, `/writing/<slug>`, `/writing/tag/<tag>` | thread 3 |
-| `src/components/writing/` | the post list, its row, tag links, the pager | thread 3 |
+| `src/pages/zh/` | the same routes under `/zh` | thread 4 |
+| `src/components/writing/` | the post list, its row, tag links, the pager, the shared list/post/tag bodies | thread 3; thread 4 |
 | `src/pages/` | routes | threads 2–4 |
 | `scripts/check-tokens.mjs` | the token guard behind `pnpm lint` | foundation |
+| `scripts/check-copy.mjs` | the Chinese punctuation and CJK–Latin spacing guard | thread 4 |
 
 ## 2. Tokens
 
@@ -88,35 +92,52 @@ The `@font-face` quartet and the `--font-sans` stack are DabFonts 1.0.1
 - `--font-mono` is Dab Mono plus system monospace and is used only for `code`,
   `pre`, `kbd`, `samp`, and tabular data. Never in the body stack.
 - No italics, no synthesized weights, no Astro font pipeline, no CDN.
-- Chinese punctuation, CJK–Latin spacing, and weight limits follow DabFonts.
+- `em` / `i` are reset to `font-style: normal` in `global.css`; the emphasis
+  treatment (600 or colour) is still open, so nothing relies on a synthesized
+  oblique.
+
+**Chinese setting.** The document language is `en` or `zh-CN` (`htmlLang()`);
+English runs inside a Chinese page carry `lang="en"`. Chinese copy uses Chinese
+codepoints, one U+0020 after every sentence or closing mark that is followed by
+text, and one U+0020 between Han and Latin letters or digits — DabFonts
+`TYPESETTING.md` §3–§4. There is no `text-autospace`, no body
+`letter-spacing`, and no `word-break` override. `scripts/check-copy.mjs` fails
+`pnpm lint` when a Chinese string in `src/content/` or `src/data/` breaks the
+spacing rule.
 
 ## 5. Interfaces
 
 | Component / module | Props / exports | Guarantees |
 |---|---|---|
-| `BaseLayout.astro` | `title`, `description`, `path?`, `lang?`; slots `head`, `header`, `footer`, default | charset/viewport, title/description/canonical, RSS autodiscovery, font preload, `data-theme` pinned to light, skip link, `#main`, header/footer fall back to the shell |
+| `BaseLayout.astro` | `title`, `description`, `path?`, `locale?`, `alternatePath?`; slots `head`, `header`, `footer`, default | charset/viewport, title/description/canonical, `lang` from the locale, localized skip link and RSS title, font preload, `data-theme` pinned to light, `#main`, header/footer fall back to the localized shell |
 | `Container.astro` | `as?` (`div` default, `section`, `header`, `footer`, `main`, `nav`), `class?` | `container-lg` width and the 16/24/32 gutter |
 | `Section.astro` | `as?` (`section` default), `spacing?` (`standard` \| `loose` \| `none`), `id?`, `labelledby?`, `class?` | top rhythm: `space-16`, `space-24` from 640 for `loose`, none for `none`; wraps its content in `Container` |
 | `SectionHeader.astro` | `label`, `index?`, `id?`, `as?` (`h2` default), `class?` | index + label + 1px rule row; index is accent, decorative, tabular |
 | `Prose.astro` | `class?`, `lang?` | `type-body` plus the 36em measure and paragraph rhythm; post bodies, heading/list/code/table rhythm from tokens only |
 | `ContentImage.astro` | `src: ImageMetadata`, `alt`, `width`, `height`, `widths?`, `sizes?`, `loading?`, `class?` | `astro:assets` output, required dimensions and `alt`, 1px `radius-lg` frame |
 | `.link`, `.button`, `.button-secondary` | classes | link: accent + underline, 2px offset; buttons: `type-label` typography in markup, 44px minimum, neutral ink or 1px boundary |
-| `src/lib/i18n.ts` | `locales`, `Locale`, `defaultLocale`, `Localized<T>` | one vocabulary for locales; no routing |
-| `src/lib/metadata.ts` | `PageMeta`, `ResolvedMeta`, `resolveMeta()` | title suffix, absolute canonical from `site.url` |
-| `components/home/HeroStage.astro` | — | the cutout portrait over `type-wordmark`, art-directed across three widths, plus the scroll cue; sticky, clipped, `z-index: 0` |
-| `components/home/Intro.astro` | `locale: Locale` | the page's only `h1`: role (`type-h4`), name (`type-display-xl`), lede (`type-lede`) |
+| `src/lib/i18n.ts` | `locales`, `Locale`, `defaultLocale`, `Localized<T>`, `htmlLang()`, `otherLocale()`, `localePath()`, `homePath()`, `homeAnchorPath()` | one vocabulary for locale, BCP 47 tag, and path prefix |
+| `src/lib/metadata.ts` | `PageMeta`, `ResolvedMeta`, `resolveMeta()` | title suffix (English em dash, Chinese `——`), absolute canonical from `site.url` |
+| `src/content/ui.ts` | `UiCopy` and default export | every interface string, both locales; components never inline one |
+| `src/lib/dates.ts` | `formatDate(isoDay, locale)`, `dateTime()`, `rssDate()` | one date format per locale; Chinese uses `YYYY 年 M 月 D 日` |
+| `components/home/HomePage.astro` | `locale: Locale` | the home composition in DESIGN.md §6 order; a locale's Writing band only when that locale has a post |
+| `components/home/HeroStage.astro` | `locale?` | the cutout portrait over `type-wordmark`, art-directed across three widths, plus the scroll cue; sticky, clipped, `z-index: 0` |
+| `components/home/Intro.astro` | `locale: Locale` | the page's only `h1`: role (`type-h4`), name (`type-display-xl`, `lang="en"`), lede (`type-lede`) |
 | `components/home/WorkGrid.astro` | `entries: CollectionEntry<"works">[]`, `locale` | two-up card grid; card = 16:10 screenshot in its own clipped box, tags (`type-label-caps`), title (`type-h3`); hover scales the image 1.03 |
-| `components/home/MusicSection.astro` | — | streaming links, DabMusic as own player, three latest releases with ISO dates formatted in the component |
-| `components/home/BlogSection.astro` | `entries: WritingEntry[]`, `hasMore: boolean` | the newest posts as home rows (`h3` titles, no tags), plus `All writing` only when more exist; the page renders the section only when a post exists |
-| `components/home/ContactSection.astro` | — | `site.email` and the contact subset of `social.all` |
+| `components/home/MusicSection.astro` | `locale?` | streaming links, DabMusic as own player, three latest releases; kind labels and dates follow the locale |
+| `components/home/BlogSection.astro` | `entries: WritingEntry[]`, `hasMore: boolean`, `locale?` | the newest posts as home rows (`h3` titles, no tags), plus `All writing` only when more exist; the page renders the section only when a post exists |
+| `components/home/ContactSection.astro` | `locale?` | `site.email` and the contact subset of `social.all` |
 | `components/writing/PostList.astro` | `entries: WritingEntry[]`, `class?` | the dated rows; the last hairlines closes the list |
-| `components/writing/PostRow.astro` | `entry: WritingEntry` | 9rem date column from 640, `type-h3` title link, one-line summary, tags; the row never nests links |
-| `components/writing/TagLinks.astro` | `tags: string[]`, `class?` | `type-caption` chips that link to `/writing/tag/<slug>`; 44px targets on coarse pointers |
-| `components/writing/Pager.astro` | `current`, `total`, `class?` | prev/next links only when those pages exist; `rel="prev"`/`rel="next"` |
-| `src/lib/writing.ts` | `publishedPosts`, `postSlug`, `postPath`, `localeTag`, `formatDate`, `dateTime`, `rssDate`, `tagSlug`, `tagPath`, `collectTags`, `pageCount`, `pageSlice`, `pagePath`, `POSTS_PER_PAGE` | one route shape for posts, tags, and pages; drafts leave production builds; a duplicate slug or a locale/directory mismatch fails the build |
-| `src/pages/writing/` | `/writing`, `/writing/page/<n>`, `/writing/<slug>`, `/writing/tag/<tag>` | static routes; 10 posts per page |
+| `components/writing/PostRow.astro` | `entry: WritingEntry` | 9rem date column from 640, `type-h3` title link, one-line summary, tags; the row never nests links; title/summary/date use the post's locale |
+| `components/writing/TagLinks.astro` | `tags: string[]`, `locale`, `class?` | `type-caption` chips under the locale's tag route; 44px targets on coarse pointers |
+| `components/writing/Pager.astro` | `current`, `total`, `locale`, `class?` | prev/next links only when those pages exist; `rel="prev"`/`rel="next"` |
+| `components/writing/WritingListPage.astro` | `locale`, `page?` | the shared list body, empty state, and pager |
+| `components/writing/PostArticle.astro` | `entry: WritingEntry` | the shared post body, prose map, meta, and back link |
+| `components/writing/WritingTagPage.astro` | `label`, `locale`, `entries` | the shared tag page body |
+| `src/lib/writing.ts` | `publishedPosts`, `postsForLocale`, `postSlug`, `postPath`, `writingPath`, `tagSlug`, `tagPath`, `tagPathFromSlug`, `collectTags`, `pageCount`, `pageSlice`, `pagePath`, `alternatePostPath`, `alternateTagPath`, `POSTS_PER_PAGE` | one route shape per locale; drafts leave production builds; a duplicate slug within one locale or a locale/directory mismatch fails the build; the same slug may exist once per locale |
+| `src/pages/writing/` and `src/pages/zh/writing/` | `/writing`, `/writing/page/<n>`, `/writing/<slug>`, `/writing/tag/<tag>` under each prefix | static routes; 10 posts per page; each locale lists only its own posts |
 | `src/content.config.ts` | `works`, `experience`, `writing` collections | Zod schemas mirroring DESIGN.md §10; `writing` adds `tags` and `draft` |
-| `src/content/profile.ts` | `HomeCopy` and default export | home copy per locale: role, intro, `now`, about, section labels |
+| `src/content/profile.ts` | `HomeCopy` and default export | home copy per locale: role, intro, `now`, about, portrait alt, section labels |
 
 Rules: extend a primitive rather than forking it; a new visual need is a token
 decision, not a local value. Home sections after the hero are opaque and sit at
@@ -160,39 +181,65 @@ ships. Restoring the toggle adds one inline script, not a framework island.
 - Writing lives at `src/content/writing/<locale>/<slug>.mdx`, one file per post
   per locale. Frontmatter: `title`, `locale`, `date` (`YYYY-MM-DD`; quote it, or
   the loader normalises the date YAML parses), `summary`, `tags`, `draft`. The
-  directory must match `locale`, and two locales cannot reuse a slug until
-  thread 4 splits the routes — both fail the build with a message.
+  directory must match `locale`; the same slug may exist once per locale and
+  each locale lists only its own posts.
 - A post body renders inside `Prose`. Markdown carries no classes, so headings
-  and links are mapped to components in `src/pages/writing/[slug].astro`; an
+  and links are mapped to components once, in the shared `PostArticle`; an
   image is imported by the author and rendered through `ContentImage`.
 - Tags are content strings, not translations; `tagSlug()` lowercases and
   hyphenates, CJK stays as written. Posts paginate at 10 per page.
-- `src/data/site.ts` and `src/data/social.ts` hold identity constants only.
+- `src/data/site.ts` and `src/data/social.ts` hold identity constants only;
+  `site.role` and `site.description` are copy, so they are `Localized`.
 - Proper nouns stay untranslated; every other field is `Localized<T>`.
+
+**Translation flow.** Interface copy lives in `src/content/ui.ts`; owner copy
+lives in `src/content/profile.ts`, the collections, and `src/data/`. To add a
+locale: extend `locales` in `src/lib/i18n.ts`; TypeScript then fails every
+`Localized` record until the new locale is filled in — there is no silent
+English fallback. Add the locale's route tree under `src/pages/<locale>/`.
+Translate a post by adding a file in the new `writing/<locale>/` directory with
+the same slug; until that file exists, that locale's list omits the post and
+the language switch falls back to the list. Chinese copy must pass
+`scripts/check-copy.mjs`.
+
 - A missing fact is omitted, never replaced by a placeholder in production.
-- Copy voice follows DabAgents rule 07.
+- Copy voice follows DabAgents rule 07; Chinese copy follows DabFonts.
 
 ## 9. Locale seam
 
-`src/lib/i18n.ts` exports the types and the locale list. There is no routing,
-no `/zh`, no translation loading, and no language switch: thread 4 owns them.
-Until then `BaseLayout` takes `lang` (default `en`) and every page is one
-locale. Do not hardcode a second locale's strings into components; add them to
-`src/content/`.
+Astro's built-in i18n runs with `defaultLocale: "en"`, `locales: ["en", "zh"]`,
+and `prefixDefaultLocale: false` (`astro.config.mjs`): English is `/`, Chinese
+is `/zh`. The route tree mirrors that (`src/pages/zh/…`); no middleware and no
+client router are involved.
 
-A post is the one exception the model already allows: its content locale is its
-own, so the article element carries `lang="zh-Hans"` while the shell stays
-English, and the URL is locale-agnostic (`/writing/<slug>`). `postPath()` in
-`src/lib/writing.ts` is the single line thread 4 changes to add
-`/zh/writing/<slug>`; slugs stay unique across locales until then.
+- `BaseLayout` takes `locale` and writes `<html lang="en">` or `lang="zh-CN"`.
+  `htmlLang()` is the only mapper; do not write a locale tag by hand.
+- Interface copy is `src/content/ui.ts`; a component reads
+  `ui.<group>.<name>[locale]` and never inlines a string. Owner copy is
+  `Localized` in `src/content/` and `src/data/`.
+- `postPath()`, `writingPath()`, `tagPath()`, and `pagePath()` prepend `/zh`
+  and no other module builds a writing URL. A post is listed only in the locale
+  it was written in; there is no cross-locale fallback.
+- The language switch is a footer link. It points at the same page in the other
+  locale when a translation exists (a post or a tag), and at that locale's
+  writing list or home otherwise. `alternatePath` on `BaseLayout` is the only
+  knob; pages pass it explicitly.
+- The Writing band appears only when the current locale has a published post.
+  The Blog nav item stays, but points at the section when it exists and at the
+  locale's writing list otherwise, so no anchor points at a missing section.
+- English runs inside a Chinese page carry `lang="en"` (site name, work and
+  release titles, platform and social labels). Tags are author strings and are
+  not auto-detected; translate them in the record if the post is Chinese.
 
 ## 10. Metadata
 
-Every page passes `title`, `description`, and `path` to `BaseLayout`;
-`resolveMeta()` appends the site name and builds the canonical URL. Extra head
-tags go in the `head` slot. Thread 5 adds Open Graph, `hreflang`, JSON-LD,
-`theme-color`, sitemap, and robots there or in the helper — it does not replace
-the props shape.
+Every page passes `title`, `description`, `path`, and `locale` to `BaseLayout`;
+`resolveMeta()` appends the site name (Chinese uses `——`, English ` — `) and
+builds the canonical URL. Extra head tags go in the `head` slot. Thread 5 adds
+Open Graph, `hreflang`, JSON-LD, `theme-color`, sitemap, and robots there or in
+the helper — it does not replace the props shape. The language switch link
+already carries `hreflang` and `lang` per target; those are link attributes,
+not the head-level `hreflang` set thread 5 owns.
 
 ## 11. Gates
 
@@ -201,7 +248,7 @@ the props shape.
 | `pnpm dev` | Astro dev server |
 | `pnpm build` | static build to `dist/` |
 | `pnpm preview` | serve `dist/` |
-| `pnpm lint` | `scripts/check-tokens.mjs` |
+| `pnpm lint` | `scripts/check-tokens.mjs` + `scripts/check-copy.mjs` |
 | `pnpm typecheck` | `astro sync && tsc --noEmit` |
 | `pnpm check` | lint + typecheck + build; CI runs exactly this |
 
@@ -254,8 +301,10 @@ or 1536 CSS pixels (200% zoom on a 1280px window is the 640px case).
 Home sections are built (thread 2): hero, work, earlier, and about, with contact
 links in the hero and the footer. Thread 3 built writing: the home Blog band
 (newest three), `/writing`, one page per post, tag pages, pagination, and a
-populated `/rss.xml`. Not built here: `/zh` routing (thread 4), OG art, sitemap,
-robots, Lighthouse and the domain switch (thread 5).
+populated `/rss.xml`. Thread 4 built the locale seam: `/zh` for home and every
+writing route, interface-copy extraction, the footer language switch, and the
+Chinese spacing guard. Not built here: a per-locale feed, head-level `hreflang`,
+OG art, sitemap, robots, Lighthouse and the domain switch (thread 5).
 
 Open content items, all owner-supplied: a final portrait to replace the CV photo,
 real 16:10 work covers, and a design pass on the writing surfaces, which reuse

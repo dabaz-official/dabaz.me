@@ -2,20 +2,37 @@
 /**
  * The site footer: copyright on the left, the site's links on the right.
  *
- * A single hairline closes the page; type is caption-weight tertiary, and each
- * link darkens on hover rather than gaining an underline.
+ * The language switch lives here rather than in the header: the header's four
+ * anchors already fill the shell at 320px, and thread 4 may not add a new
+ * visual device. The switch points at the same page in the other locale when a
+ * translation exists, and at that locale's writing list or home otherwise.
  */
 import Container from "./Container.astro";
+import ui from "../content/ui";
+import { defaultLocale, htmlLang, otherLocale, type Locale } from "../lib/i18n";
+import { writingPath } from "../lib/writing";
 
+interface Props {
+  locale?: Locale;
+  alternatePath: string;
+}
+
+const { locale = defaultLocale, alternatePath } = Astro.props;
+const target = otherLocale(locale);
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
   <Container class="site-footer__inner">
-    <p class="type-caption">© {year} DabAZ</p>
+    <p class="type-caption">© {year} <span lang="en">DabAZ</span></p>
     <div class="site-footer__links type-caption">
-      <a href="/writing">Writing</a>
-      <a href="/rss.xml">RSS</a>
+      <a href={writingPath(locale)}>{ui.footer.writing[locale]}</a>
+      <a href="/rss.xml">{ui.footer.rss[locale]}</a>
+      <a
+        href={alternatePath}
+        hreflang={htmlLang(target)}
+        lang={htmlLang(target)}>{ui.footer.languageName[target]}</a
+      >
     </div>
   </Container>
 </footer>
@@ -41,6 +58,7 @@ const year = new Date().getFullYear();
 
   .site-footer__links {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--dab-space-4);
   }
 

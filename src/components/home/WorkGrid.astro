@@ -9,6 +9,7 @@
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import Container from "../Container.astro";
+import ui from "../../content/ui";
 import type { Locale } from "../../lib/i18n";
 
 interface Props {
@@ -21,7 +22,7 @@ const { entries, locale } = Astro.props;
 
 <section class="work" id="work" aria-labelledby="work-title">
   <Container>
-    <h2 class="work__title type-h2" id="work-title">Work</h2>
+    <h2 class="work__title type-h2" id="work-title">{ui.nav.work[locale]}</h2>
 
     <ul class="work__grid">
       {
@@ -44,9 +45,11 @@ const { entries, locale } = Astro.props;
               )}
               <div class="card__body">
                 {tags.length > 0 && (
-                  <p class="type-label-caps card__tags">{tags.join(" · ")}</p>
+                  <p class="type-label-caps card__tags" lang="en">
+                    {tags.join(" · ")}
+                  </p>
                 )}
-                <h3 class="type-h3 card__name">{title}</h3>
+                <h3 class="type-h3 card__name" lang="en">{title}</h3>
               </div>
             </li>
           );

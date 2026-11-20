@@ -1,32 +1,38 @@
 ---
 /**
- * Prev/next pager for the writing list. Page 1 is `/writing`; numbered pages
- * are real URLs, so the footer of each page carries the same two slots.
+ * Prev/next pager for the writing list. Page 1 is the locale's list; numbered
+ * pages are real URLs under the same locale prefix.
  */
+import ui from "../../content/ui";
+import type { Locale } from "../../lib/i18n";
 import { pagePath } from "../../lib/writing";
 
 interface Props {
   current: number;
   total: number;
+  locale: Locale;
   class?: string;
 }
 
-const { current, total, class: className } = Astro.props;
-const newer = current > 1 ? pagePath(current - 1) : null;
-const older = current < total ? pagePath(current + 1) : null;
+const { current, total, locale, class: className } = Astro.props;
+const newer = current > 1 ? pagePath(current - 1, locale) : null;
+const older = current < total ? pagePath(current + 1, locale) : null;
 ---
 
 {
   (newer || older) && (
-    <nav class:list={["pager", "type-label", className]} aria-label="Pagination">
+    <nav
+      class:list={["pager", "type-label", className]}
+      aria-label={ui.writing.pagination[locale]}
+    >
       {newer && (
         <a class="link" href={newer} rel="prev">
-          Newer posts
+          {ui.writing.newer[locale]}
         </a>
       )}
       {older && (
         <a class="link" href={older} rel="next">
-          Older posts
+          {ui.writing.older[locale]}
         </a>
       )}
     </nav>

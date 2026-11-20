@@ -1,0 +1,93 @@
+---
+/**
+ * One post body, shared by both locale routes.
+ *
+ * The page owns the only `h1`; the body is wrapped in `Prose`, so the shell's
+ * measure and paragraph rhythm apply unchanged. A post keeps its own language:
+ * `lang` marks the title and the body, and the shell carries the locale.
+ */
+import { render } from "astro:content";
+import Section from "../Section.astro";
+import Prose from "../Prose.astro";
+import ProseH1 from "../prose/ProseH1.astro";
+import ProseH2 from "../prose/ProseH2.astro";
+import ProseH3 from "../prose/ProseH3.astro";
+import ProseH4 from "../prose/ProseH4.astro";
+import ProseLink from "../prose/ProseLink.astro";
+import TagLinks from "./TagLinks.astro";
+import ui from "../../content/ui";
+import { dateTime, formatDate } from "../../lib/dates";
+import { htmlLang } from "../../lib/i18n";
+import { writingPath, type WritingEntry } from "../../lib/writing";
+
+interface Props {
+  entry: WritingEntry;
+}
+
+/**
+ * Markdown output carries no classes, so the elements that need a type role or
+ * the link convention render through components (DESIGN.md §4, §7.8).
+ */
+const proseComponents = {
+  h1: ProseH1,
+  h2: ProseH2,
+  h3: ProseH3,
+  h4: ProseH4,
+  a: ProseLink,
+};
+
+const { entry } = Astro.props;
+const { title, date, tags, locale } = entry.data;
+const lang = htmlLang(locale);
+const { Content } = await render(entry);
+---
+
+<Section as="article" class="post">
+  <header class="post__head measure">
+    <h1 class="type-h1" lang={lang}>{title}</h1>
+    <div class="post__meta type-caption">
+      <time class="tabular" datetime={dateTime(date)}>
+        {formatDate(date, locale)}
+      </time>
+      {tags.length > 0 && <TagLinks tags={tags} locale={locale} />}
+    </div>
+  </header>
+
+  <Prose class="post__body" lang={lang}>
+    <Content components={proseComponents} />
+  </Prose>
+
+  <nav class="post__foot" aria-label={ui.writing.postNav[locale]}>
+    <a class="link type-label" href={writingPath(locale)}>
+      {ui.writing.all[locale]}
+    </a>
+  </nav>
+</Section>
+
+<style>
+  .post {
+    padding-block-end: var(--dab-space-16);
+  }
+
+  .post__head {
+    margin-block-end: var(--dab-space-12);
+  }
+
+  .post__head h1 {
+    margin: 0;
+    color: var(--dab-color-text-primary);
+  }
+
+  .post__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--dab-space-2) var(--dab-space-4);
+    margin-block-start: var(--dab-space-4);
+    color: var(--dab-color-text-tertiary);
+  }
+
+  .post__foot {
+    margin-block-start: var(--dab-space-12);
+  }
+</style>

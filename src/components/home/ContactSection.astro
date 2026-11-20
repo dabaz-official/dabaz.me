@@ -6,8 +6,16 @@
  * YouTube and Spotify live in the music section instead.
  */
 import Container from "../Container.astro";
+import ui from "../../content/ui";
 import site from "../../data/site";
 import social, { type Social } from "../../data/social";
+import { defaultLocale, type Locale } from "../../lib/i18n";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = defaultLocale } = Astro.props;
 
 const labels = ["X", "GitHub", "LinkedIn", "Instagram", "TikTok", "Threads", "CV"];
 
@@ -18,13 +26,21 @@ const links = labels
 
 <section class="contact" id="contact" aria-labelledby="contact-title">
   <Container>
-    <h2 class="contact__title type-h2" id="contact-title">Contact</h2>
+    <h2 class="contact__title type-h2" id="contact-title">
+      {ui.nav.contact[locale]}
+    </h2>
     <a class="type-h3 contact__email" href={`mailto:${site.email}`}>{site.email}</a>
     <ul class="contact__links">
       {
         links.map(({ label, href }) => (
           <li>
-            <a class="type-h3" href={href} target="_blank" rel="noreferrer">{label}</a>
+            <a
+              class="type-h3"
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+              lang="en">{label}</a
+            >
           </li>
         ))
       }
