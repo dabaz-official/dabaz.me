@@ -1,18 +1,55 @@
 import type { APIRoute } from "astro";
+import { getCollection } from "astro:content";
 import site from "../data/site";
+import { postPath, publishedPosts, rssDate } from "../lib/writing";
 
 /**
- * The feed. No posts are published yet, so the channel is valid but empty;
- * thread 3 fills it from the writing collection.
+ * The feed. One channel for the site; items are every published post, newest
+ * first, with the summary as the description and the tags as categories.
+ *
+ * Dates come from the records, never from the build clock, so the same commit
+ * produces the same feed.
  */
-export const GET: APIRoute = () => {
+const escapeXml = (value: string): string =>
+  value.replace(
+    /[<>&'"]/g,
+    (character) =>
+      ({
+        "<": "&lt;",
+        ">": "&gt;",
+        "&": "&amp;",
+        "'": "&apos;",
+        '"': "&quot;",
+      })[character] ?? character,
+  );
+
+export const GET: APIRoute = async () => {
+  const posts = publishedPosts(await getCollection("writing"));
+  const newest = posts[0]?.data.date;
+
+  const items = posts
+    .map((entry) => {
+      const { title, date, summary, tags } = entry.data;
+      const link = `${site.url}${postPath(entry)}`;
+      return `    <item>
+      <title>${escapeXml(title)}</title>
+      <link>${escapeXml(link)}</link>
+      <guid isPermaLink="true">${escapeXml(link)}</guid>
+      <pubDate>${rssDate(date)}</pubDate>
+      <description>${escapeXml(summary)}</description>
+${tags.map((tag) => `      <category>${escapeXml(tag)}</category>`).join("\n")}
+    </item>`;
+    })
+    .join("\n");
+
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>${site.name}</title>
-    <link>${site.url}/</link>
-    <description>${site.description}</description>
-    <language>en</language>
+    <title>${escapeXml(site.name)} — Writing</title>
+    <link>${site.url}/writing</link>
+    <description>${escapeXml(site.description)}</description>
+    <atom:link href="${site.url}/rss.xml" rel="self" type="application/rss+xml"/>
+${newest ? `    <lastBuildDate>${rssDate(newest)}</lastBuildDate>\n` : ""}${items}
   </channel>
 </rss>
 `;

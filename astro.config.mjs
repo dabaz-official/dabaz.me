@@ -1,4 +1,5 @@
 // @ts-check
+import mdx from "@astrojs/mdx";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 
@@ -8,6 +9,13 @@ export default defineConfig({
   // makes canonical URLs absolute.
   site: "https://dabaz.me",
   output: "static",
+  // Posts are authored in MDX so a body can embed the shared components
+  // (`ContentImage`, the prose element map). Build-time only: no client runtime.
+  integrations: [mdx()],
+  // Code blocks are styled by `.prose` from tokens. Shiki's themes would carry
+  // their own hex colours and a light/dark mismatch, which the token contract
+  // forbids; plain `<pre><code>` keeps one palette for both themes.
+  markdown: { syntaxHighlight: false },
   // HTML-aware whitespace compression keeps the single space between inline
   // elements, which the type system relies on (CJK–Latin spacing, meta rows).
   compressHTML: true,

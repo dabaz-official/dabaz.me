@@ -2,16 +2,112 @@
 /**
  * Prose wrapper: the body measure plus the `type-body` role.
  *
- * Thread 3 uses it for post bodies and may extend the paragraph rhythm; no
- * other measure may be introduced.
+ * Thread 3 uses it for post bodies and extends the paragraph rhythm here; no
+ * other measure may be introduced. Markdown carries no classes, so headings
+ * and links are mapped to components (`src/lib/prose.ts`); everything else is
+ * styled by element, with tokens only.
  */
 interface Props {
   class?: string;
+  /** BCP 47 tag for a body written in another language than the shell. */
+  lang?: string;
 }
 
-const { class: className } = Astro.props;
+const { class: className, lang } = Astro.props;
 ---
 
-<div class:list={["prose", "measure", "type-body", className]}>
+<div class:list={["prose", "measure", "type-body", className]} lang={lang}>
   <slot />
 </div>
+
+<style>
+  /* The shared `.prose > * + *` rhythm never reaches the first child, so the
+     page keeps owning the gap above the body. */
+  .prose :global(h2),
+  .prose :global(h3),
+  .prose :global(h4) {
+    margin-block-start: var(--dab-space-8);
+    margin-block-end: 0;
+    color: var(--dab-color-text-primary);
+  }
+
+  .prose :global(h2 + *),
+  .prose :global(h3 + *),
+  .prose :global(h4 + *) {
+    margin-block-start: var(--dab-space-2);
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-inline-start: var(--dab-space-6);
+  }
+
+  .prose :global(li + li),
+  .prose :global(li > ul),
+  .prose :global(li > ol) {
+    margin-block-start: var(--dab-space-1);
+  }
+
+  .prose :global(blockquote) {
+    margin-inline: 0;
+    padding-inline-start: var(--dab-space-4);
+    border-inline-start: var(--dab-border-width) solid var(--dab-color-border-strong);
+    color: var(--dab-color-text-secondary);
+  }
+
+  .prose :global(hr) {
+    border: 0;
+    border-block-start: var(--dab-border-width) solid var(--dab-color-border);
+  }
+
+  .prose :global(pre) {
+    overflow-x: auto;
+    padding: var(--dab-space-4);
+    border: var(--dab-border-width) solid var(--dab-color-border);
+    border-radius: var(--dab-radius-md);
+    background-color: var(--dab-color-surface-secondary);
+  }
+
+  .prose :global(pre code) {
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+
+  .prose :global(:not(pre) > code) {
+    padding: var(--dab-space-0-5) var(--dab-space-1);
+    border: var(--dab-border-width) solid var(--dab-color-border);
+    border-radius: var(--dab-radius-xs);
+    background-color: var(--dab-color-surface-secondary);
+  }
+
+  .prose :global(img) {
+    display: block;
+    max-inline-size: 100%;
+    block-size: auto;
+    border: var(--dab-border-width) solid var(--dab-color-border);
+    border-radius: var(--dab-radius-lg);
+  }
+
+  .prose :global(figcaption) {
+    margin-block-start: var(--dab-space-2);
+    color: var(--dab-color-text-tertiary);
+  }
+
+  .prose :global(table) {
+    inline-size: 100%;
+    border-collapse: collapse;
+  }
+
+  .prose :global(th),
+  .prose :global(td) {
+    padding: var(--dab-space-2) var(--dab-space-3);
+    border-block-end: var(--dab-border-width) solid var(--dab-color-border);
+    text-align: start;
+  }
+
+  .prose :global(th) {
+    color: var(--dab-color-text-secondary);
+    font-weight: 600;
+  }
+</style>

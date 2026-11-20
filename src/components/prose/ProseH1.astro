@@ -1,0 +1,10 @@
+---
+/**
+ * Body `h1` — the page already owns the only `h1` (the post title), so a body
+ * heading at that level renders as a section heading instead of a second one.
+ * Props (the generated `id`, mostly) pass through.
+ */
+const { ...rest } = Astro.props;
+---
+
+<h2 class="type-h2" {...rest}><slot /></h2>

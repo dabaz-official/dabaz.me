@@ -1,0 +1,10 @@
+---
+/**
+ * A link inside prose keeps the site's link convention (accent, underlined,
+ * never color-only). External links are not decorated differently: the copy
+ * says where a link goes.
+ */
+const { ...rest } = Astro.props;
+---
+
+<a class="link" {...rest}><slot /></a>

@@ -1,0 +1,70 @@
+---
+/**
+ * Every post that carries one tag. The tag's display form comes from the
+ * content; the URL segment is normalised by `tagSlug()`.
+ */
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Section from "../../../components/Section.astro";
+import PostList from "../../../components/writing/PostList.astro";
+import {
+  collectTags,
+  publishedPosts,
+  type WritingEntry,
+} from "../../../lib/writing";
+
+interface Props {
+  label: string;
+  slug: string;
+  entries: WritingEntry[];
+}
+
+export async function getStaticPaths() {
+  const posts = publishedPosts(await getCollection("writing"));
+  return collectTags(posts).map((tag) => ({
+    params: { tag: tag.slug },
+    props: { label: tag.label, slug: tag.slug, entries: tag.posts },
+  }));
+}
+
+const { label, slug, entries } = Astro.props;
+---
+
+<BaseLayout
+  title={`Tag: ${label}`}
+  description={`Posts tagged ${label}.`}
+  path={`/writing/tag/${slug}`}
+>
+  <Section class="writing-tag">
+    <header class="writing-tag__head">
+      <h1 class="type-h1">
+        <span class="writing-tag__label">Tag:</span> {label}
+      </h1>
+    </header>
+
+    <PostList entries={entries} />
+
+    <nav class="writing-tag__foot" aria-label="Writing">
+      <a class="link type-label" href="/writing">All writing</a>
+    </nav>
+  </Section>
+</BaseLayout>
+
+<style>
+  .writing-tag {
+    padding-block-end: var(--dab-space-16);
+  }
+
+  .writing-tag__head {
+    margin: 0;
+    margin-block-end: var(--dab-space-8);
+  }
+
+  .writing-tag__label {
+    color: var(--dab-color-text-tertiary);
+  }
+
+  .writing-tag__foot {
+    margin-block-start: var(--dab-space-12);
+  }
+</style>

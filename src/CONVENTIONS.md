@@ -19,6 +19,9 @@ commit. `DESIGN.md` owns composition; DabDesign, DabFonts, and DabAgents (pins i
 | `src/data/social.ts` | `Social[]`, `primary` and `all` | foundation |
 | `src/data/music.ts` | `platforms`, `ownPlayer`, `releases` | thread 2 renders |
 | `src/content/` | content records and copy; collections land in `src/content.config.ts` | threads 2–3 |
+| `src/lib/writing.ts` | post URLs, ordering, tags, pagination, date formatting | thread 3 |
+| `src/pages/writing/` | `/writing`, `/writing/page/<n>`, `/writing/<slug>`, `/writing/tag/<tag>` | thread 3 |
+| `src/components/writing/` | the post list, its row, tag links, the pager | thread 3 |
 | `src/pages/` | routes | threads 2–4 |
 | `scripts/check-tokens.mjs` | the token guard behind `pnpm lint` | foundation |
 
@@ -91,11 +94,11 @@ The `@font-face` quartet and the `--font-sans` stack are DabFonts 1.0.1
 
 | Component / module | Props / exports | Guarantees |
 |---|---|---|
-| `BaseLayout.astro` | `title`, `description`, `path?`, `lang?`; slots `head`, `header`, `footer`, default | charset/viewport, title/description/canonical, font preload, `data-theme` pinned to light, skip link, `#main`, header/footer fall back to the shell |
+| `BaseLayout.astro` | `title`, `description`, `path?`, `lang?`; slots `head`, `header`, `footer`, default | charset/viewport, title/description/canonical, RSS autodiscovery, font preload, `data-theme` pinned to light, skip link, `#main`, header/footer fall back to the shell |
 | `Container.astro` | `as?` (`div` default, `section`, `header`, `footer`, `main`, `nav`), `class?` | `container-lg` width and the 16/24/32 gutter |
 | `Section.astro` | `as?` (`section` default), `spacing?` (`standard` \| `loose` \| `none`), `id?`, `labelledby?`, `class?` | top rhythm: `space-16`, `space-24` from 640 for `loose`, none for `none`; wraps its content in `Container` |
 | `SectionHeader.astro` | `label`, `index?`, `id?`, `as?` (`h2` default), `class?` | index + label + 1px rule row; index is accent, decorative, tabular |
-| `Prose.astro` | `class?` | `type-body` plus the 36em measure and paragraph rhythm |
+| `Prose.astro` | `class?`, `lang?` | `type-body` plus the 36em measure and paragraph rhythm; post bodies, heading/list/code/table rhythm from tokens only |
 | `ContentImage.astro` | `src: ImageMetadata`, `alt`, `width`, `height`, `widths?`, `sizes?`, `loading?`, `class?` | `astro:assets` output, required dimensions and `alt`, 1px `radius-lg` frame |
 | `.link`, `.button`, `.button-secondary` | classes | link: accent + underline, 2px offset; buttons: `type-label` typography in markup, 44px minimum, neutral ink or 1px boundary |
 | `src/lib/i18n.ts` | `locales`, `Locale`, `defaultLocale`, `Localized<T>` | one vocabulary for locales; no routing |
@@ -104,9 +107,15 @@ The `@font-face` quartet and the `--font-sans` stack are DabFonts 1.0.1
 | `components/home/Intro.astro` | `locale: Locale` | the page's only `h1`: role (`type-h4`), name (`type-display-xl`), lede (`type-lede`) |
 | `components/home/WorkGrid.astro` | `entries: CollectionEntry<"works">[]`, `locale` | two-up card grid; card = 16:10 screenshot in its own clipped box, tags (`type-label-caps`), title (`type-h3`); hover scales the image 1.03 |
 | `components/home/MusicSection.astro` | — | streaming links, DabMusic as own player, three latest releases with ISO dates formatted in the component |
-| `components/home/BlogSection.astro` | — | "Coming soon…" plus the `/rss.xml` link while no post exists |
+| `components/home/BlogSection.astro` | `entries: WritingEntry[]`, `hasMore: boolean` | the newest posts as home rows (`h3` titles, no tags), plus `All writing` only when more exist; the page renders the section only when a post exists |
 | `components/home/ContactSection.astro` | — | `site.email` and the contact subset of `social.all` |
-| `src/content.config.ts` | `works`, `experience` collections | Zod schemas mirroring DESIGN.md §10; thread 3 adds `writing` |
+| `components/writing/PostList.astro` | `entries: WritingEntry[]`, `class?` | the dated rows; the last hairlines closes the list |
+| `components/writing/PostRow.astro` | `entry: WritingEntry` | 9rem date column from 640, `type-h3` title link, one-line summary, tags; the row never nests links |
+| `components/writing/TagLinks.astro` | `tags: string[]`, `class?` | `type-caption` chips that link to `/writing/tag/<slug>`; 44px targets on coarse pointers |
+| `components/writing/Pager.astro` | `current`, `total`, `class?` | prev/next links only when those pages exist; `rel="prev"`/`rel="next"` |
+| `src/lib/writing.ts` | `publishedPosts`, `postSlug`, `postPath`, `localeTag`, `formatDate`, `dateTime`, `rssDate`, `tagSlug`, `tagPath`, `collectTags`, `pageCount`, `pageSlice`, `pagePath`, `POSTS_PER_PAGE` | one route shape for posts, tags, and pages; drafts leave production builds; a duplicate slug or a locale/directory mismatch fails the build |
+| `src/pages/writing/` | `/writing`, `/writing/page/<n>`, `/writing/<slug>`, `/writing/tag/<tag>` | static routes; 10 posts per page |
+| `src/content.config.ts` | `works`, `experience`, `writing` collections | Zod schemas mirroring DESIGN.md §10; `writing` adds `tags` and `draft` |
 | `src/content/profile.ts` | `HomeCopy` and default export | home copy per locale: role, intro, `now`, about, section labels |
 
 Rules: extend a primitive rather than forking it; a new visual need is a token
@@ -117,6 +126,11 @@ decision, not a local value. Home sections after the hero are opaque and sit at
 
 Zero client JavaScript. `dist/**/*.js` is empty and the document carries no
 inline script: the theme toggle is out and the theme is pinned to light.
+
+MDX is a build-time integration (`@astrojs/mdx`), not an island: a post body
+may import `ContentImage` or another `.astro` component, and the output is
+still plain HTML with an empty `dist/**/*.js`. Syntax highlighting is off so a
+code block cannot import a palette outside the tokens.
 
 Anything else — the toggle's return, audio, command palette, analytics, an
 interactive filter — needs a recorded decision and its own budget line before it
@@ -136,13 +150,23 @@ ships. Restoring the toggle adds one inline script, not a framework island.
 
 ## 8. Content
 
-- `src/content/` is the only home for records and copy. Thread 2 created
-  `src/content.config.ts` with `works` and `experience`; thread 3 adds
-  `writing/<locale>/` to the same file, never a second config.
+- `src/content/` is the only home for records and copy. Foundation and thread 2
+  created `src/content.config.ts` with `works` and `experience`; thread 3 added
+  `writing` to the same file, never a second config.
 - Works are ordered newest first by `year`; experience newest first by `start`.
   Both are sorted at the page, not in the loader.
 - A work cover lives beside its record (`src/content/works/<slug>.webp`) so the
   `image()` schema helper resolves it; images are not kept in `public/`.
+- Writing lives at `src/content/writing/<locale>/<slug>.mdx`, one file per post
+  per locale. Frontmatter: `title`, `locale`, `date` (`YYYY-MM-DD`; quote it, or
+  the loader normalises the date YAML parses), `summary`, `tags`, `draft`. The
+  directory must match `locale`, and two locales cannot reuse a slug until
+  thread 4 splits the routes — both fail the build with a message.
+- A post body renders inside `Prose`. Markdown carries no classes, so headings
+  and links are mapped to components in `src/pages/writing/[slug].astro`; an
+  image is imported by the author and rendered through `ContentImage`.
+- Tags are content strings, not translations; `tagSlug()` lowercases and
+  hyphenates, CJK stays as written. Posts paginate at 10 per page.
 - `src/data/site.ts` and `src/data/social.ts` hold identity constants only.
 - Proper nouns stay untranslated; every other field is `Localized<T>`.
 - A missing fact is omitted, never replaced by a placeholder in production.
@@ -155,6 +179,12 @@ no `/zh`, no translation loading, and no language switch: thread 4 owns them.
 Until then `BaseLayout` takes `lang` (default `en`) and every page is one
 locale. Do not hardcode a second locale's strings into components; add them to
 `src/content/`.
+
+A post is the one exception the model already allows: its content locale is its
+own, so the article element carries `lang="zh-Hans"` while the shell stays
+English, and the URL is locale-agnostic (`/writing/<slug>`). `postPath()` in
+`src/lib/writing.ts` is the single line thread 4 changes to add
+`/zh/writing/<slug>`; slugs stay unique across locales until then.
 
 ## 10. Metadata
 
@@ -222,11 +252,12 @@ or 1536 CSS pixels (200% zoom on a 1280px window is the 640px case).
 ## 14. Not built here
 
 Home sections are built (thread 2): hero, work, earlier, and about, with contact
-links in the hero and the footer. Not built here: the writing list and posts
-(thread 3), `/zh` routing (thread 4), OG art, sitemap, robots, Lighthouse and the
-domain switch (thread 5).
+links in the hero and the footer. Thread 3 built writing: the home Blog band
+(newest three), `/writing`, one page per post, tag pages, pagination, and a
+populated `/rss.xml`. Not built here: `/zh` routing (thread 4), OG art, sitemap,
+robots, Lighthouse and the domain switch (thread 5).
 
 Open content items, all owner-supplied: a final portrait to replace the CV photo,
-real 16:10 work covers, and the `02` section slot, which DESIGN.md §6 reserves
-for Writing and thread 3 fills. Works and roles show years by owner decision;
-the CV's month ranges are not modelled.
+real 16:10 work covers, and a design pass on the writing surfaces, which reuse
+the existing tokens and primitives but have not had thread 1.5 sign-off. Works
+and roles show years by owner decision; the CV's month ranges are not modelled.

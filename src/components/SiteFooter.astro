@@ -1,9 +1,9 @@
 ---
 /**
- * The site footer: copyright on the left, the feed on the right.
+ * The site footer: copyright on the left, the site's links on the right.
  *
- * A single hairline closes the page; type is caption-weight tertiary, and the
- * feed link darkens on hover rather than gaining an underline.
+ * A single hairline closes the page; type is caption-weight tertiary, and each
+ * link darkens on hover rather than gaining an underline.
  */
 import Container from "./Container.astro";
 
@@ -13,7 +13,10 @@ const year = new Date().getFullYear();
 <footer class="site-footer">
   <Container class="site-footer__inner">
     <p class="type-caption">© {year} DabAZ</p>
-    <a class="site-footer__rss type-caption" href="/rss.xml">RSS</a>
+    <div class="site-footer__links type-caption">
+      <a href="/writing">Writing</a>
+      <a href="/rss.xml">RSS</a>
+    </div>
   </Container>
 </footer>
 
@@ -36,12 +39,17 @@ const year = new Date().getFullYear();
     color: var(--dab-color-text-tertiary);
   }
 
-  .site-footer__rss {
+  .site-footer__links {
+    display: flex;
+    gap: var(--dab-space-4);
+  }
+
+  .site-footer__links a {
     color: var(--dab-color-text-tertiary);
     text-decoration: none;
   }
 
-  .site-footer__rss:hover {
+  .site-footer__links a:hover {
     color: var(--dab-color-text-primary);
   }
 </style>

@@ -1,0 +1,44 @@
+---
+/**
+ * Prev/next pager for the writing list. Page 1 is `/writing`; numbered pages
+ * are real URLs, so the footer of each page carries the same two slots.
+ */
+import { pagePath } from "../../lib/writing";
+
+interface Props {
+  current: number;
+  total: number;
+  class?: string;
+}
+
+const { current, total, class: className } = Astro.props;
+const newer = current > 1 ? pagePath(current - 1) : null;
+const older = current < total ? pagePath(current + 1) : null;
+---
+
+{
+  (newer || older) && (
+    <nav class:list={["pager", "type-label", className]} aria-label="Pagination">
+      {newer && (
+        <a class="link" href={newer} rel="prev">
+          Newer posts
+        </a>
+      )}
+      {older && (
+        <a class="link" href={older} rel="next">
+          Older posts
+        </a>
+      )}
+    </nav>
+  )
+}
+
+<style>
+  .pager {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--dab-space-4);
+    margin-block-start: var(--dab-space-8);
+  }
+</style>
