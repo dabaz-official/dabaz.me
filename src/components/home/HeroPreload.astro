@@ -1,0 +1,34 @@
+---
+/**
+ * The hero image is the LCP element on both home routes. Preload the exact
+ * art-directed file the `<picture>` will pick, so the browser starts before it
+ * reaches the body and never downloads a second variant.
+ *
+ * Rendered into the layout's `head` slot by the two home pages.
+ */
+import hero780 from "../../assets/hero/hero-780.webp";
+import hero2880 from "../../assets/hero/hero-2880.webp";
+import hero3840 from "../../assets/hero/hero-3840.webp";
+---
+
+<link
+  rel="preload"
+  as="image"
+  href={hero780.src}
+  media="(max-width: 640px)"
+  fetchpriority="high"
+/>
+<link
+  rel="preload"
+  as="image"
+  href={hero2880.src}
+  media="(min-width: 641px) and (max-width: 1599px)"
+  fetchpriority="high"
+/>
+<link
+  rel="preload"
+  as="image"
+  href={hero3840.src}
+  media="(min-width: 1600px)"
+  fetchpriority="high"
+/>

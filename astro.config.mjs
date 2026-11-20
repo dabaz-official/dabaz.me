@@ -9,6 +9,12 @@ export default defineConfig({
   // makes canonical URLs absolute.
   site: "https://dabaz.me",
   output: "static",
+  // The whole stylesheet is small (about 7 KB uncompressed). Inlining it
+  // removes a render-blocking request on a cold mobile connection, which is
+  // where the home page's LCP was lost. See the launch report.
+  build: {
+    inlineStylesheets: "always",
+  },
   // `/` is English, `/zh` is Chinese (DESIGN.md §11). Astro's routing only
   // checks the prefix; the pages themselves live in `src/pages/zh/`.
   i18n: {

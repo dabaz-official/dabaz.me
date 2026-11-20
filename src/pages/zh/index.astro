@@ -5,6 +5,7 @@
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import HomePage from "../../components/home/HomePage.astro";
+import HeroPreload from "../../components/home/HeroPreload.astro";
 import site from "../../data/site";
 import { homePath, otherLocale, type Locale } from "../../lib/i18n";
 import { homeJsonLd } from "../../lib/structured-data";
@@ -21,5 +22,6 @@ const locale: Locale = "zh";
   translationPath={homePath(otherLocale(locale))}
   jsonLd={homeJsonLd(locale)}
 >
+  <HeroPreload slot="head" />
   <HomePage locale={locale} />
 </BaseLayout>
