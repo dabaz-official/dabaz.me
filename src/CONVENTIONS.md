@@ -131,6 +131,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `src/lib/dates.ts` | `formatDate(isoDay, locale)`, `dateTime()`, `rssDate()` | one date format per locale; Chinese uses `YYYY 年 M 月 D 日` |
 | `src/lib/feed.ts` | `buildFeed(locale)` | one channel per locale: own posts, `<language>`, title, description, and self link |
 | `components/home/HomePage.astro` | `locale: Locale` | the home composition in DESIGN.md §6 order; a locale's Writing band only when that locale has a post |
+| `components/home/HeroPreload.astro` | — | the art-directed hero preload links for the `head` slot |
 | `components/home/HeroStage.astro` | `locale?` | the cutout portrait over `type-wordmark`, art-directed across three widths, plus the scroll cue; sticky, clipped, `z-index: 0` |
 | `components/home/Intro.astro` | `locale: Locale` | the page's only `h1`: role (`type-h4`), name (`type-display-xl`, `lang="en"`), lede (`type-lede`) |
 | `components/home/WorkGrid.astro` | `entries: CollectionEntry<"works">[]`, `locale` | two-up card grid; card = 16:10 screenshot in its own clipped box, `tags[locale]` (`type-label-caps`), title (`type-h3`); hover scales the image 1.03 |
@@ -170,6 +171,14 @@ ships. Restoring the toggle adds one inline script, not a framework island.
 JSON-LD is the one `<script>` element in the document and it is data, not
 client code: `type="application/ld+json"`, no `src`, never evaluated. The
 `dist/**/*.js` check stays empty.
+
+**Critical path.** `astro.config.mjs` sets `build.inlineStylesheets: "always"`:
+the whole stylesheet is small, and inlining removes the render-blocking CSS
+request that cost a cold mobile round trip. The two home routes render
+`components/home/HeroPreload.astro` into the `head` slot, which preloads the
+exact art-directed hero file for each breakpoint so the LCP image is discovered
+before the parser reaches the body. Neither changes the composition; both are
+performance decisions.
 
 ## 7. File naming and structure
 
