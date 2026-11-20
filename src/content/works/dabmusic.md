@@ -7,11 +7,12 @@ role:
 summary:
   en: A personal music site and immersive player for a fixed catalogue.
   zh: 面向固定曲库的个人音乐站和沉浸式播放器。
+tags: ["Music", "Web"]
 href: https://music.dabaz.me
 cover:
-  src: ./dabmusic.webp
+  src: ./music.jpg
   alt:
-    en: DabMusic mark on a dark violet background
-    zh: 深紫色背景上的 DabMusic 标识
+    en: ""
+    zh: ""
 status: live
 ---

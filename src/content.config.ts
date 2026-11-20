@@ -21,6 +21,8 @@ const works = defineCollection({
       role: localized,
       org: z.string().optional(),
       summary: localized,
+      /** Card labels in the home grid, e.g. ["Game", "Web"]. */
+      tags: z.array(z.string()).default([]),
       href: z.string().url().optional(),
       cover: z
         .object({

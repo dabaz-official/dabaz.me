@@ -7,11 +7,12 @@ role:
 summary:
   en: A Notion-style personal knowledge base with public page publishing.
   zh: 类 Notion 的个人知识库，支持页面公开发布。
+tags: ["Product", "Web"]
 href: https://cyclic.dabaz.me
 cover:
-  src: ./cyclic.webp
+  src: ./cyclic-shot.jpg
   alt:
-    en: Cyclic mark on a dark violet background
-    zh: 深紫色背景上的 Cyclic 标识
+    en: ""
+    zh: ""
 status: live
 ---
