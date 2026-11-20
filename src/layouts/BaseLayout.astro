@@ -121,6 +121,22 @@ const jsonLd = Astro.props.jsonLd
     />
 
     {jsonLd && <script type="application/ld+json" is:inline set:html={jsonLd} />}
+    <link
+      rel="preload"
+      href="/fonts/DabSans-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      fetchpriority="low"
+    />
+    <link
+      rel="preload"
+      href="/fonts/DabSans-SemiBold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      fetchpriority="low"
+    />
     <slot name="head" />
   </head>
   <body class="type-body">
