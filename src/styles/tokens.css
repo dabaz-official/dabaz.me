@@ -301,6 +301,13 @@
     text-transform: uppercase;
   }
 
+  /* Han takes no tracking: DabFonts caps any tracking at 0.02em, and the
+     caps label's 0.06em is a Latin uppercase device. `uppercase` is a no-op on
+     Han, so the Chinese run keeps the size and weight and drops the gap. */
+  html[lang="zh-CN"] .type-label-caps {
+    letter-spacing: 0;
+  }
+
   /* The oversized name behind the hero portrait: it fills its container. */
   .type-wordmark {
     font-size: 34.5cqw;

@@ -6,8 +6,10 @@ role:
   zh: 独立开发者
 summary:
   en: A modern Minesweeper with three presets, custom boards and first-click safety.
-  zh: 一款重制的经典扫雷，提供三档预设、自定义棋盘和首点安全。
-tags: ["Game", "Web"]
+  zh: 一款重制的经典扫雷， 提供三档预设、 自定义棋盘和首点安全。
+tags:
+  en: ["Game", "Web"]
+  zh: ["游戏", "网页"]
 href: https://minesweeper.dabaz.me
 cover:
   src: ./minesweeper.jpg

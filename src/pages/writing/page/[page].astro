@@ -1,22 +1,29 @@
 ---
 /**
  * Writing, page 2 and later. The slice is the same as page 1's, so pagination
- * never reshuffles a post between builds.
+ * never reshuffles a post between builds, and the locale is fixed by the route.
  */
 import { getCollection } from "astro:content";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import Section from "../../../components/Section.astro";
-import Pager from "../../../components/writing/Pager.astro";
-import PostList from "../../../components/writing/PostList.astro";
+import WritingListPage from "../../../components/writing/WritingListPage.astro";
+import ui from "../../../content/ui";
 import site from "../../../data/site";
+import { defaultLocale, otherLocale } from "../../../lib/i18n";
 import {
   pageCount,
-  pageSlice,
+  pagePath,
+  postsForLocale,
   publishedPosts,
+  writingPath,
 } from "../../../lib/writing";
 
+const locale = defaultLocale;
+
 export async function getStaticPaths() {
-  const posts = publishedPosts(await getCollection("writing"));
+  const posts = postsForLocale(
+    publishedPosts(await getCollection("writing")),
+    defaultLocale,
+  );
   const total = pageCount(posts.length);
   return Array.from({ length: Math.max(0, total - 1) }, (_, index) => ({
     params: { page: String(index + 2) },
@@ -24,34 +31,14 @@ export async function getStaticPaths() {
 }
 
 const current = Number(Astro.params.page);
-const posts = publishedPosts(await getCollection("writing"));
-const visible = pageSlice(posts, current);
-const total = pageCount(posts.length);
 ---
 
 <BaseLayout
-  title={`Writing — page ${current}`}
-  description={site.description}
-  path={`/writing/page/${current}`}
+  title={ui.writing.pageTitle[locale](current)}
+  description={site.description[locale]}
+  path={pagePath(current, locale)}
+  locale={locale}
+  alternatePath={writingPath(otherLocale(locale))}
 >
-  <Section class="writing">
-    <header class="writing__head">
-      <h1 class="type-h1">Writing</h1>
-    </header>
-
-    <PostList entries={visible} />
-
-    <Pager current={current} total={total} />
-  </Section>
+  <WritingListPage locale={locale} page={current} />
 </BaseLayout>
-
-<style>
-  .writing {
-    padding-block-end: var(--dab-space-16);
-  }
-
-  .writing__head {
-    margin: 0;
-    margin-block-end: var(--dab-space-8);
-  }
-</style>

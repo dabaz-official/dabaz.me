@@ -1,0 +1,43 @@
+---
+/**
+ * Writing, page 2 and later for Chinese (`/zh/writing/page/<n>`).
+ */
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import WritingListPage from "../../../../components/writing/WritingListPage.astro";
+import ui from "../../../../content/ui";
+import site from "../../../../data/site";
+import { otherLocale, type Locale } from "../../../../lib/i18n";
+import {
+  pageCount,
+  pagePath,
+  postsForLocale,
+  publishedPosts,
+  writingPath,
+} from "../../../../lib/writing";
+
+const locale: Locale = "zh";
+
+export async function getStaticPaths() {
+  const posts = postsForLocale(
+    publishedPosts(await getCollection("writing")),
+    "zh",
+  );
+  const total = pageCount(posts.length);
+  return Array.from({ length: Math.max(0, total - 1) }, (_, index) => ({
+    params: { page: String(index + 2) },
+  }));
+}
+
+const current = Number(Astro.params.page);
+---
+
+<BaseLayout
+  title={ui.writing.pageTitle[locale](current)}
+  description={site.description[locale]}
+  path={pagePath(current, locale)}
+  locale={locale}
+  alternatePath={writingPath(otherLocale(locale))}
+>
+  <WritingListPage locale={locale} page={current} />
+</BaseLayout>

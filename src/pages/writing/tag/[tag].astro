@@ -1,70 +1,47 @@
 ---
 /**
- * Every post that carries one tag. The tag's display form comes from the
- * content; the URL segment is normalised by `tagSlug()`.
+ * Every post that carries one tag, default locale.
  */
 import { getCollection } from "astro:content";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import Section from "../../../components/Section.astro";
-import PostList from "../../../components/writing/PostList.astro";
+import WritingTagPage from "../../../components/writing/WritingTagPage.astro";
+import ui from "../../../content/ui";
+import { defaultLocale } from "../../../lib/i18n";
 import {
+  alternateTagPath,
   collectTags,
+  tagPathFromSlug,
+  postsForLocale,
   publishedPosts,
   type WritingEntry,
 } from "../../../lib/writing";
+
+const locale = defaultLocale;
 
 interface Props {
   label: string;
   slug: string;
   entries: WritingEntry[];
+  all: WritingEntry[];
 }
 
 export async function getStaticPaths() {
-  const posts = publishedPosts(await getCollection("writing"));
-  return collectTags(posts).map((tag) => ({
+  const all = publishedPosts(await getCollection("writing"));
+  return collectTags(postsForLocale(all, defaultLocale)).map((tag) => ({
     params: { tag: tag.slug },
-    props: { label: tag.label, slug: tag.slug, entries: tag.posts },
+    props: { label: tag.label, slug: tag.slug, entries: tag.posts, all },
   }));
 }
 
-const { label, slug, entries } = Astro.props;
+const { label, slug, entries, all } = Astro.props;
 ---
 
 <BaseLayout
-  title={`Tag: ${label}`}
-  description={`Posts tagged ${label}.`}
-  path={`/writing/tag/${slug}`}
+  title={ui.writing.tagTitle[locale](label)}
+  description={ui.writing.tagDescription[locale](label)}
+  path={tagPathFromSlug(slug, locale)}
+  locale={locale}
+  alternatePath={alternateTagPath(slug, locale, all)}
 >
-  <Section class="writing-tag">
-    <header class="writing-tag__head">
-      <h1 class="type-h1">
-        <span class="writing-tag__label">Tag:</span> {label}
-      </h1>
-    </header>
-
-    <PostList entries={entries} />
-
-    <nav class="writing-tag__foot" aria-label="Writing">
-      <a class="link type-label" href="/writing">All writing</a>
-    </nav>
-  </Section>
+  <WritingTagPage label={label} locale={locale} entries={entries} />
 </BaseLayout>
-
-<style>
-  .writing-tag {
-    padding-block-end: var(--dab-space-16);
-  }
-
-  .writing-tag__head {
-    margin: 0;
-    margin-block-end: var(--dab-space-8);
-  }
-
-  .writing-tag__label {
-    color: var(--dab-color-text-tertiary);
-  }
-
-  .writing-tag__foot {
-    margin-block-start: var(--dab-space-12);
-  }
-</style>

@@ -6,15 +6,24 @@
  * wide screens, the 2880 otherwise. Each file is already sized for its slot,
  * so the browser never scales a bitmap up.
  */
+import home from "../../content/profile";
+import ui from "../../content/ui";
 import site from "../../data/site";
+import { defaultLocale, type Locale } from "../../lib/i18n";
 import hero780 from "../../assets/hero/hero-780.webp";
 import hero2880 from "../../assets/hero/hero-2880.webp";
 import hero3840 from "../../assets/hero/hero-3840.webp";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = defaultLocale } = Astro.props;
 ---
 
-<section class="stage" aria-label="Portrait">
+<section class="stage" aria-label={ui.home.portrait[locale]}>
   <div class="backdrop" aria-hidden="true">
-    <span class="word type-wordmark">{site.name}</span>
+    <span class="word type-wordmark" lang="en">{site.name}</span>
   </div>
 
   <picture class="media">
@@ -23,7 +32,7 @@ import hero3840 from "../../assets/hero/hero-3840.webp";
     <img
       class="figure"
       src={hero2880.src}
-      alt={`Portrait of ${site.name}`}
+      alt={home.portrait.alt[locale]}
       width="2880"
       height="1680"
       fetchpriority="high"
@@ -31,7 +40,7 @@ import hero3840 from "../../assets/hero/hero-3840.webp";
   </picture>
 
   <div class="cue" aria-hidden="true">
-    <span class="cue__label type-caption">Scroll down</span>
+    <span class="cue__label type-caption">{ui.home.scrollDown[locale]}</span>
     <svg
       class="cue__mouse"
       width="24"

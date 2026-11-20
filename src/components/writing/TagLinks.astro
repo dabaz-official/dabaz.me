@@ -3,22 +3,27 @@
  * Tag links — `type-caption` in a 1px chip (DESIGN.md §7.7). They are
  * navigation, not status, so they carry a boundary; colour never carries the
  * meaning. Chips grow to the 44px touch target on coarse pointers.
+ *
+ * The tag string is author copy and is not translated by the locale: only the
+ * route prefix follows the post's locale.
  */
+import type { Locale } from "../../lib/i18n";
 import { tagPath } from "../../lib/writing";
 
 interface Props {
   tags: string[];
+  locale: Locale;
   class?: string;
 }
 
-const { tags, class: className } = Astro.props;
+const { tags, locale, class: className } = Astro.props;
 ---
 
 <ul class:list={["tag-list", "type-caption", className]}>
   {
     tags.map((tag) => (
       <li>
-        <a class="tag" href={tagPath(tag)}>
+        <a class="tag" href={tagPath(tag, locale)}>
           {tag}
         </a>
       </li>

@@ -9,7 +9,7 @@ everything else. Design values live in the pinned repositories, not here.
 - **Purpose:** personal site of DabAZ — work, writing, and contact.
 - **Repo:** https://github.com/dabaz-official/dabaz.me
 - **Canonical URL:** https://dabaz.me
-- **Primary locale:** `en`; `zh` arrives with the internationalization thread
+- **Primary locale:** `en`; `zh` ships at `/zh` (thread 4)
 - **Owner:** dabaz-official
 
 ## Required reading (in order)
@@ -47,7 +47,7 @@ Versions at those commits: DabDesign 1.0.1, DabFonts 1.0.1, DabAgents 1.0.2.
 pnpm dev        # local dev server
 pnpm build      # static build to dist/
 pnpm preview    # serve dist/ locally
-pnpm lint       # token guard: no hex, letter-spacing, or raw font-size outside tokens.css
+pnpm lint       # token guard + Chinese punctuation/CJK–Latin spacing guard
 pnpm typecheck  # astro sync && tsc --noEmit
 pnpm check      # the gate: lint + typecheck + build
 ```
@@ -66,8 +66,9 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
   toggle is out; the dark tokens stay for its return. Full contract in
   `src/CONVENTIONS.md`.
 - **Interfaces:** `Container`, `Section`, `SectionHeader`, `Prose`,
-  `ContentImage`, `BaseLayout`, `src/lib/i18n.ts`, `src/lib/metadata.ts` are
-  the shared surface. Extend them; do not fork them.
+  `ContentImage`, `BaseLayout`, `src/content/ui.ts`, `src/lib/i18n.ts`,
+  `src/lib/metadata.ts`, `src/lib/dates.ts` are the shared surface. Extend
+  them; do not fork them.
 - **Content:** `src/content/` for records and copy, `src/data/site.ts` and
   `src/data/social.ts` for identity. See `src/content/README.md`.
 - **Design ownership:** thread 1.5 (Design Direction) owns composition, rhythm,
@@ -77,8 +78,8 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
 - **Threads:** HQ (0) decisions and merging · Foundation (1) system · Design
   Direction (1.5) visual direction · Content & Sections (2) home · Blog (3) ·
   Internationalization (4) · Launch & Polish (5).
-- **Scope of the current work:** foundation and home sections are in; the design
-  pass is next. Writing, `/zh`, OG art, and the domain wait for their threads.
+- **Scope of the current work:** foundation, home sections, writing, and `/zh`
+  are in. OG art and the domain wait for thread 5.
 
 ## Definition of Done
 

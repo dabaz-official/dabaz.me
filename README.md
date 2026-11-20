@@ -5,8 +5,9 @@ fonts, no client runtime.
 
 The rebuild is in progress on `rebuild`. This branch ships the foundation —
 tokens, fonts, the document shell, shared primitives, CI — the home page (hero,
-work, music, blog, contact), and the blog: `/writing`, post pages, tags,
-pagination, and RSS. `/zh` follows in its own thread.
+work, music, blog, contact), the blog (`/writing`, post pages, tags, pagination,
+per-locale RSS), and the Chinese site: `/zh` with the same routes, a footer
+language switch, and DabFonts punctuation and CJK–Latin spacing.
 
 ## Stack
 
@@ -40,7 +41,7 @@ Node 24 (`.nvmrc`), pnpm 12.
 | `pnpm dev` | Development server |
 | `pnpm build` | Static build to `dist/` |
 | `pnpm preview` | Serve `dist/` locally |
-| `pnpm lint` | Token guard: no raw design values outside `src/styles/tokens.css` |
+| `pnpm lint` | Token guard plus the Chinese copy-spacing guard |
 | `pnpm typecheck` | `astro sync && tsc --noEmit` |
 | `pnpm check` | Gate: lint, typecheck, build. CI runs this. |
 
@@ -51,13 +52,13 @@ public/           fonts and favicon — served as-is
 src/
   assets/         the portrait, imported through astro:assets
   components/     shared primitives, the shell, home sections, and writing rows
-  content/        works, experience, profile copy, and writing posts
+  content/        works, experience, profile/interface copy, and writing posts
   data/           site identity and social links
   layouts/        BaseLayout — head, skip link, slots, theme attribute
-  lib/            i18n seam, metadata helper, writing helpers
-  pages/          routes: `/`, `/writing`, posts, tags, `/rss.xml`
+  lib/            locale seam, metadata and date helpers, writing helpers
+  pages/          routes: `/`, `/zh`, writing, posts, tags, `/rss.xml`, `/zh/rss.xml`
   styles/         tokens.css (the only design values) and global.css
-scripts/          check-tokens.mjs, the lint gate
+scripts/          check-tokens.mjs and check-copy.mjs, the lint gate
 docs/             working handoff for the rebuild (deleted after merge)
 ```
 

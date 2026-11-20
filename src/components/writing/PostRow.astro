@@ -10,7 +10,9 @@
  * the home page's section headings. Tags are optional on summary surfaces.
  */
 import type { WritingEntry } from "../../lib/writing";
-import { dateTime, formatDate, localeTag, postPath } from "../../lib/writing";
+import { dateTime, formatDate } from "../../lib/dates";
+import { htmlLang } from "../../lib/i18n";
+import { postPath } from "../../lib/writing";
 import TagLinks from "./TagLinks.astro";
 
 interface Props {
@@ -26,19 +28,24 @@ const {
 } = Astro.props;
 const Heading = headingLevel;
 const { title, date, summary, tags, locale } = entry.data;
+const lang = htmlLang(locale);
 ---
 
 <article class="post-row">
   <time class="post-row__date type-caption tabular" datetime={dateTime(date)}>
-    {formatDate(date)}
+    {formatDate(date, locale)}
   </time>
 
   <div class="post-row__content">
-    <Heading class="post-row__title type-h3" lang={localeTag(locale)}>
+    <Heading class="post-row__title type-h3" lang={lang}>
       <a class="post-row__link" href={postPath(entry)}>{title}</a>
     </Heading>
-    <p class="post-row__summary type-body-sm" lang={localeTag(locale)}>{summary}</p>
-    {showTags && tags.length > 0 && <TagLinks tags={tags} class="post-row__tags" />}
+    <p class="post-row__summary type-body-sm" lang={lang}>{summary}</p>
+    {
+      showTags && tags.length > 0 && (
+        <TagLinks tags={tags} locale={locale} class="post-row__tags" />
+      )
+    }
   </div>
 </article>
 

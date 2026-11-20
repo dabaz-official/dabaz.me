@@ -13,6 +13,12 @@ import { locales } from "./lib/i18n";
 /** A field that exists in every locale (DESIGN.md §10 `Localized`). */
 const localized = z.object({ en: z.string(), zh: z.string() });
 
+/** A list of labels that exists in every locale, e.g. work card tags. */
+const localizedList = z.object({
+  en: z.array(z.string().min(1)),
+  zh: z.array(z.string().min(1)),
+});
+
 const works = defineCollection({
   loader: glob({ pattern: "*.md", base: "./src/content/works" }),
   schema: ({ image }) =>
@@ -22,8 +28,8 @@ const works = defineCollection({
       role: localized,
       org: z.string().optional(),
       summary: localized,
-      /** Card labels in the home grid, e.g. ["Game", "Web"]. */
-      tags: z.array(z.string()).default([]),
+      /** Card labels in the home grid, e.g. ["Game", "Web"] / ["游戏", "网页"]. */
+      tags: localizedList.default({ en: [], zh: [] }),
       href: z.string().url().optional(),
       cover: z
         .object({

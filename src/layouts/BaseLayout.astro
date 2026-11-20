@@ -3,31 +3,51 @@
  * The document shell.
  *
  * Owns: charset/viewport, title/description/canonical from `resolveMeta`, the
- * font preload, the theme attribute, the skip link, and the header/footer
- * slots. Pages pass content and, when they need more head tags, a `head` slot.
+ * font preload, the document language, the theme attribute, the skip link, and
+ * the header/footer slots. Pages pass content and, when they need more head
+ * tags, a `head` slot.
  *
- * Theme contract: `data-theme="light" | "dark"` on `<html>`. The site ships
- * pinned to `light` while the toggle is out, so there is no theme script and
- * no client JavaScript at all; the dark token block is untouched and ready for
- * the toggle's return. Documented in `src/CONVENTIONS.md`.
+ * Locale contract: `locale` decides `<html lang>` (`en` or `zh-CN`, see
+ * DabFonts TYPESETTING.md §7), the shell's copy, and the language switch. The
+ * theme contract is unchanged: `data-theme="light"` is pinned, so there is no
+ * theme script and no client JavaScript at all.
  */
 import SiteFooter from "../components/SiteFooter.astro";
 import SiteHeader from "../components/SiteHeader.astro";
+import ui from "../content/ui";
 import site from "../data/site";
+import {
+  defaultLocale,
+  homePath,
+  htmlLang,
+  otherLocale,
+  rssPath,
+  type Locale,
+} from "../lib/i18n";
 import { resolveMeta, type PageMeta } from "../lib/metadata";
 import "../styles/global.css";
 
 interface Props extends PageMeta {
-  /** BCP 47 language tag for the document. Thread 4 owns per-locale values. */
-  lang?: string;
+  /** The page's locale. Defaults to `en`. */
+  locale?: Locale;
+  /** Where the footer's language switch points; defaults to the other home. */
+  alternatePath?: string;
 }
 
-const { lang = "en" } = Astro.props;
-const meta = resolveMeta(Astro.props);
+const { locale = defaultLocale } = Astro.props;
+const alternatePath =
+  Astro.props.alternatePath ?? homePath(otherLocale(locale));
+const meta = resolveMeta({
+  title: Astro.props.title,
+  description: Astro.props.description,
+  path: Astro.props.path,
+  locale,
+});
+const separator = locale === "zh" ? "——" : " — ";
 ---
 
 <!doctype html>
-<html lang={lang} data-theme="light">
+<html lang={htmlLang(locale)} data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -37,8 +57,8 @@ const meta = resolveMeta(Astro.props);
     <link
       rel="alternate"
       type="application/rss+xml"
-      title={`${site.name} — Writing`}
-      href="/rss.xml"
+      title={`${site.name}${separator}${ui.writing.title[locale]}`}
+      href={rssPath(locale)}
     />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link
@@ -51,11 +71,13 @@ const meta = resolveMeta(Astro.props);
     <slot name="head" />
   </head>
   <body class="type-body">
-    <a class="skip-link type-label" href="#main">Skip to content</a>
-    <slot name="header"><SiteHeader /></slot>
+    <a class="skip-link type-label" href="#main">{ui.skipToContent[locale]}</a>
+    <slot name="header"><SiteHeader locale={locale} /></slot>
     <main id="main" tabindex="-1">
       <slot />
     </main>
-    <slot name="footer"><SiteFooter /></slot>
+    <slot name="footer"
+      ><SiteFooter locale={locale} alternatePath={alternatePath} /></slot
+    >
   </body>
 </html>

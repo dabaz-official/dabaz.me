@@ -8,6 +8,7 @@
  */
 import type { ImageMetadata } from "astro";
 
+import type { Localized } from "../lib/i18n";
 import athanasia from "../assets/music/athanasia.jpg";
 import slagb from "../assets/music/slagb-freestyle-2.jpg";
 import whatWeLeft from "../assets/music/what-we-left-behind.jpg";
@@ -41,7 +42,10 @@ export const platforms: Platform[] = [
 export const ownPlayer = {
   label: "DabMusic",
   href: "https://music.dabaz.me",
-  note: "Unreleased tracks and new releases, in a player I built.",
+  note: {
+    en: "Unreleased tracks and new releases, in a player I built.",
+    zh: "未发布的曲目和新作， 都在我自建的播放器里。",
+  } satisfies Localized,
 };
 
 export const releases: Release[] = [

@@ -1,57 +1,24 @@
 ---
 /**
- * Writing — the list page (DESIGN.md §6, §7.5).
- *
- * Page 1 lives here; later pages are `/writing/page/<n>`. A locale with no
- * posts says so instead of rendering an empty list.
+ * Writing — the list page for the default locale. Page 1 lives here; later
+ * pages are `/writing/page/<n>`.
  */
-import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Section from "../../components/Section.astro";
-import Pager from "../../components/writing/Pager.astro";
-import PostList from "../../components/writing/PostList.astro";
+import WritingListPage from "../../components/writing/WritingListPage.astro";
+import ui from "../../content/ui";
 import site from "../../data/site";
-import {
-  pageCount,
-  pageSlice,
-  publishedPosts,
-} from "../../lib/writing";
+import { defaultLocale, otherLocale } from "../../lib/i18n";
+import { writingPath } from "../../lib/writing";
 
-const posts = publishedPosts(await getCollection("writing"));
-const visible = pageSlice(posts, 1);
-const total = pageCount(posts.length);
+const locale = defaultLocale;
 ---
 
-<BaseLayout title="Writing" description={site.description} path="/writing">
-  <Section class="writing">
-    <header class="writing__head">
-      <h1 class="type-h1">Writing</h1>
-    </header>
-
-    {
-      visible.length > 0 ? (
-        <PostList entries={visible} />
-      ) : (
-        <p class="writing__empty type-body-lg">No posts yet.</p>
-      )
-    }
-
-    <Pager current={1} total={total} />
-  </Section>
+<BaseLayout
+  title={ui.writing.title[locale]}
+  description={site.description[locale]}
+  path={writingPath(locale)}
+  locale={locale}
+  alternatePath={writingPath(otherLocale(locale))}
+>
+  <WritingListPage locale={locale} />
 </BaseLayout>
-
-<style>
-  .writing {
-    padding-block-end: var(--dab-space-16);
-  }
-
-  .writing__head {
-    margin: 0;
-    margin-block-end: var(--dab-space-8);
-  }
-
-  .writing__empty {
-    margin: 0;
-    color: var(--dab-color-text-secondary);
-  }
-</style>

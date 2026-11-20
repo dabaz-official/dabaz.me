@@ -4,11 +4,14 @@ import type { Localized } from "../lib/i18n";
 import site from "../data/site";
 
 /**
- * Home copy — DESIGN.md §10 `Profile`, plus the interface strings the home
- * page and the footer render.
+ * Home copy — DESIGN.md §10 `Profile`, plus the labels the home page renders.
  *
- * Thread 4 extracts these into the locale flow; until then the components read
- * one locale (`defaultLocale`) from this module and never inline a string.
+ * Thread 4 extracted the interface strings into `src/content/ui.ts`; this
+ * module keeps only the owner's copy. Every field is `Localized`, so a new
+ * locale fails the build here instead of falling back to English.
+ *
+ * Chinese copy follows DabFonts TYPESETTING.md §3: Chinese punctuation, one
+ * U+0020 after a sentence or closing mark that is followed by text.
  */
 export interface HomeCopy {
   role: Localized;
@@ -35,13 +38,10 @@ export interface HomeCopy {
 }
 
 const home: HomeCopy = {
-  role: {
-    en: site.role,
-    zh: "前端工程师兼 UI 设计师",
-  },
+  role: site.role,
   intro: {
     en: "Also a musician, designer, developer and former hacker — building things that make noise, in code, in sound and in pixels.",
-    zh: "同时也是音乐人、设计师、开发者和前黑客——在代码、声音与像素之间制造噪音。",
+    zh: "同时也是音乐人、 设计师、 开发者和前黑客——在代码、 声音与像素之间制造噪音。",
   },
   now: {
     en: "Currently building DabChat and DabMusic.",
@@ -49,7 +49,7 @@ const home: HomeCopy = {
   },
   about: {
     en: "Frontend engineer by trade, hacker by instinct, musician by obsession, designer by necessity. I build interfaces, compose systems, and make noise on both sides of the frequency spectrum.",
-    zh: "本职前端工程师，本能是黑客，痴迷于音乐，因需要而设计。我写界面、搭系统，在频谱的两端制造噪音。",
+    zh: "本职前端工程师， 本能是黑客， 痴迷于音乐， 因需要而设计。 我写界面、 搭系统， 在频谱的两端制造噪音。",
   },
   portrait: {
     src: portrait,
