@@ -296,10 +296,11 @@ site name once.
 - **Crawl files.** `src/pages/sitemap.xml.ts` emits every public route with the
   same alternates as the head; drafts never reach it. `public/robots.txt`
   points at the sitemap. `404.astro` is a real 404 and carries `noindex`.
-- **Theme colour.** `<meta name="theme-color">` has a light and a dark entry
-  and mirrors `--dab-color-background`; a meta tag cannot read a custom
-  property, so `src/data/site.ts` carries the only colour literal outside
-  `tokens.css` (see the exception in `AGENTS.md`).
+- **Theme colour.** `<meta name="theme-color">` has a light and a dark entry;
+  because the site is pinned to light, both use the active light background and
+  mirror `--dab-color-background`. A meta tag cannot read a custom property, so
+  `src/data/site.ts` carries the only colour literal outside `tokens.css` (see
+  the exception in `AGENTS.md`).
 - **Guard.** `scripts/check-meta.mjs` runs after the build inside `pnpm check`
   and fails on a broken title pattern, a missing or oversized description, a
   mismatched canonical/OG URL, a missing icon, a sitemap gap, a missing

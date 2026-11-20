@@ -49,9 +49,8 @@ const site = {
   appleIcon: "/apple-icon.png",
   manifest: "/site.webmanifest",
 
-  /** Mirrors `--dab-color-background` for the light and dark UA surfaces. */
+  /** Mirrors `--dab-color-background`; the site is pinned light, so both UA surfaces use it. */
   themeColor: "rgb(250 250 250)",
-  themeColorDark: "rgb(10 10 10)",
 } as const;
 
 export default site;
