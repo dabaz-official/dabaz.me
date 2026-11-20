@@ -120,14 +120,6 @@ const jsonLd = Astro.props.jsonLd
       content={site.themeColorDark}
     />
 
-    <link
-      rel="preload"
-      href="/fonts/DabSans-Regular.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-      fetchpriority="low"
-    />
     {jsonLd && <script type="application/ld+json" is:inline set:html={jsonLd} />}
     <slot name="head" />
   </head>
