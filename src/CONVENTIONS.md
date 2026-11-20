@@ -14,11 +14,12 @@ commit. `DESIGN.md` owns composition; DabDesign, DabFonts, and DabAgents (pins i
 | `src/layouts/BaseLayout.astro` | document shell, head, skip link, slots, theme attribute | foundation |
 | `src/components/` | shared primitives and the header/footer shell | foundation; extension by later threads |
 | `src/lib/i18n.ts` | `Locale`, `Localized<T>`, `locales`, `defaultLocale`, `htmlLang()`, `localePath()`, `homePath()`, `homeAnchorPath()`, `otherLocale()` | foundation; thread 4 |
-| `src/lib/metadata.ts` | `PageMeta`, `resolveMeta()` | foundation; OG by thread 5 |
+| `src/lib/metadata.ts` | `PageMeta`, `ResolvedMeta`, `resolveMeta()` | foundation; thread 5 added OG, `hreflang`, and JSON-LD fields |
+| `src/lib/structured-data.ts` | `homeJsonLd()`, `collectionJsonLd()`, `postJsonLd()` | thread 5 |
 | `src/lib/dates.ts` | `formatDate(isoDay, locale)`, `dateTime()`, `rssDate()` | foundation; thread 4 |
 | `src/lib/feed.ts` | `buildFeed(locale)` | thread 4 |
-| `src/lib/writing.ts` | post URLs and ordering per locale, tags, pagination, alternate-language targets | thread 3; thread 4 |
-| `src/data/site.ts` | site name, URL, email, `role` and `description` (`Localized`) | foundation |
+| `src/lib/writing.ts` | post URLs and ordering per locale, tags, pagination, alternate-language targets | thread 3; thread 4; thread 5 translation lookups |
+| `src/data/site.ts` | site name, URL, email, `role` and `description` (`Localized`), and the surface identity: tagline, OG locale and image, icons, manifest, theme colours | foundation; thread 5 surface fields |
 | `src/data/social.ts` | `Social[]`, `primary` and `all` | foundation |
 | `src/data/music.ts` | `platforms`, `ownPlayer` (`note` is `Localized`), `releases` | thread 2 renders |
 | `src/content/ui.ts` | every interface string the shell and shared components render | thread 4 |
@@ -27,8 +28,13 @@ commit. `DESIGN.md` owns composition; DabDesign, DabFonts, and DabAgents (pins i
 | `src/pages/zh/` | the same routes under `/zh` | thread 4 |
 | `src/components/writing/` | the post list, its row, tag links, the pager, the shared list/post/tag bodies | thread 3; thread 4 |
 | `src/pages/` | routes | threads 2–4 |
+| `src/pages/sitemap.xml.ts` | every public route plus its `hreflang` alternates | thread 5 |
+| `src/pages/404.astro` | the real 404 document, `noindex` | thread 5 |
 | `scripts/check-tokens.mjs` | the token guard behind `pnpm lint` | foundation |
 | `scripts/check-copy.mjs` | the Chinese punctuation and CJK–Latin spacing guard | thread 4 |
+| `scripts/check-meta.mjs` | the post-build metadata guard (title pattern, OG, icons, sitemap, `hreflang`, no client JS) | thread 5 |
+| `scripts/generate-icons.mjs` | the icon exports from the supplied plate master | thread 5 |
+| `scripts/generate-og.mjs` | the two OG cards, rendered with the real Dab Sans faces | thread 5 |
 
 ## 2. Tokens
 
@@ -111,7 +117,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 
 | Component / module | Props / exports | Guarantees |
 |---|---|---|
-| `BaseLayout.astro` | `title`, `description`, `path?`, `locale?`, `alternatePath?`; slots `head`, `header`, `footer`, default | charset/viewport, title/description/canonical, `lang` from the locale, localized skip link and RSS title, font preload, `data-theme` pinned to light, `#main`, header/footer fall back to the localized shell |
+| `BaseLayout.astro` | `title`, `description`, `path?`, `locale?`, `alternatePath?`, `translationPath?`, `ogType?`, `jsonLd?`; slots `head`, `header`, `footer`, default | charset/viewport, title/description/canonical, OG/Twitter, head-level `hreflang` + `x-default`, theme colours, icons/manifest, JSON-LD, `lang` from the locale, localized skip link and RSS title, font preload, `data-theme` pinned to light, `#main`, header/footer fall back to the localized shell |
 | `Container.astro` | `as?` (`div` default, `section`, `header`, `footer`, `main`, `nav`), `class?` | `container-lg` width and the 16/24/32 gutter |
 | `Section.astro` | `as?` (`section` default), `spacing?` (`standard` \| `loose` \| `none`), `id?`, `labelledby?`, `class?` | top rhythm: `space-16`, `space-24` from 640 for `loose`, none for `none`; wraps its content in `Container` |
 | `SectionHeader.astro` | `label`, `index?`, `id?`, `as?` (`h2` default), `class?` | index + label + 1px rule row; index is accent, decorative, tabular |
@@ -119,7 +125,8 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `ContentImage.astro` | `src: ImageMetadata`, `alt`, `width`, `height`, `widths?`, `sizes?`, `loading?`, `class?` | `astro:assets` output, required dimensions and `alt`, 1px `radius-lg` frame |
 | `.link`, `.button`, `.button-secondary` | classes | link: accent + underline, 2px offset; buttons: `type-label` typography in markup, 44px minimum, neutral ink or 1px boundary |
 | `src/lib/i18n.ts` | `locales`, `Locale`, `defaultLocale`, `Localized<T>`, `htmlLang()`, `otherLocale()`, `localePath()`, `homePath()`, `homeAnchorPath()` | one vocabulary for locale, BCP 47 tag, and path prefix |
-| `src/lib/metadata.ts` | `PageMeta`, `ResolvedMeta`, `resolveMeta()` | title suffix (English em dash, Chinese `——`), absolute canonical from `site.url` |
+| `src/lib/metadata.ts` | `PageMeta`, `ResolvedMeta`, `resolveMeta()` | title suffix (English em dash, Chinese `——`), the home title (site name + tagline), absolute canonical from `site.url`, OG locale/image, `hreflang` set |
+| `src/lib/structured-data.ts` | `homeJsonLd(locale)`, `collectionJsonLd(...)`, `postJsonLd(entry)` | `Person` + `WebSite` on home, `CollectionPage` on lists, `BlogPosting` on a post |
 | `src/content/ui.ts` | `UiCopy` and default export | every interface string, both locales; components never inline one |
 | `src/lib/dates.ts` | `formatDate(isoDay, locale)`, `dateTime()`, `rssDate()` | one date format per locale; Chinese uses `YYYY 年 M 月 D 日` |
 | `src/lib/feed.ts` | `buildFeed(locale)` | one channel per locale: own posts, `<language>`, title, description, and self link |
@@ -159,6 +166,10 @@ code block cannot import a palette outside the tokens.
 Anything else — the toggle's return, audio, command palette, analytics, an
 interactive filter — needs a recorded decision and its own budget line before it
 ships. Restoring the toggle adds one inline script, not a framework island.
+
+JSON-LD is the one `<script>` element in the document and it is data, not
+client code: `type="application/ld+json"`, no `src`, never evaluated. The
+`dist/**/*.js` check stays empty.
 
 ## 7. File naming and structure
 
@@ -241,15 +252,47 @@ client router are involved.
   release titles, platform and social labels). Tags are author strings and are
   not auto-detected; translate them in the record if the post is Chinese.
 
-## 10. Metadata
+## 10. Metadata and surface identity
 
 Every page passes `title`, `description`, `path`, and `locale` to `BaseLayout`;
 `resolveMeta()` appends the site name (Chinese uses `——`, English ` — `) and
-builds the canonical URL. Extra head tags go in the `head` slot. Thread 5 adds
-Open Graph, `hreflang`, JSON-LD, `theme-color`, sitemap, and robots there or in
-the helper — it does not replace the props shape. The language switch link
-already carries `hreflang` and `lang` per target; those are link attributes,
-not the head-level `hreflang` set thread 5 owns.
+builds the canonical URL. The home route is the exception in the head only:
+`<title>` is `DabAZ — <tagline>`, while `<h1>`, `og:title`, and `twitter:title`
+stay `DabAZ`. Every other route puts the page title first and closes with the
+site name once.
+
+- **Route fields.** `translationPath` is the equivalent page in the other
+  locale, and only when a translation exists. The footer's `alternatePath` may
+  fall back to a list or home; `hreflang` never does. Posts and tags pass the
+  twin from `translationPostPath()` / `translationTagPath()`; home and the
+  writing list pass their counterpart. `x-default` points at the English
+  version when one exists.
+- **Head surface.** Open Graph and Twitter use one description, one canonical
+  URL, and one 1200×630 PNG per locale (`public/og/en.png`, `zh.png`). The
+  default card titles the site name and uses `site.tagline`; `og:image:alt` is
+  the page title. `og:type` is `article` on a post and `website` elsewhere.
+  `twitter:card` is `summary_large_image`; there is no invented handle.
+- **Structured data.** `src/lib/structured-data.ts` supplies `Person` and
+  `WebSite` on the home route, `BlogPosting` on a post, and `CollectionPage`
+  on a list or tag page. It is serialised once by `BaseLayout` as
+  `application/ld+json` (data, not an island).
+- **Icons and manifest.** `public/icon.svg` is the supplied plate master
+  (`rx=108`, inside iOS's squircle). `scripts/generate-icons.mjs` exports
+  `favicon.ico` (16/32/48), `apple-icon.png` (180), `icons/icon-192.png`,
+  `icons/icon-512.png`, and `icons/icon-maskable-512.png` from it without
+  re-rounding or recolouring. `public/site.webmanifest` lists 192/512 from the
+  plate and a maskable 512.
+- **Crawl files.** `src/pages/sitemap.xml.ts` emits every public route with the
+  same alternates as the head; drafts never reach it. `public/robots.txt`
+  points at the sitemap. `404.astro` is a real 404 and carries `noindex`.
+- **Theme colour.** `<meta name="theme-color">` has a light and a dark entry
+  and mirrors `--dab-color-background`; a meta tag cannot read a custom
+  property, so `src/data/site.ts` carries the only colour literal outside
+  `tokens.css` (see the exception in `AGENTS.md`).
+- **Guard.** `scripts/check-meta.mjs` runs after the build inside `pnpm check`
+  and fails on a broken title pattern, a missing or oversized description, a
+  mismatched canonical/OG URL, a missing icon, a sitemap gap, a missing
+  `x-default`, or an executable script.
 
 ## 11. Gates
 
@@ -306,17 +349,22 @@ Viewport and keyboard results from the same run are in the foundation report;
 the shell measured no horizontal scroll at 320, 375, 390, 640, 768, 1024, 1280,
 or 1536 CSS pixels (200% zoom on a 1280px window is the 640px case).
 
-## 14. Not built here
+## 14. Launch surface
 
 Home sections are built (thread 2): hero, work, earlier, and about, with contact
 links in the hero and the footer. Thread 3 built writing: the home Blog band
 (newest three), `/writing`, one page per post, tag pages, pagination, and a
 populated `/rss.xml`. Thread 4 built the locale seam: `/zh` for home and every
 writing route, `/zh/rss.xml`, interface-copy extraction, the footer language
-switch, and the Chinese spacing guard. Not built here: head-level `hreflang`,
-OG art, sitemap, robots, Lighthouse and the domain switch (thread 5).
+switch, and the Chinese spacing guard. Thread 5 built the launch surface:
+head-level `hreflang` and `x-default`, the per-locale OG cards, the icon
+exports and manifest, the `Person`/`BlogPosting`/`CollectionPage` JSON-LD, the
+sitemap, robots, the real 404, and the post-build metadata guard.
 
 Open content items, all owner-supplied: a final portrait to replace the CV photo,
 real 16:10 work covers, and a design pass on the writing surfaces, which reuse
 the existing tokens and primitives but have not had thread 1.5 sign-off. Works
 and roles show years by owner decision; the CV's month ranges are not modelled.
+The home and post descriptions are owner copy and sit below rule 07's length
+floor; `scripts/check-meta.mjs` reports them as warnings rather than padding
+them.

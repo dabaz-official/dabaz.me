@@ -6,19 +6,28 @@
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import WritingListPage from "../../../components/writing/WritingListPage.astro";
 import ui from "../../../content/ui";
-import site from "../../../data/site";
 import { otherLocale, type Locale } from "../../../lib/i18n";
+import { collectionJsonLd } from "../../../lib/structured-data";
 import { writingPath } from "../../../lib/writing";
 
 const locale: Locale = "zh";
+const path = writingPath(locale);
+const description = ui.writing.description[locale];
 ---
 
 <BaseLayout
   title={ui.writing.title[locale]}
-  description={site.description[locale]}
-  path={writingPath(locale)}
+  description={description}
+  path={path}
   locale={locale}
   alternatePath={writingPath(otherLocale(locale))}
+  translationPath={writingPath(otherLocale(locale))}
+  jsonLd={collectionJsonLd({
+    locale,
+    path,
+    name: ui.writing.title[locale],
+    description,
+  })}
 >
   <WritingListPage locale={locale} />
 </BaseLayout>

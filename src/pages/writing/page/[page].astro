@@ -7,8 +7,8 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import WritingListPage from "../../../components/writing/WritingListPage.astro";
 import ui from "../../../content/ui";
-import site from "../../../data/site";
 import { defaultLocale, otherLocale } from "../../../lib/i18n";
+import { collectionJsonLd } from "../../../lib/structured-data";
 import {
   pageCount,
   pagePath,
@@ -31,14 +31,29 @@ export async function getStaticPaths() {
 }
 
 const current = Number(Astro.params.page);
+const path = pagePath(current, locale);
+const description = ui.writing.pageDescription[locale](current);
+
+// The translated page exists only when the other locale also has this page.
+const all = publishedPosts(await getCollection("writing"));
+const otherTotal = pageCount(postsForLocale(all, otherLocale(locale)).length);
+const translationPath =
+  current <= otherTotal ? pagePath(current, otherLocale(locale)) : undefined;
 ---
 
 <BaseLayout
   title={ui.writing.pageTitle[locale](current)}
-  description={site.description[locale]}
-  path={pagePath(current, locale)}
+  description={description}
+  path={path}
   locale={locale}
   alternatePath={writingPath(otherLocale(locale))}
+  translationPath={translationPath}
+  jsonLd={collectionJsonLd({
+    locale,
+    path,
+    name: ui.writing.pageTitle[locale](current),
+    description,
+  })}
 >
   <WritingListPage locale={locale} page={current} />
 </BaseLayout>

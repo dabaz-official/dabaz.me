@@ -49,7 +49,9 @@ pnpm build      # static build to dist/
 pnpm preview    # serve dist/ locally
 pnpm lint       # token guard + Chinese punctuation/CJK–Latin spacing guard
 pnpm typecheck  # astro sync && tsc --noEmit
-pnpm check      # the gate: lint + typecheck + build
+pnpm icons      # export favicon, Apple icon, and manifest icons from public/icon.svg
+pnpm og         # render public/og/en.png and zh.png (needs Chrome)
+pnpm check      # the gate: lint + typecheck + build + the metadata guard
 ```
 
 CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
@@ -78,8 +80,9 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
 - **Threads:** HQ (0) decisions and merging · Foundation (1) system · Design
   Direction (1.5) visual direction · Content & Sections (2) home · Blog (3) ·
   Internationalization (4) · Launch & Polish (5).
-- **Scope of the current work:** foundation, home sections, writing, and `/zh`
-  are in. OG art and the domain wait for thread 5.
+- **Scope of the current work:** foundation, home sections, writing, `/zh`, and
+  the launch surface (metadata, OG, icons, sitemap, 404) are in. The production
+  domain switch stays with thread 5 after the gates pass.
 
 ## Definition of Done
 
@@ -110,3 +113,15 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
   Reason: `@astrojs/check` is outside the foundation dependency whitelist, so
   the gate is `astro sync && tsc --noEmit && astro build`; template errors are
   caught by the Astro 7 compiler at build time. Owner: HQ. Review: 2026-12-19.
+- **Metadata colour mirror.** Rule: design values live only in
+  `src/styles/tokens.css`. Reason: `<meta name="theme-color">` and the web
+  manifest need a literal, and neither can read a custom property; the two
+  values mirror `--dab-color-background` and appear only in `src/data/site.ts`
+  and `public/site.webmanifest`. The token guard does not scan `public/`.
+  Owner: HQ. Review: 2026-12-19.
+- **Lighthouse method.** Rule: DabAgents rule 04 §6 asks for a mobile Lighthouse
+  run. Reason: the pinned DabFonts regular face is 821 KB, and Lighthouse's
+  default Lantern simulation extrapolates it as paint-blocking, reporting
+  performance 62 while a real-throttled mobile run reports 99 with LCP 1.8 s.
+  The gate is measured with `--throttling-method=devtools`; the simulated
+  number is reported alongside it, not hidden. Owner: HQ. Review: 2026-12-19.
