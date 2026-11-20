@@ -1,0 +1,25 @@
+---
+/**
+ * Home, Chinese (`/zh`), through Astro's built-in i18n with
+ * `prefixDefaultLocale: false`.
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HomePage from "../../components/home/HomePage.astro";
+import site from "../../data/site";
+import { homePath, otherLocale, type Locale } from "../../lib/i18n";
+import { homeJsonLd } from "../../lib/structured-data";
+
+const locale: Locale = "zh";
+---
+
+<BaseLayout
+  title={site.name}
+  description={site.description[locale]}
+  path={homePath(locale)}
+  locale={locale}
+  alternatePath={homePath(otherLocale(locale))}
+  translationPath={homePath(otherLocale(locale))}
+  jsonLd={homeJsonLd(locale)}
+>
+  <HomePage locale={locale} />
+</BaseLayout>

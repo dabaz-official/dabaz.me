@@ -1,0 +1,66 @@
+---
+/**
+ * The writing list body, shared by both locale routes.
+ *
+ * The route file owns the document metadata and the language switch target;
+ * this component owns the heading, the rows, and the pager. A locale with no
+ * posts says so instead of rendering an empty list (DESIGN.md §6).
+ */
+import { getCollection } from "astro:content";
+import Section from "../Section.astro";
+import Pager from "./Pager.astro";
+import PostList from "./PostList.astro";
+import ui from "../../content/ui";
+import type { Locale } from "../../lib/i18n";
+import {
+  pageCount,
+  pageSlice,
+  postsForLocale,
+  publishedPosts,
+} from "../../lib/writing";
+
+interface Props {
+  locale: Locale;
+  page?: number;
+}
+
+const { locale, page = 1 } = Astro.props;
+const posts = postsForLocale(
+  publishedPosts(await getCollection("writing")),
+  locale,
+);
+const total = pageCount(posts.length);
+const visible = pageSlice(posts, page);
+---
+
+<Section class="writing">
+  <header class="writing__head">
+    <h1 class="type-h1">{ui.writing.title[locale]}</h1>
+  </header>
+
+  {
+    visible.length > 0 ? (
+      <PostList entries={visible} />
+    ) : (
+      <p class="writing__empty type-body-lg">{ui.writing.empty[locale]}</p>
+    )
+  }
+
+  <Pager current={page} total={total} locale={locale} />
+</Section>
+
+<style>
+  .writing {
+    padding-block-end: var(--dab-space-16);
+  }
+
+  .writing__head {
+    margin: 0;
+    margin-block-end: var(--dab-space-8);
+  }
+
+  .writing__empty {
+    margin: 0;
+    color: var(--dab-color-text-secondary);
+  }
+</style>

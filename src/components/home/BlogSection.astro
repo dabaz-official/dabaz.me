@@ -1,0 +1,60 @@
+---
+/**
+ * Blog: the newest three posts, in the same row grammar as `/writing`
+ * (DESIGN.md §6, §7.5).
+ *
+ * The page decides whether the section exists at all: a locale with no
+ * published posts renders no Writing section, never an empty heading. The
+ * `All writing` link appears only when there are more posts than the list
+ * shows. Tags stay on the post page so the home rows stay scannable.
+ */
+import Container from "../Container.astro";
+import PostList from "../writing/PostList.astro";
+import ui from "../../content/ui";
+import { defaultLocale, type Locale } from "../../lib/i18n";
+import { writingPath, type WritingEntry } from "../../lib/writing";
+
+interface Props {
+  entries: WritingEntry[];
+  hasMore: boolean;
+  locale?: Locale;
+}
+
+const { entries, hasMore, locale = defaultLocale } = Astro.props;
+---
+
+<section class="blog" id="blog" aria-labelledby="blog-title">
+  <Container>
+    <h2 class="blog__title type-h2" id="blog-title">{ui.nav.blog[locale]}</h2>
+
+    <PostList entries={entries} headingLevel="h3" showTags={false} />
+
+    {
+      hasMore && (
+        <p class="blog__more">
+          <a class="link type-label" href={writingPath(locale)}>
+            {ui.writing.all[locale]}
+          </a>
+        </p>
+      )
+    }
+  </Container>
+</section>
+
+<style>
+  .blog {
+    padding-block-start: var(--dab-space-24);
+    scroll-margin-block-start: calc(var(--dab-space-16) + var(--dab-space-4));
+  }
+
+  .blog__title {
+    margin: 0;
+    margin-block-end: var(--dab-space-8);
+    color: var(--dab-color-text-primary);
+  }
+
+  .blog__more {
+    margin: 0;
+    margin-block-start: var(--dab-space-8);
+  }
+</style>

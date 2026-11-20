@@ -1,0 +1,6 @@
+---
+/** Body `h3`: a subsection at the `type-h3` role (DESIGN.md §4). */
+const { ...rest } = Astro.props;
+---
+
+<h3 class="type-h3" {...rest}><slot /></h3>

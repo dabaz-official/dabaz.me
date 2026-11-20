@@ -1,0 +1,79 @@
+---
+/**
+ * The site footer: copyright on the left, the site's links on the right.
+ *
+ * The language switch lives here rather than in the header: the header's four
+ * anchors already fill the shell at 320px, and thread 4 may not add a new
+ * visual device. The switch points at the same page in the other locale when a
+ * translation exists, and at that locale's writing list or home otherwise.
+ */
+import Container from "./Container.astro";
+import ui from "../content/ui";
+import {
+  defaultLocale,
+  htmlLang,
+  otherLocale,
+  rssPath,
+  type Locale,
+} from "../lib/i18n";
+import { writingPath } from "../lib/writing";
+
+interface Props {
+  locale?: Locale;
+  alternatePath: string;
+}
+
+const { locale = defaultLocale, alternatePath } = Astro.props;
+const target = otherLocale(locale);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <Container class="site-footer__inner">
+    <p class="type-caption">© {year} <span lang="en">DabAZ</span></p>
+    <div class="site-footer__links type-caption">
+      <a href={writingPath(locale)}>{ui.footer.writing[locale]}</a>
+      <a href={rssPath(locale)}>{ui.footer.rss[locale]}</a>
+      <a
+        href={alternatePath}
+        hreflang={htmlLang(target)}
+        lang={htmlLang(target)}>{ui.footer.languageName[target]}</a
+      >
+    </div>
+  </Container>
+</footer>
+
+<style>
+  .site-footer {
+    border-block-start: var(--dab-border-width) solid var(--dab-color-border);
+  }
+
+  /* `Container` renders this element; see the note in SiteHeader. */
+  :global(.site-footer__inner) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--dab-space-4);
+    padding-block: var(--dab-space-8);
+  }
+
+  .site-footer p {
+    margin: 0;
+    color: var(--dab-color-text-tertiary);
+  }
+
+  .site-footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--dab-space-4);
+  }
+
+  .site-footer__links a {
+    color: var(--dab-color-text-tertiary);
+    text-decoration: none;
+  }
+
+  .site-footer__links a:hover {
+    color: var(--dab-color-text-primary);
+  }
+</style>

@@ -1,0 +1,33 @@
+---
+/**
+ * Writing — the Chinese list page (`/zh/writing`). Page 1 lives here; later
+ * pages are `/zh/writing/page/<n>`.
+ */
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import WritingListPage from "../../../components/writing/WritingListPage.astro";
+import ui from "../../../content/ui";
+import { otherLocale, type Locale } from "../../../lib/i18n";
+import { collectionJsonLd } from "../../../lib/structured-data";
+import { writingPath } from "../../../lib/writing";
+
+const locale: Locale = "zh";
+const path = writingPath(locale);
+const description = ui.writing.description[locale];
+---
+
+<BaseLayout
+  title={ui.writing.title[locale]}
+  description={description}
+  path={path}
+  locale={locale}
+  alternatePath={writingPath(otherLocale(locale))}
+  translationPath={writingPath(otherLocale(locale))}
+  jsonLd={collectionJsonLd({
+    locale,
+    path,
+    name: ui.writing.title[locale],
+    description,
+  })}
+>
+  <WritingListPage locale={locale} />
+</BaseLayout>

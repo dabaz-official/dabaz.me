@@ -1,0 +1,143 @@
+---
+/**
+ * The document shell.
+ *
+ * Owns: charset/viewport, title/description/canonical from `resolveMeta`, the
+ * Open Graph and Twitter surface, `hreflang`, the theme colours, the icons and
+ * manifest, the font preload, the document language, the theme attribute, the
+ * skip link, and the header/footer slots. Pages pass content and, when they
+ * need more head tags, a `head` slot.
+ *
+ * Locale contract: `locale` decides `<html lang>` (`en` or `zh-CN`, see
+ * DabFonts TYPESETTING.md §7), the shell's copy, and the language switch. The
+ * theme contract is unchanged: `data-theme="light"` is pinned, so there is no
+ * theme script and no client JavaScript at all. The JSON-LD block is data, not
+ * a script: the build still ships no JavaScript bundle.
+ */
+import SiteFooter from "../components/SiteFooter.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import ui from "../content/ui";
+import site from "../data/site";
+import {
+  defaultLocale,
+  homePath,
+  htmlLang,
+  otherLocale,
+  rssPath,
+} from "../lib/i18n";
+import type { Locale } from "../lib/i18n";
+import { resolveMeta, type PageMeta } from "../lib/metadata";
+import "../styles/global.css";
+
+interface Props extends PageMeta {
+  /** The page's locale. Defaults to `en`. */
+  locale?: Locale;
+  /** Where the footer's language switch points; defaults to the other home. */
+  alternatePath?: string;
+}
+
+const { locale = defaultLocale } = Astro.props;
+const alternatePath =
+  Astro.props.alternatePath ?? homePath(otherLocale(locale));
+const meta = resolveMeta({
+  title: Astro.props.title,
+  description: Astro.props.description,
+  path: Astro.props.path,
+  locale,
+  ogType: Astro.props.ogType,
+  translationPath: Astro.props.translationPath,
+});
+const separator = locale === "zh" ? "——" : " — ";
+const alternateLocale = otherLocale(locale);
+const hasTranslation = meta.hreflang.length > 1;
+const jsonLd = Astro.props.jsonLd
+  ? JSON.stringify(Astro.props.jsonLd).replace(/</g, "\\u003c")
+  : undefined;
+---
+
+<!doctype html>
+<html lang={htmlLang(locale)} data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{meta.title}</title>
+    <meta name="description" content={meta.description} />
+    <link rel="canonical" href={meta.canonical} />
+
+    {
+      meta.hreflang.map((link) => (
+        <link rel="alternate" hreflang={link.hreflang} href={link.href} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={meta.xDefault} />
+
+    <meta property="og:type" content={meta.ogType} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={meta.pageTitle} />
+    <meta property="og:description" content={meta.description} />
+    <meta property="og:url" content={meta.canonical} />
+    <meta property="og:locale" content={meta.ogLocale} />
+    {
+      hasTranslation && (
+        <meta
+          property="og:locale:alternate"
+          content={site.ogLocale[alternateLocale]}
+        />
+      )
+    }
+    <meta property="og:image" content={meta.ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={meta.pageTitle} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={meta.pageTitle} />
+    <meta name="twitter:description" content={meta.description} />
+    <meta name="twitter:image" content={meta.ogImage} />
+    <meta name="twitter:image:alt" content={meta.pageTitle} />
+
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${site.name}${separator}${ui.writing.title[locale]}`}
+      href={rssPath(locale)}
+    />
+    <link rel="icon" href={site.icon} type="image/svg+xml" />
+    <link rel="icon" href={site.favicon} sizes="16x16 32x32 48x48" />
+    <link rel="apple-touch-icon" href={site.appleIcon} sizes="180x180" />
+    <link rel="manifest" href={site.manifest} />
+    <meta name="apple-mobile-web-app-title" content={site.name} />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content={site.themeColor}
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content={site.themeColorDark}
+    />
+
+    <link
+      rel="preload"
+      href="/fonts/DabSans-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    {jsonLd && <script type="application/ld+json" is:inline set:html={jsonLd} />}
+    <slot name="head" />
+  </head>
+  <body class="type-body">
+    <a class="skip-link type-label" href="#main">{ui.skipToContent[locale]}</a>
+    <slot name="header"><SiteHeader locale={locale} /></slot>
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <slot name="footer"
+      ><SiteFooter locale={locale} alternatePath={alternatePath} /></slot
+    >
+  </body>
+</html>

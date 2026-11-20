@@ -1,0 +1,27 @@
+---
+/**
+ * Home, default locale.
+ *
+ * The composition lives in `HomePage`; this file owns only the document
+ * metadata and the language switch target.
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import HomePage from "../components/home/HomePage.astro";
+import site from "../data/site";
+import { defaultLocale, homePath, otherLocale } from "../lib/i18n";
+import { homeJsonLd } from "../lib/structured-data";
+
+const locale = defaultLocale;
+---
+
+<BaseLayout
+  title={site.name}
+  description={site.description[locale]}
+  path={homePath(locale)}
+  locale={locale}
+  alternatePath={homePath(otherLocale(locale))}
+  translationPath={homePath(otherLocale(locale))}
+  jsonLd={homeJsonLd(locale)}
+>
+  <HomePage locale={locale} />
+</BaseLayout>

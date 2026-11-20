@@ -1,0 +1,44 @@
+---
+/**
+ * One post, default locale. The slug is shared across locales, so the English
+ * and Chinese routes do not collide: the locale is the prefix.
+ */
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostArticle from "../../components/writing/PostArticle.astro";
+import {
+  alternatePostPath,
+  postPath,
+  postSlug,
+  postsForLocale,
+  publishedPosts,
+  translationPostPath,
+} from "../../lib/writing";
+import { defaultLocale } from "../../lib/i18n";
+import { postJsonLd } from "../../lib/structured-data";
+
+const locale = defaultLocale;
+
+export async function getStaticPaths() {
+  const all = publishedPosts(await getCollection("writing"));
+  return postsForLocale(all, defaultLocale).map((entry) => ({
+    params: { slug: postSlug(entry) },
+    props: { entry, all },
+  }));
+}
+
+const { entry, all } = Astro.props;
+---
+
+<BaseLayout
+  title={entry.data.title}
+  description={entry.data.summary}
+  path={postPath(entry)}
+  locale={entry.data.locale}
+  alternatePath={alternatePostPath(entry, all)}
+  translationPath={translationPostPath(entry, all)}
+  ogType="article"
+  jsonLd={postJsonLd(entry)}
+>
+  <PostArticle entry={entry} />
+</BaseLayout>

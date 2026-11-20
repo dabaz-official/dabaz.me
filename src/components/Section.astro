@@ -1,0 +1,54 @@
+---
+/**
+ * A page section: the container plus the section rhythm.
+ *
+ * `spacing` is the only knob, because the rhythm is a design decision:
+ *   - `standard` — `space-16` above, between sections (DESIGN.md §5);
+ *   - `loose`    — `space-24` from 640, the hero-to-content transition;
+ *   - `none`     — no top padding; the consumer owns it.
+ */
+import Container from "./Container.astro";
+
+interface Props {
+  as?: "section" | "article" | "div";
+  spacing?: "standard" | "loose" | "none";
+  id?: string;
+  labelledby?: string;
+  class?: string;
+}
+
+const {
+  as: Tag = "section",
+  spacing = "standard",
+  id,
+  labelledby,
+  class: className,
+} = Astro.props;
+---
+
+<Tag
+  id={id}
+  class:list={["section", className]}
+  data-spacing={spacing}
+  aria-labelledby={labelledby}
+>
+  <Container>
+    <slot />
+  </Container>
+</Tag>
+
+<style>
+  .section {
+    padding-block-start: var(--dab-space-16);
+  }
+
+  .section[data-spacing="none"] {
+    padding-block-start: 0;
+  }
+
+  @media (min-width: 640px) {
+    .section[data-spacing="loose"] {
+      padding-block-start: var(--dab-space-24);
+    }
+  }
+</style>

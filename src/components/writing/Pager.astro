@@ -1,0 +1,50 @@
+---
+/**
+ * Prev/next pager for the writing list. Page 1 is the locale's list; numbered
+ * pages are real URLs under the same locale prefix.
+ */
+import ui from "../../content/ui";
+import type { Locale } from "../../lib/i18n";
+import { pagePath } from "../../lib/writing";
+
+interface Props {
+  current: number;
+  total: number;
+  locale: Locale;
+  class?: string;
+}
+
+const { current, total, locale, class: className } = Astro.props;
+const newer = current > 1 ? pagePath(current - 1, locale) : null;
+const older = current < total ? pagePath(current + 1, locale) : null;
+---
+
+{
+  (newer || older) && (
+    <nav
+      class:list={["pager", "type-label", className]}
+      aria-label={ui.writing.pagination[locale]}
+    >
+      {newer && (
+        <a class="link" href={newer} rel="prev">
+          {ui.writing.newer[locale]}
+        </a>
+      )}
+      {older && (
+        <a class="link" href={older} rel="next">
+          {ui.writing.older[locale]}
+        </a>
+      )}
+    </nav>
+  )
+}
+
+<style>
+  .pager {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--dab-space-4);
+    margin-block-start: var(--dab-space-8);
+  }
+</style>

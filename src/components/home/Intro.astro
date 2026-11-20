@@ -1,0 +1,61 @@
+---
+/**
+ * The statement under the hero: role, name, one sentence.
+ *
+ * This is the page's only h1. It is centred and takes the full container, so
+ * it reads as a title block rather than a column of prose.
+ */
+import Container from "../Container.astro";
+import home from "../../content/profile";
+import site from "../../data/site";
+import type { Locale } from "../../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<section class="intro" aria-labelledby="intro-name">
+  <Container>
+    <div class="intro__inner">
+      <p class="type-h4 intro__eyebrow">{home.role[locale]}</p>
+      <h1 class="type-display-xl intro__name" id="intro-name">
+        <span lang="en">{site.name}</span>
+      </h1>
+      <p class="type-lede intro__lede">{home.intro[locale]}</p>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .intro {
+    padding-block-start: var(--dab-space-24);
+  }
+
+  .intro__inner {
+    text-align: center;
+  }
+
+  .intro__eyebrow {
+    margin: 0;
+    color: var(--dab-color-text-primary);
+  }
+
+  .intro__name {
+    margin: 0;
+    margin-block-start: var(--dab-space-4);
+    color: var(--dab-color-text-primary);
+    text-wrap: balance;
+  }
+
+  .intro__lede {
+    margin: 0;
+    margin-block-start: var(--dab-space-8);
+    margin-inline: auto;
+    max-inline-size: 34em;
+    color: var(--dab-color-text-secondary);
+    text-wrap: pretty;
+  }
+</style>

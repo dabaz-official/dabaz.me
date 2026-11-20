@@ -1,0 +1,21 @@
+# Copy to .github/workflows/ci.yml.
+# pnpm projects: this caller. npm projects: the shared workflow installs with
+# pnpm only, so keep a local workflow that runs `npm ci` and `npm run check`.
+# Node defaults to 24 in the shared workflow; if `.nvmrc` pins another LTS,
+# pass it as `with: node-version: "<version>"`.
+#
+# The gate is the project's own `pnpm check`; the shared workflow only installs
+# and runs it, so nothing here restates what the gate is.
+name: ci
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  ci:
+    uses: dabaz-official/.github/.github/workflows/web-ci.yml@main

@@ -1,0 +1,97 @@
+---
+/**
+ * One writing row — the grammar DESIGN.md §7.5 borrows from the work row:
+ * a dated meta column, then title and one-line summary, closed by a hairline.
+ *
+ * The row links through its title. Tags sit beside it and stay their own links,
+ * so a row never nests one anchor inside another.
+ *
+ * `headingLevel` keeps the page outline honest: `h2` on `/writing`, `h3` under
+ * the home page's section headings. Tags are optional on summary surfaces.
+ */
+import type { WritingEntry } from "../../lib/writing";
+import { dateTime, formatDate } from "../../lib/dates";
+import { htmlLang } from "../../lib/i18n";
+import { postPath } from "../../lib/writing";
+import TagLinks from "./TagLinks.astro";
+
+interface Props {
+  entry: WritingEntry;
+  headingLevel?: "h2" | "h3";
+  showTags?: boolean;
+}
+
+const {
+  entry,
+  headingLevel = "h2",
+  showTags = true,
+} = Astro.props;
+const Heading = headingLevel;
+const { title, date, summary, tags, locale } = entry.data;
+const lang = htmlLang(locale);
+---
+
+<article class="post-row">
+  <time class="post-row__date type-caption tabular" datetime={dateTime(date)}>
+    {formatDate(date, locale)}
+  </time>
+
+  <div class="post-row__content">
+    <Heading class="post-row__title type-h3" lang={lang}>
+      <a class="post-row__link" href={postPath(entry)}>{title}</a>
+    </Heading>
+    <p class="post-row__summary type-body-sm" lang={lang}>{summary}</p>
+    {
+      showTags && tags.length > 0 && (
+        <TagLinks tags={tags} locale={locale} class="post-row__tags" />
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .post-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--dab-space-2);
+    padding-block: var(--dab-space-6);
+    border-block-start: var(--dab-border-width) solid var(--dab-color-border);
+  }
+
+  @media (min-width: 640px) {
+    .post-row {
+      /* DESIGN.md §7.5: 9rem meta column from 640. */
+      grid-template-columns: 9rem minmax(0, 1fr);
+      gap: var(--dab-space-6);
+    }
+  }
+
+  .post-row__date {
+    color: var(--dab-color-text-tertiary);
+  }
+
+  .post-row__title {
+    margin: 0;
+  }
+
+  .post-row__link {
+    color: var(--dab-color-text-primary);
+    text-decoration: none;
+  }
+
+  .post-row__link:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .post-row__summary {
+    max-inline-size: 38em;
+    margin: 0;
+    margin-block-start: var(--dab-space-1);
+    color: var(--dab-color-text-secondary);
+  }
+
+  .post-row__tags {
+    margin-block-start: var(--dab-space-3);
+  }
+</style>
