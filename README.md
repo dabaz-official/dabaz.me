@@ -6,8 +6,8 @@ fonts, no client runtime.
 The rebuild is in progress on `rebuild`. This branch ships the foundation —
 tokens, fonts, the document shell, shared primitives, CI — the home page (hero,
 work, music, blog, contact), the blog (`/writing`, post pages, tags, pagination,
-RSS), and the Chinese site: `/zh` with the same routes, a footer language
-switch, and DabFonts punctuation and CJK–Latin spacing.
+per-locale RSS), and the Chinese site: `/zh` with the same routes, a footer
+language switch, and DabFonts punctuation and CJK–Latin spacing.
 
 ## Stack
 
@@ -56,7 +56,7 @@ src/
   data/           site identity and social links
   layouts/        BaseLayout — head, skip link, slots, theme attribute
   lib/            locale seam, metadata and date helpers, writing helpers
-  pages/          routes: `/`, `/zh`, writing, posts, tags, `/rss.xml`
+  pages/          routes: `/`, `/zh`, writing, posts, tags, `/rss.xml`, `/zh/rss.xml`
   styles/         tokens.css (the only design values) and global.css
 scripts/          check-tokens.mjs and check-copy.mjs, the lint gate
 docs/             working handoff for the rebuild (deleted after merge)

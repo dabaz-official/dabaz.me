@@ -16,6 +16,7 @@ commit. `DESIGN.md` owns composition; DabDesign, DabFonts, and DabAgents (pins i
 | `src/lib/i18n.ts` | `Locale`, `Localized<T>`, `locales`, `defaultLocale`, `htmlLang()`, `localePath()`, `homePath()`, `homeAnchorPath()`, `otherLocale()` | foundation; thread 4 |
 | `src/lib/metadata.ts` | `PageMeta`, `resolveMeta()` | foundation; OG by thread 5 |
 | `src/lib/dates.ts` | `formatDate(isoDay, locale)`, `dateTime()`, `rssDate()` | foundation; thread 4 |
+| `src/lib/feed.ts` | `buildFeed(locale)` | thread 4 |
 | `src/lib/writing.ts` | post URLs and ordering per locale, tags, pagination, alternate-language targets | thread 3; thread 4 |
 | `src/data/site.ts` | site name, URL, email, `role` and `description` (`Localized`) | foundation |
 | `src/data/social.ts` | `Social[]`, `primary` and `all` | foundation |
@@ -121,6 +122,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `src/lib/metadata.ts` | `PageMeta`, `ResolvedMeta`, `resolveMeta()` | title suffix (English em dash, Chinese `——`), absolute canonical from `site.url` |
 | `src/content/ui.ts` | `UiCopy` and default export | every interface string, both locales; components never inline one |
 | `src/lib/dates.ts` | `formatDate(isoDay, locale)`, `dateTime()`, `rssDate()` | one date format per locale; Chinese uses `YYYY 年 M 月 D 日` |
+| `src/lib/feed.ts` | `buildFeed(locale)` | one channel per locale: own posts, `<language>`, title, description, and self link |
 | `components/home/HomePage.astro` | `locale: Locale` | the home composition in DESIGN.md §6 order; a locale's Writing band only when that locale has a post |
 | `components/home/HeroStage.astro` | `locale?` | the cutout portrait over `type-wordmark`, art-directed across three widths, plus the scroll cue; sticky, clipped, `z-index: 0` |
 | `components/home/Intro.astro` | `locale: Locale` | the page's only `h1`: role (`type-h4`), name (`type-display-xl`, `lang="en"`), lede (`type-lede`) |
@@ -224,6 +226,10 @@ client router are involved.
 - `postPath()`, `writingPath()`, `tagPath()`, and `pagePath()` prepend `/zh`
   and no other module builds a writing URL. A post is listed only in the locale
   it was written in; there is no cross-locale fallback.
+- The writing feed follows the same split: `/rss.xml` carries English posts,
+  `/zh/rss.xml` carries Chinese posts. `rssPath(locale)` feeds the head
+  autodiscovery link and the footer link; the channel's `<language>` is the
+  document tag from `htmlLang()`.
 - The language switch is a footer link. It points at the same page in the other
   locale when a translation exists (a post or a tag), and at that locale's
   writing list or home otherwise. `alternatePath` on `BaseLayout` is the only
@@ -306,8 +312,8 @@ Home sections are built (thread 2): hero, work, earlier, and about, with contact
 links in the hero and the footer. Thread 3 built writing: the home Blog band
 (newest three), `/writing`, one page per post, tag pages, pagination, and a
 populated `/rss.xml`. Thread 4 built the locale seam: `/zh` for home and every
-writing route, interface-copy extraction, the footer language switch, and the
-Chinese spacing guard. Not built here: a per-locale feed, head-level `hreflang`,
+writing route, `/zh/rss.xml`, interface-copy extraction, the footer language
+switch, and the Chinese spacing guard. Not built here: head-level `hreflang`,
 OG art, sitemap, robots, Lighthouse and the domain switch (thread 5).
 
 Open content items, all owner-supplied: a final portrait to replace the CV photo,

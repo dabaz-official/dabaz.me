@@ -47,3 +47,8 @@ export function homeAnchorPath(locale: Locale, anchor: string): string {
   const home = homePath(locale);
   return `${home === "/" ? "" : home}/#${anchor}`;
 }
+
+/** The locale's writing feed: `/rss.xml` or `/zh/rss.xml`. */
+export function rssPath(locale: Locale): string {
+  return localePath(locale, "/rss.xml");
+}

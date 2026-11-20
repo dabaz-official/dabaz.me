@@ -21,6 +21,7 @@ import {
   homePath,
   htmlLang,
   otherLocale,
+  rssPath,
   type Locale,
 } from "../lib/i18n";
 import { resolveMeta, type PageMeta } from "../lib/metadata";
@@ -57,7 +58,7 @@ const separator = locale === "zh" ? "——" : " — ";
       rel="alternate"
       type="application/rss+xml"
       title={`${site.name}${separator}${ui.writing.title[locale]}`}
-      href="/rss.xml"
+      href={rssPath(locale)}
     />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link

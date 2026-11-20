@@ -9,7 +9,13 @@
  */
 import Container from "./Container.astro";
 import ui from "../content/ui";
-import { defaultLocale, htmlLang, otherLocale, type Locale } from "../lib/i18n";
+import {
+  defaultLocale,
+  htmlLang,
+  otherLocale,
+  rssPath,
+  type Locale,
+} from "../lib/i18n";
 import { writingPath } from "../lib/writing";
 
 interface Props {
@@ -27,7 +33,7 @@ const year = new Date().getFullYear();
     <p class="type-caption">© {year} <span lang="en">DabAZ</span></p>
     <div class="site-footer__links type-caption">
       <a href={writingPath(locale)}>{ui.footer.writing[locale]}</a>
-      <a href="/rss.xml">{ui.footer.rss[locale]}</a>
+      <a href={rssPath(locale)}>{ui.footer.rss[locale]}</a>
       <a
         href={alternatePath}
         hreflang={htmlLang(target)}
