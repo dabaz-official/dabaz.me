@@ -8,17 +8,28 @@ import PostRow from "./PostRow.astro";
 
 interface Props {
   entries: WritingEntry[];
+  headingLevel?: "h2" | "h3";
+  showTags?: boolean;
   class?: string;
 }
 
-const { entries, class: className } = Astro.props;
+const {
+  entries,
+  headingLevel,
+  showTags,
+  class: className,
+} = Astro.props;
 ---
 
 <ol class:list={["post-list", className]}>
   {
     entries.map((entry) => (
       <li>
-        <PostRow entry={entry} />
+        <PostRow
+          entry={entry}
+          headingLevel={headingLevel}
+          showTags={showTags}
+        />
       </li>
     ))
   }

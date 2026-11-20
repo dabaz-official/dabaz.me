@@ -16,6 +16,7 @@ import BlogSection from "../components/home/BlogSection.astro";
 import ContactSection from "../components/home/ContactSection.astro";
 import site from "../data/site";
 import { defaultLocale } from "../lib/i18n";
+import { publishedPosts } from "../lib/writing";
 
 const locale = defaultLocale;
 
@@ -23,6 +24,9 @@ const locale = defaultLocale;
 const works = (await getCollection("works")).sort(
   (a, b) => (b.data.year ?? 0) - (a.data.year ?? 0),
 );
+
+// Newest first; the home list shows the first three and links out for the rest.
+const posts = publishedPosts(await getCollection("writing"));
 ---
 
 <BaseLayout title={site.name} description={site.description} path="/">
@@ -30,6 +34,6 @@ const works = (await getCollection("works")).sort(
   <Intro locale={locale} />
   <WorkGrid entries={works} locale={locale} />
   <MusicSection />
-  <BlogSection />
+  {posts.length > 0 && <BlogSection entries={posts.slice(0, 3)} hasMore={posts.length > 3} />}
   <ContactSection />
 </BaseLayout>

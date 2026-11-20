@@ -5,6 +5,9 @@
  *
  * The row links through its title. Tags sit beside it and stay their own links,
  * so a row never nests one anchor inside another.
+ *
+ * `headingLevel` keeps the page outline honest: `h2` on `/writing`, `h3` under
+ * the home page's section headings. Tags are optional on summary surfaces.
  */
 import type { WritingEntry } from "../../lib/writing";
 import { dateTime, formatDate, localeTag, postPath } from "../../lib/writing";
@@ -12,9 +15,16 @@ import TagLinks from "./TagLinks.astro";
 
 interface Props {
   entry: WritingEntry;
+  headingLevel?: "h2" | "h3";
+  showTags?: boolean;
 }
 
-const { entry } = Astro.props;
+const {
+  entry,
+  headingLevel = "h2",
+  showTags = true,
+} = Astro.props;
+const Heading = headingLevel;
 const { title, date, summary, tags, locale } = entry.data;
 ---
 
@@ -24,11 +34,11 @@ const { title, date, summary, tags, locale } = entry.data;
   </time>
 
   <div class="post-row__content">
-    <h2 class="post-row__title type-h3" lang={localeTag(locale)}>
+    <Heading class="post-row__title type-h3" lang={localeTag(locale)}>
       <a class="post-row__link" href={postPath(entry)}>{title}</a>
-    </h2>
+    </Heading>
     <p class="post-row__summary type-body-sm" lang={localeTag(locale)}>{summary}</p>
-    {tags.length > 0 && <TagLinks tags={tags} class="post-row__tags" />}
+    {showTags && tags.length > 0 && <TagLinks tags={tags} class="post-row__tags" />}
   </div>
 </article>
 

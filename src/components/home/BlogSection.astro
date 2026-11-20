@@ -1,19 +1,40 @@
 ---
 /**
- * Blog: nothing published yet, so it says so and offers the feed.
+ * Blog: the newest three posts, in the same row grammar as `/writing`
+ * (DESIGN.md §6, §7.5).
  *
- * When the first post lands, this block becomes the dated rows the direction
- * spec describes; the heading and the feed link stay.
+ * The page decides whether the section exists at all: a locale with no
+ * published posts renders no Writing section, never an empty heading. The
+ * `All writing` link appears only when there are more posts than the list
+ * shows. Tags stay on the post page so the home rows stay scannable.
  */
 import Container from "../Container.astro";
+import PostList from "../writing/PostList.astro";
+import type { WritingEntry } from "../../lib/writing";
+
+interface Props {
+  entries: WritingEntry[];
+  hasMore: boolean;
+}
+
+const { entries, hasMore } = Astro.props;
 ---
 
 <section class="blog" id="blog" aria-labelledby="blog-title">
   <Container>
     <h2 class="blog__title type-h2" id="blog-title">Blog</h2>
-    <p class="blog__soon type-body-lg">
-      Coming soon… <a class="blog__rss" href="/rss.xml">RSS</a>
-    </p>
+
+    <PostList entries={entries} headingLevel="h3" showTags={false} />
+
+    {
+      hasMore && (
+        <p class="blog__more">
+          <a class="link type-label" href="/writing">
+            All writing
+          </a>
+        </p>
+      )
+    }
   </Container>
 </section>
 
@@ -29,19 +50,8 @@ import Container from "../Container.astro";
     color: var(--dab-color-text-primary);
   }
 
-  .blog__soon {
+  .blog__more {
     margin: 0;
-    color: var(--dab-color-text-secondary);
-  }
-
-  .blog__rss {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .blog__rss:hover {
-    color: var(--dab-color-text-primary);
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    margin-block-start: var(--dab-space-8);
   }
 </style>

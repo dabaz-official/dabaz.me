@@ -107,7 +107,7 @@ The `@font-face` quartet and the `--font-sans` stack are DabFonts 1.0.1
 | `components/home/Intro.astro` | `locale: Locale` | the page's only `h1`: role (`type-h4`), name (`type-display-xl`), lede (`type-lede`) |
 | `components/home/WorkGrid.astro` | `entries: CollectionEntry<"works">[]`, `locale` | two-up card grid; card = 16:10 screenshot in its own clipped box, tags (`type-label-caps`), title (`type-h3`); hover scales the image 1.03 |
 | `components/home/MusicSection.astro` | — | streaming links, DabMusic as own player, three latest releases with ISO dates formatted in the component |
-| `components/home/BlogSection.astro` | — | "Coming soon…" plus the `/rss.xml` link while no post exists |
+| `components/home/BlogSection.astro` | `entries: WritingEntry[]`, `hasMore: boolean` | the newest posts as home rows (`h3` titles, no tags), plus `All writing` only when more exist; the page renders the section only when a post exists |
 | `components/home/ContactSection.astro` | — | `site.email` and the contact subset of `social.all` |
 | `components/writing/PostList.astro` | `entries: WritingEntry[]`, `class?` | the dated rows; the last hairlines closes the list |
 | `components/writing/PostRow.astro` | `entry: WritingEntry` | 9rem date column from 640, `type-h3` title link, one-line summary, tags; the row never nests links |
@@ -252,13 +252,12 @@ or 1536 CSS pixels (200% zoom on a 1280px window is the 640px case).
 ## 14. Not built here
 
 Home sections are built (thread 2): hero, work, earlier, and about, with contact
-links in the hero and the footer. Thread 3 built writing: `/writing`, one page
-per post, tag pages, pagination, and a populated `/rss.xml`. Not built here:
-the home Writing row (the home `BlogSection` is still thread 2's placeholder),
-`/zh` routing (thread 4), OG art, sitemap, robots, Lighthouse and the domain
-switch (thread 5).
+links in the hero and the footer. Thread 3 built writing: the home Blog band
+(newest three), `/writing`, one page per post, tag pages, pagination, and a
+populated `/rss.xml`. Not built here: `/zh` routing (thread 4), OG art, sitemap,
+robots, Lighthouse and the domain switch (thread 5).
 
 Open content items, all owner-supplied: a final portrait to replace the CV photo,
-real 16:10 work covers, and the home Writing row that replaces the `02` section
-slot DESIGN.md §6 reserves for Writing. Works and roles show years by owner
-decision; the CV's month ranges are not modelled.
+real 16:10 work covers, and a design pass on the writing surfaces, which reuse
+the existing tokens and primitives but have not had thread 1.5 sign-off. Works
+and roles show years by owner decision; the CV's month ranges are not modelled.
