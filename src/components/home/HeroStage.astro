@@ -1,0 +1,149 @@
+---
+/**
+ * Hero: the cutout portrait over the oversized name, with the scroll cue.
+ *
+ * Art direction is a `<picture>`: the tall crop on phones, the 4K master on
+ * wide screens, the 2880 otherwise. Each file is already sized for its slot,
+ * so the browser never scales a bitmap up.
+ */
+import site from "../../data/site";
+import hero780 from "../../assets/hero/hero-780.webp";
+import hero2880 from "../../assets/hero/hero-2880.webp";
+import hero3840 from "../../assets/hero/hero-3840.webp";
+---
+
+<section class="stage" aria-label="Portrait">
+  <div class="backdrop" aria-hidden="true">
+    <span class="word type-wordmark">{site.name}</span>
+  </div>
+
+  <picture class="media">
+    <source media="(max-width: 640px)" srcset={hero780.src} />
+    <source media="(min-width: 1600px)" srcset={hero3840.src} />
+    <img
+      class="figure"
+      src={hero2880.src}
+      alt={`Portrait of ${site.name}`}
+      width="2880"
+      height="1680"
+      fetchpriority="high"
+    />
+  </picture>
+
+  <div class="cue" aria-hidden="true">
+    <span class="cue__label type-caption">Scroll down</span>
+    <svg
+      class="cue__mouse"
+      width="24"
+      height="36"
+      viewBox="0 0 24 36"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+    >
+      <rect x="1" y="1" width="22" height="34" rx="11"></rect>
+      <circle class="cue__wheel" cx="12" cy="10" r="1.6" fill="currentColor" stroke="none"></circle>
+    </svg>
+  </div>
+</section>
+
+<style>
+  .stage {
+    position: sticky;
+    inset-block-start: var(--dab-space-16);
+    z-index: 0;
+    block-size: calc(100dvh - var(--dab-space-16));
+    overflow: clip;
+  }
+
+  .backdrop {
+    position: absolute;
+    inset-block-start: 34%;
+    inset-inline: 0;
+    z-index: 0;
+    inline-size: 100%;
+    max-inline-size: var(--dab-container-lg);
+    margin-inline: auto;
+    padding-inline: var(--dab-gutter);
+    container-type: inline-size;
+    text-align: center;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .word {
+    display: block;
+    color: var(--dab-color-border);
+    white-space: nowrap;
+  }
+
+  .media {
+    position: relative;
+    z-index: 1;
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .figure {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .cue {
+    position: absolute;
+    inset-block-end: var(--dab-space-6);
+    inset-inline: 0;
+    display: grid;
+    justify-items: center;
+    gap: var(--dab-space-2);
+    color: var(--dab-color-text-inverse);
+    pointer-events: none;
+  }
+
+  .cue__label {
+    opacity: 0.85;
+    /* the cue is white: the shadow keeps it legible over a light photo */
+    text-shadow:
+      0 1px 4px rgb(0 0 0 / 0.45),
+      0 0 14px rgb(0 0 0 / 0.3);
+  }
+
+  .cue__mouse {
+    display: block;
+    filter: drop-shadow(0 1px 3px rgb(0 0 0 / 0.5))
+      drop-shadow(0 0 10px rgb(0 0 0 / 0.3));
+  }
+
+  .cue__wheel {
+    animation: scroll-wheel 1.8s var(--dab-easing-standard) infinite;
+  }
+
+  @keyframes scroll-wheel {
+    0% {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    25% {
+      opacity: 1;
+    }
+    70% {
+      transform: translateY(7px);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(9px);
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cue__wheel {
+      animation: none;
+    }
+  }
+</style>

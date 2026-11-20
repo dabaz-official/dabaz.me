@@ -40,8 +40,8 @@ const home: HomeCopy = {
     zh: "前端工程师兼 UI 设计师",
   },
   intro: {
-    en: "Hacker, musician, designer, developer — building things that make noise, in code, in sound and in pixels.",
-    zh: "黑客、音乐人、设计师、开发者——在代码、声音与像素之间制造噪音。",
+    en: "Also a musician, designer, developer and former hacker — building things that make noise, in code, in sound and in pixels.",
+    zh: "同时也是音乐人、设计师、开发者和前黑客——在代码、声音与像素之间制造噪音。",
   },
   now: {
     en: "Currently building DabChat and DabMusic.",
