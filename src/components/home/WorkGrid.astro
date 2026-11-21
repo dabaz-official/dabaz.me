@@ -40,6 +40,8 @@ const { entries, locale } = Astro.props;
                     height={1000}
                     widths={[800, 1600]}
                     sizes="(min-width: 640px) 50vw, 100vw"
+                    loading="lazy"
+                    fetchpriority="low"
                   />
                 </div>
               )}

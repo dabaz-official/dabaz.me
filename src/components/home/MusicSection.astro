@@ -78,6 +78,8 @@ const { locale = defaultLocale } = Astro.props;
                 alt=""
                 width={160}
                 height={160}
+                loading="lazy"
+                fetchpriority="low"
               />
               <span class="release__text">
                 <span class="type-h3 release__name" lang="en"
