@@ -81,11 +81,11 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
   the direction and holds the merge veto. A UI change without design sign-off
   does not merge.
 - **Threads:** HQ (0) decisions and merging · Foundation (1) system · Design
-  Direction (1.5) visual direction · Content & Sections (2) home · Blog (3) ·
-  Internationalization (4) · Launch & Polish (5).
-- **Scope of the current work:** foundation, home sections, writing, `/zh`, and
-  the launch surface (metadata, OG, icons, sitemap, 404) are in. The production
-  domain switch stays with thread 5 after the gates pass.
+  Direction (1.5, archived exploration) · Content & Sections (2) home · Blog
+  (3) · Internationalization (4) · Launch & Polish (5).
+- **Scope of the current work:** the site is live on `dabaz.me` — foundation,
+  home, writing, `/zh`, and the launch surface are in, and the domain is
+  switched. Remaining work is maintenance and polish, not a thread deliverable.
 
 ## Definition of Done
 
