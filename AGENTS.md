@@ -91,7 +91,8 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
 - [ ] Responsive checks at 375, 390, 640, 768, 1024, 1280, 1536 plus 320 for
       overflow, and 200% zoom
 - [ ] Accessibility: keyboard path, visible focus, 44×44 targets, contrast on
-      both themes (DabAgents rule 04, DabDesign `core.md` §9)
+      the pinned light theme (re-measure when dark returns) (DabAgents rule 04,
+      DabDesign `core.md` §9)
 - [ ] No client JavaScript
 - [ ] Copy follows DabAgents rule 07; Chinese copy follows DabFonts
 - [ ] `src/CONVENTIONS.md` updated when an interface changes
