@@ -126,6 +126,11 @@ Rules:
 
 ## 6. Page structure
 
+**Superseded 2026-11-22.** The shipped home is the owner-designed composition
+recorded in §16: hero stage → intro → work grid → music → writing → contact.
+The structure and numbering below describe the earlier plan and are awaiting a
+rewrite from the shipped components; do not implement from them.
+
 ```
 Header        name · nav                     (sticky)
 Hero          name, role line, intro, now, portrait, links
@@ -171,22 +176,31 @@ radii, or type sizes.
 
 ### 7.2 Hero
 
+**Superseded 2026-11-22.** The shipped hero is the pinned portrait stage in
+§16: a full-height cutout portrait over the oversized wordmark, with the intro
+block below it. The sequence below describes the earlier inline hero and is
+awaiting a rewrite.
+
 - Top padding `space-24` at desktop, `space-16` below 640.
 - Sequence: name → role line (`role @ org`, org as an inline link) → intro
   (≤34em) → `now` line → links.
 - `now` line: `type-caption`, label in `color-text-tertiary`, content in
   `color-text-primary`. One sentence, present tense.
-- Portrait: required. `space-24` square (96px), `radius-full`, 1px border,
-  beside the text from 640 and above, never as a background. The photo asset is
-  still outstanding.
 
 ### 7.3 Section header
+
+Not used by the shipped home. The spec stays until the component is either
+adopted by a collection page or removed.
 
 - One row: index (`type-caption`, tabular, accent) + label (`type-label`) +
   a 1px rule filling the remaining width.
 - No underline decoration, no arrows, no icons.
 
 ### 7.4 Work row
+
+**Superseded 2026-11-22.** The shipped work section is a two-up card grid
+(§16), not rows: screenshot, tags, name; the cards are not links yet. The row
+grammar below is awaiting a rewrite.
 
 - 1px top border per row, last row closes with a bottom border.
 - Grid: 9rem meta column + flexible content from 640; stacked below.
@@ -361,15 +375,10 @@ Authoring rules:
 
 ## 14. Open items
 
-These block content or assets, not the design:
+One decision is still open; the earlier asset and content blockers have shipped
+(the portrait, the first post, and the work years are all live).
 
-1. **Portrait asset.** A photo file is still needed (square crop preferred). The
-   hero slot is specified in §7.2.
-2. **First post.** Writing renders only when at least one published post exists.
-   Give me a title, date, and body, or accept that the section ships hidden.
-3. **Work years.** The list meta expects a year per work. The current three
-   projects have no recorded dates; omit or supply them.
-4. **Dark mode.** Dormant by decision. Returning it needs an owner decision and
+1. **Dark mode.** Dormant by decision. Returning it needs an owner decision and
    a stated script budget, not a styling patch.
 
 ## 15. Decision log
