@@ -28,7 +28,7 @@ Versions at those commits: DabDesign 1.0.1, DabFonts 1.0.1, DabAgents 1.0.2.
 
 ## Stack
 
-- **Framework:** Astro 7.4.12, `output: "static"`, no adapter
+- **Framework:** Astro 7.4.13, `output: "static"`, no adapter
 - **Post bodies:** MDX through `@astrojs/mdx` (build-time only; no client
   runtime, `dist/**/*.js` stays empty)
 - **Language:** TypeScript, `strict: true`

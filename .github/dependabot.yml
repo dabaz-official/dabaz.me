@@ -1,0 +1,50 @@
+version: 2
+
+# Monthly version updates only. Security alerts are a repository setting, not a
+# file; see "Code security" in the repository settings.
+#
+# Major bumps for the framework, the Astro integrations and the image toolchain
+# are deliberately not automated: each needs a migration read and a preview
+# check. Patch and minor updates arrive as one grouped PR per family.
+
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      astro:
+        patterns:
+          - "astro"
+          - "@astrojs/*"
+      tailwind:
+        patterns:
+          - "tailwindcss"
+          - "@tailwindcss/*"
+      tooling:
+        patterns:
+          - "typescript"
+          - "sharp"
+    ignore:
+      - dependency-name: "astro"
+        update-types:
+          - "version-update:semver-major"
+      - dependency-name: "@astrojs/*"
+        update-types:
+          - "version-update:semver-major"
+      - dependency-name: "typescript"
+        update-types:
+          - "version-update:semver-major"
+      - dependency-name: "sharp"
+        update-types:
+          - "version-update:semver-major"
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "chore(ci)"
