@@ -123,8 +123,8 @@ const ui: UiCopy = {
         `带有 ${label} 标签的文章： 关于硬件、 软件与购买建议的笔记， 按时间倒序排列， 记录真实使用体验与取舍， 不做参数复读。`,
     },
     pageTitle: {
-      en: (page) => `Writing — page ${page}`,
-      zh: (page) => `写作——第 ${page} 页`,
+      en: (page) => `Writing - page ${page}`,
+      zh: (page) => `写作 - 第 ${page} 页`,
     },
   },
   notFound: {

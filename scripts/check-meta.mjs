@@ -84,7 +84,7 @@ for (const path of htmlFiles) {
     errors.push(`${rel}: expected one <title>, found ${titles.length}`);
   }
   const title = titles[0] ? stripTags(titles[0][1]) : "";
-  const titlePattern = isHome ? /^DabAZ( — |——).+$/ : /( — |——)DabAZ$/;
+  const titlePattern = isHome ? /^DabAZ - .+$/ : / - DabAZ$/;
   if (!titlePattern.test(title)) {
     errors.push(`${rel}: title does not match the rule 10 pattern: "${title}"`);
   }

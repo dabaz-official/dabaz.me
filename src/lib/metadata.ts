@@ -56,10 +56,8 @@ export interface ResolvedMeta {
 
 const homePaths = new Set(["/", "/zh"]);
 
-/** `en` and `zh` are the only title separators DabFonts allows here. */
-function separator(locale: Locale): string {
-  return locale === "zh" ? "——" : " — ";
-}
+/** Titles separate their parts with a spaced hyphen, in both locales. */
+const TITLE_SEPARATOR = " - ";
 
 export function resolveMeta({
   title,
@@ -71,7 +69,7 @@ export function resolveMeta({
 }: PageMeta): ResolvedMeta {
   const isHome = homePaths.has(path);
   const tagline = site.tagline[locale];
-  const dash = separator(locale);
+  const dash = TITLE_SEPARATOR;
   const pageTitle = isHome ? site.name : title;
 
   // Rule 10 §2: the site name leads on the home route and closes every other

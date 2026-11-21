@@ -37,7 +37,7 @@ export async function buildFeed(locale: Locale): Promise<Response> {
     locale,
   );
   const newest = posts[0]?.data.date;
-  const separator = locale === "zh" ? "——" : " — ";
+  const separator = " - ";
   const title = `${site.name}${separator}${ui.writing.title[locale]}`;
 
   const items = posts
