@@ -24,8 +24,8 @@ const site = {
   email: "hi@dabaz.me",
   role,
   description: {
-    en: "Forward deployed engineer working between customers and engineering, turning ambiguous problems into working systems with AI-assisted delivery.",
-    zh: "前沿部署工程师， 在客户与工程团队之间工作， 用 AI 辅助交付， 把一线模糊的问题变成能运行的系统， 再把现场的反馈带回产品。",
+    en: "Forward deployed engineer working between customers and engineering, building things that make noise — in code, in sound and in pixels.",
+    zh: "前沿部署工程师， 在客户与工程团队之间工作， 把一线模糊的问题变成可以落地的系统， 也在代码、 声音与像素之间制造噪音。",
   } satisfies Localized,
 
   /** The short line under the wordmark on the OG card; the role is the tagline. */
