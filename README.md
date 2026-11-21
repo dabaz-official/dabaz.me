@@ -45,6 +45,7 @@ Node 24 (`.nvmrc`), pnpm 12.
 | `pnpm typecheck` | `astro sync && tsc --noEmit` |
 | `pnpm icons` | Export the favicon, Apple icon, and manifest icons from `public/icon.svg` |
 | `pnpm og` | Render the two 1200×630 OG cards (needs Chrome) |
+| `pnpm subset` | Regenerate the two home-only font subsets from the pinned faces |
 | `pnpm check` | Gate: lint, typecheck, build, then the metadata guard |
 
 ## Structure

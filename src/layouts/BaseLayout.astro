@@ -48,6 +48,8 @@ const meta = resolveMeta({
   translationPath: Astro.props.translationPath,
 });
 const separator = locale === "zh" ? "——" : " — ";
+const path = Astro.props.path ?? "/";
+const isHome = path === "/" || path === "/zh";
 const alternateLocale = otherLocale(locale);
 const hasTranslation = meta.hreflang.length > 1;
 const jsonLd = Astro.props.jsonLd
@@ -123,7 +125,7 @@ const jsonLd = Astro.props.jsonLd
     <slot name="head" />
     {jsonLd && <script type="application/ld+json" is:inline set:html={jsonLd} />}
   </head>
-  <body class="type-body">
+  <body class:list={["type-body", isHome && "home-font"]}>
     <a class="skip-link type-label" href="#main">{ui.skipToContent[locale]}</a>
     <slot name="header"><SiteHeader locale={locale} /></slot>
     <main id="main" tabindex="-1">

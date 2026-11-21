@@ -97,6 +97,12 @@ The `@font-face` quartet and the `--font-sans` stack are DabFonts 1.0.1
 
 - `BaseLayout` does not preload either 821 KB face: the home LCP image owns the
   critical bandwidth, and `font-display: swap` paints the fallback immediately.
+- The two home routes use **Dab Sans Home**, a generated subset of the pinned
+  faces: 400 and 600, about 25 KB each, containing exactly the characters those
+  routes render (`scripts/home-glyphs.txt`). `body.home-font` switches the
+  stack; every other route keeps the full faces. The subset is built by
+  `scripts/subset-home-fonts.sh` (`pnpm subset`) from the pinned files and does
+  not change the typeface or metrics. Re-run it whenever home copy changes.
 - `--font-mono` is Dab Mono plus system monospace and is used only for `code`,
   `pre`, `kbd`, `samp`, and tabular data. Never in the body stack.
 - No italics, no synthesized weights, no Astro font pipeline, no CDN.
@@ -118,7 +124,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 
 | Component / module | Props / exports | Guarantees |
 |---|---|---|
-| `BaseLayout.astro` | `title`, `description`, `path?`, `locale?`, `alternatePath?`, `translationPath?`, `ogType?`, `jsonLd?`; slots `head`, `header`, `footer`, default | charset/viewport, title/description/canonical, OG/Twitter, head-level `hreflang` + `x-default`, theme colours, icons/manifest, JSON-LD, `lang` from the locale, localized skip link and RSS title, font preload, `data-theme` pinned to light, `#main`, header/footer fall back to the localized shell |
+| `BaseLayout.astro` | `title`, `description`, `path?`, `locale?`, `alternatePath?`, `translationPath?`, `ogType?`, `jsonLd?`; slots `head`, `header`, `footer`, default | charset/viewport, title/description/canonical, OG/Twitter, head-level `hreflang` + `x-default`, theme colours, icons/manifest, JSON-LD, `lang` from the locale, localized skip link and RSS title, the home subset switch, `data-theme` pinned to light, `#main`, header/footer fall back to the localized shell |
 | `Container.astro` | `as?` (`div` default, `section`, `header`, `footer`, `main`, `nav`), `class?` | `container-lg` width and the 16/24/32 gutter |
 | `Section.astro` | `as?` (`section` default), `spacing?` (`standard` \| `loose` \| `none`), `id?`, `labelledby?`, `class?` | top rhythm: `space-16`, `space-24` from 640 for `loose`, none for `none`; wraps its content in `Container` |
 | `SectionHeader.astro` | `label`, `index?`, `id?`, `as?` (`h2` default), `class?` | index + label + 1px rule row; index is accent, decorative, tabular |

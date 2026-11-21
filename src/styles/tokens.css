@@ -18,7 +18,8 @@
 /* ---------------------------------------------------------------------------
  * Fonts — DabFonts TYPESETTING.md §2.1, verbatim.
  * `local("☺")` is first in every `src` so a locally installed family cannot
- * win. The 400 face is preloaded in BaseLayout; the 600 face uses `swap`.
+ * win. Both faces use `swap`; the home routes use the generated subset below,
+ * and no face is preloaded (the hero image owns the critical path).
  * ------------------------------------------------------------------------- */
 
 @font-face {
@@ -53,8 +54,32 @@
   font-display: swap;
 }
 
+/* Home subset — generated from the two full faces above by
+ * `scripts/subset-home-fonts.sh`. It contains exactly the characters the two
+ * home routes render (`scripts/home-glyphs.txt`, about 25 KB per weight).
+ * Other routes keep the full faces; the typeface and metrics are unchanged. */
+@font-face {
+  font-family: "Dab Sans Home";
+  src: url("/fonts/DabSansHome-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Dab Sans Home";
+  src: url("/fonts/DabSansHome-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --font-sans: "Dab Sans", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+
+  /* The home routes put the subset first and fall back to the full family if
+     a glyph ever escapes `scripts/home-glyphs.txt`. */
+  --font-sans-home: "Dab Sans Home", var(--font-sans);
 
   /* Dab Mono is the monospace stack only: code, pre, kbd, samp, tabular data.
      It never enters the body stack. */

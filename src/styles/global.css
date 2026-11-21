@@ -29,6 +29,11 @@
     font-synthesis: none;
   }
 
+  /* The two home routes opt into the home-only subset; the shell inherits it. */
+  body.home-font {
+    font-family: var(--font-sans-home);
+  }
+
   main {
     flex: 1;
   }

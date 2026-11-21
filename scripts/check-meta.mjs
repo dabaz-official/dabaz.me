@@ -189,7 +189,16 @@ for (const path of htmlFiles) {
   }
 }
 
-for (const file of ["icon.svg", "favicon.ico", "apple-icon.png", "site.webmanifest", "robots.txt", "sitemap.xml"]) {
+for (const file of [
+  "icon.svg",
+  "favicon.ico",
+  "apple-icon.png",
+  "site.webmanifest",
+  "robots.txt",
+  "sitemap.xml",
+  "fonts/DabSansHome-Regular.woff2",
+  "fonts/DabSansHome-SemiBold.woff2",
+]) {
   try {
     await stat(join(root, file));
   } catch {

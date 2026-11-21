@@ -35,7 +35,9 @@ Versions at those commits: DabDesign 1.0.1, DabFonts 1.0.1, DabAgents 1.0.2.
 - **Styling:** Tailwind CSS 4.3.5 through `@tailwindcss/vite`; DabDesign tokens
   declared once in `src/styles/tokens.css`
 - **Fonts:** DabFonts 1.0.1, self-hosted in `public/fonts`; `@font-face` block
-  verbatim, no Astro font pipeline
+  verbatim, no Astro font pipeline. The two home routes add a generated subset
+  (`DabSansHome-*.woff2`, `scripts/home-glyphs.txt`); every other route uses
+  the full faces.
 - **Voice:** DabAgents rule 07
 - **Package manager:** pnpm 12.21.0 (`packageManager`)
 - **Node:** 24 (`.nvmrc`); Astro 7 requires `>=22.23.4`
@@ -51,6 +53,7 @@ pnpm lint       # token guard + Chinese punctuation/CJK–Latin spacing guard
 pnpm typecheck  # astro sync && tsc --noEmit
 pnpm icons      # export favicon, Apple icon, and manifest icons from public/icon.svg
 pnpm og         # render public/og/en.png and zh.png (needs Chrome)
+pnpm subset     # regenerate the two home font subsets from the pinned faces
 pnpm check      # the gate: lint + typecheck + build + the metadata guard
 ```
 
