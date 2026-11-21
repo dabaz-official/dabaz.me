@@ -111,13 +111,14 @@ for (const path of htmlFiles) {
   const isZh = lang.startsWith("zh");
 
   const description = meta("description");
+  const noindex = (meta("robots") ?? "").includes("noindex");
   if (!description) errors.push(`${rel}: missing meta description`);
   else {
     const length = [...description].length;
     const max = isZh ? 90 : 160;
     const floor = isZh ? 60 : 120;
     if (length > max) errors.push(`${rel}: description is ${length} characters (max ${max})`);
-    if (length < floor) warnings.push(`${rel}: description is ${length} characters, under rule 07's ${floor} floor`);
+    if (!noindex && length < floor) warnings.push(`${rel}: description is ${length} characters, under rule 07's ${floor} floor`);
   }
 
   const canonical = links.find((tag) => tag.rel === "canonical")?.href;

@@ -16,7 +16,8 @@
     "icons": "node scripts/generate-icons.mjs",
     "og": "node scripts/generate-og.mjs",
     "subset": "sh scripts/subset-home-fonts.sh",
-    "check": "pnpm lint && pnpm typecheck && astro build && node scripts/check-meta.mjs"
+    "check": "pnpm lint && pnpm typecheck && astro build && node scripts/check-meta.mjs && node scripts/check-home-subset.mjs",
+    "glyphs": "node scripts/build-home-glyphs.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "8.1.6",

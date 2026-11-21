@@ -117,8 +117,10 @@ const ui: UiCopy = {
       zh: (label) => `标签： ${label}`,
     },
     tagDescription: {
-      en: (label) => `Posts tagged ${label}.`,
-      zh: (label) => `带有 ${label} 标签的文章。`,
+      en: (label) =>
+        `Posts tagged ${label} on dabaz.me: notes, teardowns and buying advice from the archive, newest first, with the receipts and the trade-offs left in.`,
+      zh: (label) =>
+        `带有 ${label} 标签的文章： 关于硬件、 软件与购买建议的笔记， 按时间倒序排列， 记录真实使用体验与取舍， 不做参数复读。`,
     },
     pageTitle: {
       en: (page) => `Writing — page ${page}`,
