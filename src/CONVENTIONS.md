@@ -105,6 +105,8 @@ The `@font-face` quartet and the `--font-sans` stack are DabFonts 1.0.1
   stack; every other route keeps the full faces. The subset is built by
   `scripts/subset-home-fonts.sh` (`pnpm subset`) from the pinned files and does
   not change the typeface or metrics. Re-run it whenever home copy changes.
+  `vercel.json` serves the full faces immutable and the subset with a one-day
+  cache plus `stale-while-revalidate`.
 - `--font-mono` is Dab Mono plus system monospace and is used only for `code`,
   `pre`, `kbd`, `samp`, and tabular data. Never in the body stack.
 - No italics, no synthesized weights, no Astro font pipeline, no CDN.
