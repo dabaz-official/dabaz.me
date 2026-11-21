@@ -324,8 +324,8 @@ build's compiler catches template errors.
 
 - Skip link is the first focusable element; `#main` takes focus.
 - Visible focus: 2px `color-focus` outline, 2px offset, never removed.
-- Icon-only controls carry `aria-label` and a 44×44 target (the theme toggle
-  does).
+- Icon-only controls carry `aria-label` and a 44×44 target. No icon-only
+  control ships today; add the label with the control, not after it.
 - The accent appears in at most three places per screen: section index, inline
   links, current nav item. A fourth is a defect.
 - Body copy holds the 36em measure; nothing else claims a second measure.

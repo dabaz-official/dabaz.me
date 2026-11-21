@@ -1,6 +1,6 @@
 # DESIGN.md — dabaz.me
 
-**Status:** Draft 0.2 · 2026-11-19
+**Status:** Draft 0.3 · 2026-11-21
 **Scope:** the rebuilt `dabaz.me` on branch `rebuild` (Astro). It supersedes the
 Next.js implementation shipped in PR #3–#5 in full, not in part.
 **Normative upstream:** [DabDesign](https://github.com/dabaz-official/DabDesign)
@@ -36,7 +36,7 @@ tokens; nothing is copied as a value.
 
 | Source | Measured | We take | We drop |
 |---|---|---|---|
-| craigweiss.dev | 680px column, 20px gutters; mono meta at 12–14px; accent used only as `>`, `/`, `//` prefixes; 1px hairline rows | Accent discipline, dark/light parity, dated rows, small-type meta | Mono for UI labels (DabDesign reserves mono), terminal prefixes, 680px column |
+| craigweiss.dev | 680px column, 20px gutters; mono meta at 12–14px; accent used only as `>`, `/`, `//` prefixes; 1px hairline rows | Accent discipline, restrained palette, dated rows, small-type meta | Mono for UI labels (DabDesign reserves mono), terminal prefixes, 680px column |
 | arisacoba.com | shell 64em→60em (≈1024→960), 60–80px padding, ≈800px content; borders 1.5px; radii 4/6/12/20; near-black `#090E24` on white | Moderate shell width, generous outer padding, calm gray-on-white, round portrait, thumbnail rows | 1.5px borders (core: 1px), its type scale, its blue `#283CFF` |
 | muhid.de | card radii 20–24px, 1.5px off-white borders, pill chips, avatar rings, one soft shadow | Card anatomy, thumbnail treatment, section density, friendly rhythm | Rose/blue dual accent, pill chips (core: pills are actions only), 1.5px borders |
 
@@ -63,9 +63,12 @@ Roles come from DabDesign core §3.3; the accent mapping comes from
 places: a section index, inline links, the current nav item. If a fourth appears,
 remove it.
 
-**Theme.** Light and dark are equal citizens. Default follows
-`prefers-color-scheme`; an explicit choice is stored and applied before first
-paint. No gradient overlays.
+**Theme.** Light only. `<html>` carries `data-theme="light"`; there is no
+toggle, no stored preference, and no inline script. The dark role values stay in
+`tokens.css` for a possible return, but they are dormant: no page resolves to
+dark and the system preference is ignored. Restoring dark mode is not a styling
+change — it needs a recorded decision and a stated script budget. No gradient
+overlays.
 
 **Glass is allowed in exactly one place: the site header** (§7.1). Every other
 surface — footer, cards, dialogs, toasts — stays opaque. Upstream
@@ -75,7 +78,7 @@ licence to blur anything else.
 
 **Decided 2026-11-19:** the accent hue is the approved personal-series blue.
 craigweiss.dev's teal is out of scope; adopting it would need a `DEC-` plus a
-measured contrast table in both themes.
+measured contrast table in the pinned light theme, and again if dark returns.
 
 ## 4. Typography
 
@@ -124,7 +127,7 @@ Rules:
 ## 6. Page structure
 
 ```
-Header        name · nav · theme toggle        (static, not sticky)
+Header        name · nav                     (sticky)
 Hero          name, role line, intro, now, portrait, links
 Work          dated list of shipped things     (01)
 Writing       dated list of posts              (02)
@@ -156,13 +159,13 @@ radii, or type sizes.
   `--dab-header-blur`. Text sits on the scrim, never on raw content.
 - Fallbacks: no `backdrop-filter` support or `prefers-reduced-transparency:
   reduce` renders the header fully opaque. Never rely on the blur for contrast.
-- Contrast is measured over the composited scrim in both themes; the scrim may
-  not drop below 80% until it is re-measured.
+- Contrast is measured over the composited scrim in the pinned light theme; the
+  scrim may not drop below 80% until it is re-measured. Re-measure when dark
+  returns.
 - Left: wordmark, `type-h4`, weight 600.
 - Right: nav (`type-label`, `color-text-secondary`, current item
-  `color-text-primary` with an accent marker), then the theme toggle.
-- Theme toggle: 24px icon in a 44×44 hit area, `aria-label`, no visible box until
-  hover/focus.
+  `color-text-primary` with an accent marker). No theme control: the theme is
+  fixed (§3).
 - Anchored sections set `scroll-margin-top` to the header height plus
   `space-4`, so a jump never hides a heading under the bar.
 
@@ -239,8 +242,7 @@ radii, or type sizes.
   page transitions in v1.
 - Interaction feedback only: color/border at `duration-fast`; card lift at
   `duration-slow` with `easing-standard`.
-- Theme change swaps colors without a transition flash; no cross-fade of the
-  whole page.
+- The theme is fixed, so there is no theme transition.
 - `prefers-reduced-motion` removes movement; color feedback stays.
 - Every hover affordance has a focus and touch equivalent.
 
@@ -321,10 +323,10 @@ Authoring rules:
 - **Pages:** `/` and `/zh` through the built-in i18n routing with
   `prefixDefaultLocale: false`; `/writing` and `/zh/writing`; one static page per
   post at `/writing/<slug>` and `/zh/writing/<slug>`.
-- **Components:** `.astro` by default. Islands only for interaction that cannot
-  be done with HTML + CSS + a small inline script.
-- **Islands budget for v1:** the theme toggle (inline script, <1 KB). Nothing
-  else. A future audio player or command palette each needs its own review.
+- **Components:** `.astro` by default. No framework integration and no island
+  exists today.
+- **Islands budget:** zero. No client JavaScript ships; `dist/**/*.js` stays
+  empty. Adding an island or an inline script needs a recorded decision first.
 - **Content:** `src/content/works/*.md` with a Zod schema mirroring §10;
   `src/content/experience/*.md`; `src/content/writing/en/*.md` and
   `src/content/writing/zh/*.md`; profile and socials as typed TS modules.
@@ -343,8 +345,9 @@ Authoring rules:
 ## 12. Gates
 
 - Blocking: `astro check`, `astro build`, and a clean console on every page.
-- Blocking: contrast measured on the real surfaces in both themes; keyboard
-  operation; 44×44 targets; no horizontal scroll at 320px or 200% zoom.
+- Blocking: contrast measured on the real surfaces in the pinned light theme;
+  keyboard operation; 44×44 targets; no horizontal scroll at 320px or 200% zoom.
+  Re-measure when dark returns.
 - Blocking: every width named in DabDesign core §7 checked when layout changes.
 - Reported, not blocking: Lighthouse performance and best-practice scores.
 
@@ -366,6 +369,8 @@ These block content or assets, not the design:
    Give me a title, date, and body, or accept that the section ships hidden.
 3. **Work years.** The list meta expects a year per work. The current three
    projects have no recorded dates; omit or supply them.
+4. **Dark mode.** Dormant by decision. Returning it needs an owner decision and
+   a stated script budget, not a styling patch.
 
 ## 15. Decision log
 
