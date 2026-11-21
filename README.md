@@ -11,7 +11,7 @@ language switch, and DabFonts punctuation and CJK–Latin spacing.
 
 ## Stack
 
-- **Framework:** Astro 7.4.12, fully static, no adapter; MDX for post bodies
+- **Framework:** Astro 7.4.13, fully static, no adapter; MDX for post bodies
   (`@astrojs/mdx`, build-time only)
 - **Language:** TypeScript, `strict: true`
 - **Styling:** Tailwind CSS 4.3.5 (`@tailwindcss/vite`) over DabDesign tokens in
