@@ -35,6 +35,8 @@ commit. `DESIGN.md` owns composition; DabDesign, DabFonts, and DabAgents (pins i
 | `scripts/check-meta.mjs` | the post-build metadata guard (title pattern, OG, icons, sitemap, `hreflang`, no client JS) | thread 5 |
 | `scripts/generate-icons.mjs` | the icon exports from the supplied plate master | thread 5 |
 | `scripts/generate-og.mjs` | the two OG cards, rendered with the real Dab Sans faces | thread 5 |
+| `scripts/subset-home-fonts.sh` | regenerates the home-only subset from the pinned faces | thread 5 |
+| `scripts/home-glyphs.txt` | the exact character set the two home routes render | thread 5 |
 
 ## 2. Tokens
 
@@ -184,9 +186,12 @@ the whole stylesheet is small, and inlining removes the render-blocking CSS
 request that cost a cold mobile round trip. The two home routes render
 `components/home/HeroPreload.astro` into the `head` slot, which preloads the
 exact art-directed hero file for each breakpoint so the LCP image is discovered
-before the parser reaches the body. Neither 821 KB face is preloaded: the image
-keeps the critical bandwidth, and `font-display: swap` paints the fallback
-immediately. Neither changes the composition; both are performance decisions.
+before the parser reaches the body. The home routes switch to the 50 KB subset
+(`body.home-font`), and the work and release covers are lazy with
+`fetchpriority="low"`, so neither the full 1.6 MB font pair nor an offscreen
+cover competes with the hero. No font is preloaded; `font-display: swap` paints
+the fallback immediately. None of this changes the composition; all of it is a
+performance decision.
 
 ## 7. File naming and structure
 
@@ -377,7 +382,8 @@ writing route, `/zh/rss.xml`, interface-copy extraction, the footer language
 switch, and the Chinese spacing guard. Thread 5 built the launch surface:
 head-level `hreflang` and `x-default`, the per-locale OG cards, the icon
 exports and manifest, the `Person`/`BlogPosting`/`CollectionPage` JSON-LD, the
-sitemap, robots, the real 404, and the post-build metadata guard.
+sitemap, robots, the real 404, the post-build metadata guard, and the home-only
+font subset (50 KB instead of 1.6 MB on `/` and `/zh`).
 
 Open content items, all owner-supplied: a final portrait to replace the CV photo,
 real 16:10 work covers, and a design pass on the writing surfaces, which reuse
