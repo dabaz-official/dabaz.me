@@ -390,7 +390,7 @@ The rules above are a floor, not a design. The current home page satisfies them
 and still reads as a default document, because no thread owned composition,
 rhythm, or detail.
 
-- **Owner:** thread 1.5, Design Direction (see `docs/handoff-design.md`).
+- **Owner:** thread 1.5, Design Direction (see `docs/design/direction.md`).
 - **Authority:** HQ approves one direction before implementation; thread 2
   implements it; no UI merges without design sign-off (`AGENTS.md` → Definition
   of Done).

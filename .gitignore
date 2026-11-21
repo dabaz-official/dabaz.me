@@ -26,6 +26,10 @@ pnpm-debug.log*
 # macOS
 .DS_Store
 
-# design scratch — comps, screenshots and source images; nothing under /docs ships
-# (narrow to /docs/design/ if a real document ever belongs in the repo)
-/docs/
+# design scratch — captures, source images and throwaway scripts; nothing under
+# /docs/design/ ships. The comps and the direction record stay tracked.
+/docs/design/shots/
+/docs/design/assets/
+/docs/design/comps/*.mjs
+/docs/design/comps/*.swift
+/docs/design/comps/scratch.css

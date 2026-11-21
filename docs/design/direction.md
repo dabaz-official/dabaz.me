@@ -14,21 +14,19 @@ file was edited.
 | Artifact | Path |
 |---|---|
 | Comps (standalone HTML, no JS) | `docs/design/comps/{before,a,b}.html` + `comps.css` |
-| Screenshots | `docs/design/shots/` — 375 / 768 / 1024 / 1440, light + dark, per comp |
-| Scrolled header | `docs/design/shots/*-1440-scrolled-{light,dark}.png` |
-| Hover, keyboard focus | `docs/design/shots/*-1024-{hover,focus}.png` |
-| Shooter / probe | `docs/design/comps/shoot.mjs`, `probe.mjs` (Chrome CDP, no deps) |
+| Decision record | this file |
 
-Run locally: `python3 -m http.server 4321` at the repo root, then
-`node docs/design/comps/shoot.mjs a b`. The comps link the **real**
-`src/styles/tokens.css`, so every colour, type role, space step, radius and
-duration on screen is the token, not a copy. Everything under `docs/design/` is
-throwaway and stays out of production.
+The screenshots, capture scripts and source images used during the approval were
+removed once the direction was approved; the comps remain as the visual
+evidence. View them with `python3 -m http.server 4321` at the repo root. They
+link the **real** `src/styles/tokens.css`, so every colour, type role, space
+step, radius and duration on screen is the token, not a copy. Nothing under
+`docs/design/` ships.
 
-Measured facts used below: no horizontal scroll at 320 / 375 / 768 / 1024 /
-1440 in either direction (probe: `scrollWidth === clientWidth` at every width);
-full-page shots are 1× CSS pixels (the hover and focus clips are 2×), page
-height 1.66–1.93k at 1024.
+Measured during the comp pass: no horizontal scroll at 320 / 375 / 768 / 1024 /
+1440 in either direction (`scrollWidth === clientWidth` at every width);
+full-page captures were 1× CSS pixels (hover and focus clips 2×); page height
+1.66–1.93k at 1024.
 
 ## 1. What I held
 
@@ -200,10 +198,12 @@ B also keeps the accent bill at two, uses no new raw value (its text axis is
 | `comps/a.html` | Direction A |
 | `comps/b.html` | Direction B |
 
-Each is shot at 375, 768, 1024 and 1440 in light and dark (`shots/<comp>-<w>-<theme>.png`),
-plus a scrolled viewport at 1440 (`-scrolled-`) and a clipped hover and keyboard
-focus state at 1024 (`-hover`, `-focus`). All six sections appear in every
-full-page shot. Comp heights: 375 → 2.2–2.3k, 1024 → 1.7–1.9k.
+Each was captured at 375, 768, 1024 and 1440 in light and dark
+(`shots/<comp>-<w>-<theme>.png`), plus a scrolled viewport at 1440
+(`-scrolled-`) and a clipped hover and keyboard focus state at 1024 (`-hover`,
+`-focus`). All six sections appeared in every full-page capture. Comp heights:
+375 → 2.2–2.3k, 1024 → 1.7–1.9k. The capture set was removed from the repo after
+approval; the filenames below are historical.
 
 ## 5. D3 — detail spec (Direction B)
 
@@ -379,6 +379,6 @@ HQ records these in DESIGN.md; I do not edit it.
 ## 10. Not done
 
 No production page, no edits to `tokens.css`, `DESIGN.md`, `AGENTS.md` or
-`src/CONVENTIONS.md`, no blog, `/zh`, OG art, deployment, commit or PR. The
-comps and shots are uncommitted in the working tree for HQ to approve, revise or
-discard.
+`src/CONVENTIONS.md`, no blog, `/zh`, OG art or deployment. The comps and the
+capture set were reviewed before the owner approved B; the captures were removed
+from the repo afterwards.
