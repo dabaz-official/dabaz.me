@@ -76,10 +76,10 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
   them; do not fork them.
 - **Content:** `src/content/` for records and copy, `src/data/site.ts` and
   `src/data/social.ts` for identity. See `src/content/README.md`.
-- **Design ownership:** thread 1.5 (Design Direction) owns composition, rhythm,
-  and visual detail; Foundation owns tokens; thread 2 implements the approved
-  direction. HQ approves the direction and holds the design veto. A UI change
-  without design sign-off does not merge.
+- **Design ownership:** the owner owns composition, rhythm, and visual detail;
+  Foundation owns tokens; thread 2 implements the approved direction. HQ records
+  the direction and holds the merge veto. A UI change without design sign-off
+  does not merge.
 - **Threads:** HQ (0) decisions and merging · Foundation (1) system · Design
   Direction (1.5) visual direction · Content & Sections (2) home · Blog (3) ·
   Internationalization (4) · Launch & Polish (5).

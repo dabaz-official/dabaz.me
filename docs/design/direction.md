@@ -1,11 +1,14 @@
 # Visual direction — dabaz.me home
 
 **Thread:** 1.5, Design Direction.
-**For:** HQ (approval, veto, merge).
+**For:** archive.
 **Date:** 2026-11-19.
 **Scope:** header, hero, work, earlier, about, footer on `/`. Nothing else.
-**Status:** proposal. No production page was written, no token, copy, or contract
-file was edited.
+**Status:** archived exploration. Neither option was adopted. The owner designed
+the shipped composition directly; see `DESIGN.md` §16.
+
+> **Archived.** This document records the A/B exploration, not the shipped
+> direction. Do not implement from it.
 
 ---
 
@@ -16,9 +19,8 @@ file was edited.
 | Comps (standalone HTML, no JS) | `docs/design/comps/{before,a,b}.html` + `comps.css` |
 | Decision record | this file |
 
-The screenshots, capture scripts and source images used during the approval were
-removed once the direction was approved; the comps remain as the visual
-evidence. View them with `python3 -m http.server 4321` at the repo root. They
+The screenshots, capture scripts and source images used during the exploration
+were removed when it was archived; the comps remain as the visual evidence. View them with `python3 -m http.server 4321` at the repo root. They
 link the **real** `src/styles/tokens.css`, so every colour, type role, space
 step, radius and duration on screen is the token, not a copy. Nothing under
 `docs/design/` ships.
@@ -202,8 +204,8 @@ Each was captured at 375, 768, 1024 and 1440 in light and dark
 (`shots/<comp>-<w>-<theme>.png`), plus a scrolled viewport at 1440
 (`-scrolled-`) and a clipped hover and keyboard focus state at 1024 (`-hover`,
 `-focus`). All six sections appeared in every full-page capture. Comp heights:
-375 → 2.2–2.3k, 1024 → 1.7–1.9k. The capture set was removed from the repo after
-approval; the filenames below are historical.
+375 → 2.2–2.3k, 1024 → 1.7–1.9k. The capture set was removed from the repo when
+the exploration was archived; the filenames below are historical.
 
 ## 5. D3 — detail spec (Direction B)
 
@@ -332,9 +334,10 @@ div per row, or widen the shell.
     covers absent below 768, and the hero order is portrait → name → role →
     intro → now → links.
 
-## 8. Contract edits the approved direction implies
+## 8. Contract edits Direction B would have implied
 
-HQ records these in DESIGN.md; I do not edit it.
+None of these were adopted; this section records what the proposal would have
+changed. HQ would have recorded them in DESIGN.md; this archive does not edit it.
 
 1. **§7.3 vs §4 — section titles.** Adopt §4's mapping: the section title is
    `type-h2`, the index is a `type-caption` marker. §7.3's `type-label` label and
@@ -348,7 +351,7 @@ HQ records these in DESIGN.md; I do not edit it.
    header, the margin column and the footer still share one edge.
 4. **§7.1 — header.** Scrim at 82% (above the 80% floor), blur unchanged,
    opaque fallback; measured on the composite, not on the token.
-5. If A were approved instead: §5 (split shell with a 20rem column), §7.2 (hero
+5. If A had been chosen instead: §5 (split shell with a 20rem column), §7.2 (hero
    composition), §8 (sticky content column), §7.4 (no covers).
 
 ## 9. Ambiguities and defects found
@@ -380,5 +383,6 @@ HQ records these in DESIGN.md; I do not edit it.
 
 No production page, no edits to `tokens.css`, `DESIGN.md`, `AGENTS.md` or
 `src/CONVENTIONS.md`, no blog, `/zh`, OG art or deployment. The comps and the
-capture set were reviewed before the owner approved B; the captures were removed
-from the repo afterwards.
+capture set were reviewed during the exploration; the owner chose neither and
+designed the shipped composition directly. The captures were removed from the
+repo afterwards.

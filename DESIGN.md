@@ -383,18 +383,22 @@ These block content or assets, not the design:
 | 2026-11-19 | No system preference means light | Owner |
 | 2026-11-19 | Shell is `container-lg`; no new container token | This document, §5 |
 | 2026-11-19 | Header is sticky and the only surface allowed glass; project exception recorded | Owner |
+| 2026-11-22 | The owner designed the shipped home directly; the thread 1.5 options (A and The Sheet) are archived, not adopted | Owner |
 
-## 16. Visual direction (pending)
+## 16. Visual direction
 
-The rules above are a floor, not a design. The current home page satisfies them
-and still reads as a default document, because no thread owned composition,
-rhythm, or detail.
+The owner designed the shipped composition directly. There is no pending
+proposal and no separate approval step: this document describes the implemented
+home, and the thread 1.5 exploration in `docs/design/direction.md` is archived
+with neither option adopted.
 
-- **Owner:** thread 1.5, Design Direction (see `docs/design/direction.md`).
-- **Authority:** HQ approves one direction before implementation; thread 2
-  implements it; no UI merges without design sign-off (`AGENTS.md` → Definition
-  of Done).
-- **Until it lands:** no new visual devices, effects, or layout variants. The
-  header glass is the only approved exception.
-- **The direction must name exactly one signature device** — the one thing a
-  visitor remembers — and it must survive with the accent used in three places.
+- **Signature device:** the pinned portrait stage — the cutout portrait over the
+  oversized `DabAZ` wordmark, with every later section scrolling over it.
+- **Owner:** the owner owns composition, rhythm, and visual detail.
+- **Authority:** the owner approves; HQ records the decision and holds the merge
+  veto. A UI change still needs design sign-off (`AGENTS.md` → Definition of
+  Done).
+- **Current scope:** no new visual devices, effects, or layout variants until a
+  later direction is approved. The header glass is the only approved exception.
+- **Constraints:** the accent budget (§3), the single measure (§5), and the
+  token-only rule (§7) still apply to every new section.
