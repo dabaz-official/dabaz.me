@@ -143,7 +143,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `src/lib/feed.ts` | `buildFeed(locale)` | one channel per locale: own posts, `<language>`, title, description, and self link |
 | `components/home/HomePage.astro` | `locale: Locale` | the home composition in DESIGN.md §6 order; a locale's Writing band only when that locale has a post |
 | `components/home/HeroPreload.astro` | — | the art-directed hero preload links for the `head` slot |
-| `components/home/HeroStage.astro` | `locale?` | the cutout portrait over `type-wordmark`, art-directed across three widths, plus the scroll cue; sticky, clipped, `z-index: 0` |
+| `components/home/HeroStage.astro` | `locale?` | the cutout portrait over the inline wordmark SVG, art-directed across three widths, plus the scroll cue; sticky, clipped, `z-index: 0` |
 | `components/home/Intro.astro` | `locale: Locale` | the page's only `h1`: role (`type-h4`), name (`type-display-xl`, `lang="en"`), lede (`type-lede`) |
 | `components/home/WorkGrid.astro` | `entries: CollectionEntry<"works">[]`, `locale` | two-up card grid; card = 16:10 screenshot in its own clipped box, `tags[locale]` (`type-label-caps`), title (`type-h3`); hover scales the image 1.03 |
 | `components/home/MusicSection.astro` | `locale?` | streaming links, DabMusic as own player, three latest releases; kind labels and dates follow the locale |

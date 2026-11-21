@@ -333,14 +333,6 @@
     letter-spacing: 0;
   }
 
-  /* The oversized name behind the hero portrait: it fills its container. */
-  .type-wordmark {
-    font-size: 34.5cqw;
-    font-weight: 600;
-    line-height: 0.8;
-    letter-spacing: -0.02em;
-  }
-
   /* Aligned numerals: years, dates, counts (core §4.2). */
   .tabular {
     font-variant-numeric: tabular-nums;
