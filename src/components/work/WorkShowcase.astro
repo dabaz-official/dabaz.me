@@ -37,28 +37,75 @@ const id = "work-showcase";
 {
   entries.length > 0 && (
     <div class="showcase" data-showcase>
-      <div class="showcase__nav">
-        <div
-          class="showcase__tabs"
-          role="tablist"
-          aria-label={ui.work.showcaseLabel[locale]}
-        >
-          {entries.map((entry, index) => (
-            <button
-              class="showcase__tab type-body-sm"
-              type="button"
-              role="tab"
-              id={`${id}-tab-${index}`}
-              aria-controls={`${id}-panel-${index}`}
-              aria-selected={index === 0 ? "true" : "false"}
-              tabindex={index === 0 ? 0 : -1}
-              data-showcase-tab={index}
-              lang="en"
-            >
-              {entry.data.title}
-            </button>
-          ))}
+      <div class="showcase__carousel">
+        <div class="showcase__nav">
+          <div
+            class="showcase__tabs"
+            role="tablist"
+            aria-label={ui.work.showcaseLabel[locale]}
+          >
+            {entries.map((entry, index) => (
+              <button
+                class="showcase__tab type-body-sm"
+                type="button"
+                role="tab"
+                id={`${id}-tab-${index}`}
+                aria-controls={`${id}-panel-${index}`}
+                aria-selected={index === 0 ? "true" : "false"}
+                tabindex={index === 0 ? 0 : -1}
+                data-showcase-tab={index}
+                lang="en"
+              >
+                {entry.data.title}
+              </button>
+            ))}
+          </div>
         </div>
+
+        {/* Pointer affordance for the overflow: skipped in the tab order
+            because the tablist itself is the keyboard path. */}
+        <button
+          class="showcase__paddle showcase__paddle--prev"
+          type="button"
+          aria-label={ui.work.previousProjects[locale]}
+          tabindex="-1"
+          data-showcase-paddle="-1"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M15 5 8 12l7 7" />
+          </svg>
+        </button>
+        <button
+          class="showcase__paddle showcase__paddle--next"
+          type="button"
+          aria-label={ui.work.nextProjects[locale]}
+          tabindex="-1"
+          data-showcase-paddle="1"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
       </div>
 
       <div class="showcase__items">
@@ -230,50 +277,114 @@ const id = "work-showcase";
     color: var(--dab-color-text-secondary);
   }
 
-  /* The pill bar sits above the panels so it stays clickable while they
-     cross-fade underneath it. */
-  .showcase__nav {
+  /* The pill sits in a positioning context so the paddles can overlay its
+     ends without scrolling with the tabs. */
+  .showcase__carousel {
+    position: relative;
     grid-row: 2;
     grid-column: 1;
     z-index: 2;
     margin-block: var(--dab-space-6);
+  }
+
+  .showcase__nav {
+    /* Paddle plus one gutter: content fades over the paddle's whole footprint,
+       so no half-letter is left peeking beside it. */
+    --showcase-fade: calc(var(--dab-target-min) + var(--dab-space-4));
+
     overflow-x: auto;
     overscroll-behavior-inline: contain;
+    scroll-behavior: smooth;
+    scroll-padding-inline: var(--showcase-fade);
     scrollbar-width: none;
+  }
+
+  /* The fade only exists on a side that still has tabs beyond it, and it is
+     fully transparent under the paddle itself: content fades in over the
+     gutter just past it, so nothing sits under the chevron. */
+  .showcase__carousel[data-fade-start="true"] .showcase__nav {
+    mask-image: linear-gradient(
+      90deg,
+      transparent 0,
+      transparent var(--dab-target-min),
+      black var(--showcase-fade),
+      black 100%
+    );
+  }
+
+  .showcase__carousel[data-fade-end="true"] .showcase__nav {
+    mask-image: linear-gradient(
+      90deg,
+      black 0,
+      black calc(100% - var(--showcase-fade)),
+      transparent calc(100% - var(--dab-target-min)),
+      transparent 100%
+    );
+  }
+
+  .showcase__carousel[data-fade-start="true"][data-fade-end="true"]
+    .showcase__nav {
+    mask-image: linear-gradient(
+      90deg,
+      transparent 0,
+      transparent var(--dab-target-min),
+      black var(--showcase-fade),
+      black calc(100% - var(--showcase-fade)),
+      transparent calc(100% - var(--dab-target-min)),
+      transparent 100%
+    );
   }
 
   .showcase__nav::-webkit-scrollbar {
     display: none;
   }
 
-  /* A pill wider than the gutter fades out where it continues; the script
-     only sets the flags for the edges that actually have content beyond them. */
-  .showcase__nav[data-fade-start="true"] {
-    mask-image: linear-gradient(
-      90deg,
-      transparent,
-      black var(--dab-space-6),
-      black 100%
-    );
+  /* A paddle appears only on a side that still has tabs beyond it, so the pair
+     doubles as the "there is more" affordance. It is 44×44 for touch; the
+     mask above, not the button, hides the tabs sliding underneath. */
+  .showcase__paddle {
+    position: absolute;
+    inset-block-start: 50%;
+    translate: 0 -50%;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    inline-size: var(--dab-target-min);
+    block-size: var(--dab-target-min);
+    padding: 0;
+    border: 0;
+    border-radius: var(--dab-radius-full);
+    /* Same fill as the pill: the mask above removes the tab text under the
+       paddle, and this keeps the track looking unbroken behind the chevron. */
+    background-color: var(--dab-color-surface);
+    color: var(--dab-color-text-secondary);
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--dab-duration-fast) var(--dab-easing-linear),
+      visibility 0s var(--dab-duration-fast);
   }
 
-  .showcase__nav[data-fade-end="true"] {
-    mask-image: linear-gradient(
-      90deg,
-      black 0,
-      black calc(100% - var(--dab-space-6)),
-      transparent
-    );
+  /* Flush with the clip edge: a few pixels of a tab between the paddle and
+     the scroll container would read as a rendering glitch. */
+  .showcase__paddle--prev {
+    inset-inline-start: 0;
   }
 
-  .showcase__nav[data-fade-start="true"][data-fade-end="true"] {
-    mask-image: linear-gradient(
-      90deg,
-      transparent,
-      black var(--dab-space-6),
-      black calc(100% - var(--dab-space-6)),
-      transparent
-    );
+  .showcase__paddle--next {
+    inset-inline-end: 0;
+  }
+
+  .showcase__paddle:hover {
+    color: var(--dab-color-text-primary);
+  }
+
+  .showcase__carousel[data-fade-start="true"] .showcase__paddle--prev,
+  .showcase__carousel[data-fade-end="true"] .showcase__paddle--next {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--dab-duration-fast) var(--dab-easing-linear);
   }
 
   .showcase__tabs {
@@ -328,7 +439,7 @@ const id = "work-showcase";
 
   /* No script: the nav cannot do anything, so it leaves and the panels stack
      as a plain list of screenshot plus summary. */
-  html:not(.js) .showcase__nav {
+  html:not(.js) .showcase__carousel {
     display: none;
   }
 
@@ -359,6 +470,11 @@ const id = "work-showcase";
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .showcase__nav {
+      scroll-behavior: auto;
+    }
+
+    .showcase__paddle,
     .showcase__media,
     .showcase__item.is-active .showcase__media,
     .showcase__caption,
@@ -384,6 +500,10 @@ const id = "work-showcase";
     );
     const tablist = root.querySelector<HTMLElement>('[role="tablist"]');
     const nav = root.querySelector<HTMLElement>(".showcase__nav");
+    const carousel = root.querySelector<HTMLElement>(".showcase__carousel");
+    const paddles = Array.from(
+      root.querySelectorAll<HTMLButtonElement>("[data-showcase-paddle]"),
+    );
 
     if (!tablist || tabs.length === 0 || tabs.length !== items.length) continue;
 
@@ -403,6 +523,10 @@ const id = "work-showcase";
         "--showcase-indicator-width",
         `${tab.offsetWidth}px`,
       );
+    };
+
+    const revealActive = () => {
+      tabs[active]?.scrollIntoView({ block: "nearest", inline: "nearest" });
     };
 
     const select = (index: number, moveFocus = false) => {
@@ -427,8 +551,20 @@ const id = "work-showcase";
     tabs.forEach((tab, index) => {
       tab.addEventListener("click", () => {
         select(index);
+        // A tab revealed by the paddles can be half under one of them.
+        revealActive();
       });
     });
+
+    for (const paddle of paddles) {
+      paddle.addEventListener("click", () => {
+        const direction = Number(paddle.dataset.showcasePaddle);
+        if (!nav || !direction) return;
+        nav.scrollBy({
+          left: direction * Math.round(nav.clientWidth * 0.8),
+        });
+      });
+    }
 
     tablist.addEventListener("keydown", (event) => {
       if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
@@ -440,17 +576,19 @@ const id = "work-showcase";
       if (event.key === "Home") select(0, true);
       else if (event.key === "End") select(tabs.length - 1, true);
       else select(active + (event.key === "ArrowRight" ? 1 : -1), true);
+
+      revealActive();
     });
 
     select(active);
 
-    // The indicator must not fly in from zero width on the first paint, and a
-    // pill that overflows the gutter needs its fade before the first scroll.
+    // The indicator must not fly in from zero width on the first paint, and
+    // each paddle appears only on a side that still has tabs beyond it.
     const syncNav = () => {
-      if (!nav) return;
+      if (!nav || !carousel) return;
       const overflow = nav.scrollWidth > nav.clientWidth + 1;
-      nav.dataset.fadeStart = String(overflow && nav.scrollLeft > 1);
-      nav.dataset.fadeEnd = String(
+      carousel.dataset.fadeStart = String(overflow && nav.scrollLeft > 1);
+      carousel.dataset.fadeEnd = String(
         overflow && nav.scrollLeft + nav.clientWidth < nav.scrollWidth - 1,
       );
     };

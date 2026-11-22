@@ -156,7 +156,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `components/home/MusicSection.astro` | `locale?` | the home band; the streaming links, player, and release rows live in `components/music/MusicContent.astro` |
 | `components/home/WritingSection.astro` | `entries: WritingEntry[]`, `hasMore: boolean`, `locale?` | the newest posts as home rows (`h3` titles, no tags), plus `All writing` only when more exist; the page renders the section only when a post exists |
 | `components/home/ContactSection.astro` | `locale?` | the home band; the address and the contact subset of `social.all` live in `components/contact/ContactDetails.astro` |
-| `components/work/WorkShowcase.astro` | `entries: CollectionEntry<"works">[]`, `locale` | pill-tab project gallery: one screenshot and one `summary` per record, cross-fading in one grid cell; the caption row is sized by the tallest summary so tabs never move; the tab behaviour is the site's one client module (CONVENTIONS.md §6); nav hidden and panels stacked with scripting off |
+| `components/work/WorkShowcase.astro` | `entries: CollectionEntry<"works">[]`, `locale` | pill-tab project gallery: one screenshot and one `summary` per record, cross-fading in one grid cell; the caption row is sized by the tallest summary so tabs never move; a tab list that overflows scrolls behind 44px paddles, one per side that still has tabs, skipped in the tab order; the tab behaviour is the site's one client module (CONVENTIONS.md §6); nav hidden and panels stacked with scripting off |
 | `components/work/WorkGallery.astro` | `entries: CollectionEntry<"works">[]`, `locale`, `heading?` (`h3` default) | two-up card grid; card = 16:10 screenshot in its own clipped box, `tags[locale]` (`type-label-caps`), title (`type-h3`); hover scales the image 1.03 |
 | `components/work/WorkPage.astro` | `entries: CollectionEntry<"works">[]`, `locale` | `/work` body: `type-h1` heading plus the gallery |
 | `components/music/MusicContent.astro` | `locale?`, `subHeading?` (`h3` default) | streaming links, DabMusic as own player, latest releases; kind labels and dates follow the locale |
@@ -191,8 +191,9 @@ Two artifacts, no more:
    bundled module, loaded by `/` and `/zh` only. Astro inlines it into the
    document while it stays this small, so there is no `/_astro` request; the
    guard accepts either form. It adds the tab behaviour — selected state,
-   roving `tabindex`, arrow/Home/End keys, and the sliding indicator — to
-   markup that already renders as a full list.
+   roving `tabindex`, arrow/Home/End keys, the sliding indicator, and the
+   scroll paddles that appear on a narrow screen — to markup that already
+   renders as a full list.
 
 Everything else stays static. The showcase is a progressive enhancement: with
 scripting off the nav is hidden and the four panels stack in document order with
