@@ -37,9 +37,11 @@ export interface UiCopy {
     description: Localized;
     /** Accessible name of the home showcase's tab list. */
     showcaseLabel: Localized;
-    /** Paddles that scroll the showcase's tab list on narrow screens. */
+    /** Paddles that step the showcase's selection on narrow screens. */
     previousProjects: Localized;
     nextProjects: Localized;
+    /** Accessible name of the medallion on a work screenshot. */
+    caseStudy: Localized;
   };
   music: {
     description: Localized;
@@ -101,8 +103,9 @@ const ui: UiCopy = {
       zh: "DabAZ 的作品： 从网页应用到小游戏与工具， 每一件都从想法做到上线， 附上截图、 技术选择与背后的取舍， 以及仍在维护的部分。",
     },
     showcaseLabel: { en: "Projects", zh: "项目" },
-    previousProjects: { en: "Previous projects", zh: "上一组项目" },
-    nextProjects: { en: "Next projects", zh: "下一组项目" },
+    previousProjects: { en: "Previous project", zh: "上一个项目" },
+    nextProjects: { en: "Next project", zh: "下一个项目" },
+    caseStudy: { en: "Case study", zh: "案例研究" },
   },
   music: {
     description: {

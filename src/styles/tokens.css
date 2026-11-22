@@ -132,6 +132,19 @@
   --dab-header-blur: blur(16px) saturate(1.8);
   --dab-header-border: var(--dab-color-border);
 
+  /* Media scrim — the medallion over a work screenshot, the same translucent
+     grey and ink apple.com puts on its play/pause button. It sits on an image,
+     not on a surface, so it keeps these values in both themes and the dark
+     block does not override it. 4.56:1 over a white capture, 3.29:1 over a
+     near-black one; both clear the 3:1 a graphical object needs. */
+  --dab-media-scrim: rgb(210 210 215 / 0.64);
+  --dab-media-scrim-text: rgb(0 0 0 / 0.56);
+  /* Hover lightens and thickens the scrim, press darkens it and dips; the ink
+     deepens on hover. Same three states as the button on apple.com. */
+  --dab-media-scrim-hover: rgb(223 223 227 / 0.7);
+  --dab-media-scrim-active: rgb(193 193 198 / 0.65);
+  --dab-media-scrim-text-hover: rgb(0 0 0 / 0.64);
+
   /* Core-fixed: never overridden, never accented. */
   --dab-color-focus: #4c89ef;
   --dab-color-selection-bg: #171717; /* gray-900 */
@@ -217,6 +230,9 @@
   --dab-duration-fast: 100ms;
   --dab-duration-base: 200ms;
   --dab-duration-slow: 300ms;
+  /* The medallion's hover and press read as a slow reveal; keep it separate
+     from `slow`, which the tab transitions own. */
+  --dab-duration-slower: 500ms;
   --dab-easing-standard: cubic-bezier(0, 0, 0.5, 1);
   --dab-easing-linear: linear;
 }

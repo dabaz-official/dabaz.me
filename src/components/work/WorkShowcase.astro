@@ -22,7 +22,7 @@
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import ui from "../../content/ui";
-import type { Locale } from "../../lib/i18n";
+import { workPath, type Locale } from "../../lib/i18n";
 
 interface Props {
   entries: CollectionEntry<"works">[];
@@ -62,8 +62,9 @@ const id = "work-showcase";
           </div>
         </div>
 
-        {/* Pointer affordance for the overflow: skipped in the tab order
-            because the tablist itself is the keyboard path. */}
+        {/* Steps the selection one project at a time when the tab list
+            overflows. Skipped in the tab order because the tablist itself is
+            the keyboard path. */}
         <button
           class="showcase__paddle showcase__paddle--prev"
           type="button"
@@ -147,6 +148,25 @@ const id = "work-showcase";
                     fetchpriority="low"
                   />
                 )}
+
+                {/* The medallion apple.com puts a play/pause in: a link to
+                    the project's case study, with a plus for now. */}
+                <a
+                  class="showcase__media-action"
+                  href={`${workPath(locale)}/${entry.id}`}
+                  aria-label={ui.work.caseStudy[locale]}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 5v14M5 12h14" />
+                  </svg>
+                </a>
               </figure>
               <div class="showcase__caption">
                 <h3 class="type-h3 showcase__name" lang="en">
@@ -199,6 +219,7 @@ const id = "work-showcase";
      opaque underneath until the fade is done and then drops in one step —
      invisible, because by then it is covered. That is a dissolve, not a dip. */
   .showcase__media {
+    position: relative;
     grid-row: 1;
     margin: 0;
     aspect-ratio: 16 / 10;
@@ -209,14 +230,14 @@ const id = "work-showcase";
     opacity: 0;
     visibility: hidden;
     transition:
-      opacity 0s var(--dab-duration-slow),
-      visibility 0s var(--dab-duration-slow);
+      opacity 0s var(--dab-duration-slower),
+      visibility 0s var(--dab-duration-slower);
   }
 
   .showcase__item.is-active .showcase__media {
     opacity: 1;
     visibility: visible;
-    transition: opacity var(--dab-duration-slow) var(--dab-easing-standard);
+    transition: opacity var(--dab-duration-slower) var(--dab-easing-standard);
   }
 
   .showcase__image {
@@ -232,6 +253,47 @@ const id = "work-showcase";
      `lazy`, so the theme that is not in use does not download it. */
   .showcase__image--dark {
     display: none;
+  }
+
+  /* Bottom-right medallion, 20px in from the edge, on the same translucent
+     scrim apple.com uses for its play/pause button. Like that button it has
+     no border: the scrim carries its own contrast, so it reads over a light
+     capture and a dark one without a hairline. */
+  .showcase__media-action {
+    position: absolute;
+    inset-block-end: var(--dab-space-5);
+    inset-inline-end: var(--dab-space-5);
+    display: grid;
+    place-items: center;
+    inline-size: var(--dab-target-min);
+    block-size: var(--dab-target-min);
+    padding: 0;
+    border: 0;
+    border-radius: var(--dab-radius-full);
+    background-color: var(--dab-media-scrim);
+    color: var(--dab-media-scrim-text);
+    text-decoration: none;
+    transition:
+      background-color var(--dab-duration-slower) var(--dab-easing-standard),
+      color var(--dab-duration-slower) var(--dab-easing-standard),
+      transform var(--dab-duration-slower) var(--dab-easing-standard);
+  }
+
+  /* The glyph keeps the ratio of apple.com's 36px button with its 36px mask:
+     24px in a 44px medallion. */
+  .showcase__media-action svg {
+    inline-size: var(--dab-size-icon-lg);
+    block-size: auto;
+  }
+
+  .showcase__media-action:hover {
+    background-color: var(--dab-media-scrim-hover);
+    color: var(--dab-media-scrim-text-hover);
+  }
+
+  .showcase__media-action:active {
+    background-color: var(--dab-media-scrim-active);
+    transform: scale(0.95);
   }
 
   html[data-theme="dark"] .showcase__image {
@@ -300,8 +362,10 @@ const id = "work-showcase";
   }
 
   /* The fade only exists on a side that still has tabs beyond it, and it is
-     fully transparent under the paddle itself: content fades in over the
-     gutter just past it, so nothing sits under the chevron. */
+     fully transparent under the paddle itself: the tabs fade in over the
+     gutter just past it, so nothing sits under the chevron. The mask lives on
+     the scroller because its box is the visible area; on the content it would
+     fade past the clip. */
   .showcase__carousel[data-fade-start="true"] .showcase__nav {
     mask-image: linear-gradient(
       90deg,
@@ -339,24 +403,24 @@ const id = "work-showcase";
     display: none;
   }
 
-  /* A paddle appears only on a side that still has tabs beyond it, so the pair
-     doubles as the "there is more" affordance. It is 44×44 for touch; the
-     mask above, not the button, hides the tabs sliding underneath. */
+  /* A paddle shows only on a side that still has tabs beyond the edge, so it
+     never covers the first or last tab in a list that already fits, and never
+     offers a step it cannot take. 44×44 wide for touch; its scrim restores the
+     track the mask above has faded. */
   .showcase__paddle {
     position: absolute;
-    inset-block-start: 50%;
-    translate: 0 -50%;
+    inset-block: 0;
     z-index: 2;
     display: grid;
     place-items: center;
     inline-size: var(--dab-target-min);
-    block-size: var(--dab-target-min);
     padding: 0;
     border: 0;
-    border-radius: var(--dab-radius-full);
-    /* Same fill as the pill: the mask above removes the tab text under the
-       paddle, and this keeps the track looking unbroken behind the chevron. */
-    background-color: var(--dab-color-surface);
+    /* A bare reset: without it the platform button style can add its own
+       bevel or shadow. */
+    appearance: none;
+    box-shadow: none;
+    background-color: transparent;
     color: var(--dab-color-text-secondary);
     cursor: pointer;
     opacity: 0;
@@ -366,14 +430,30 @@ const id = "work-showcase";
       visibility 0s var(--dab-duration-fast);
   }
 
-  /* Flush with the clip edge: a few pixels of a tab between the paddle and
-     the scroll container would read as a rendering glitch. */
+  /* The scrim reproduces the pill's own end — a semicircle on the outside,
+     then the track fading inward — instead of a disc floating on it. */
   .showcase__paddle--prev {
     inset-inline-start: 0;
+    border-start-start-radius: var(--dab-radius-pill);
+    border-end-start-radius: var(--dab-radius-pill);
+    background-image: linear-gradient(
+      90deg,
+      var(--dab-color-surface) 0,
+      var(--dab-color-surface) 55%,
+      transparent 100%
+    );
   }
 
   .showcase__paddle--next {
     inset-inline-end: 0;
+    border-start-end-radius: var(--dab-radius-pill);
+    border-end-end-radius: var(--dab-radius-pill);
+    background-image: linear-gradient(
+      270deg,
+      var(--dab-color-surface) 0,
+      var(--dab-color-surface) 55%,
+      transparent 100%
+    );
   }
 
   .showcase__paddle:hover {
@@ -475,12 +555,17 @@ const id = "work-showcase";
     }
 
     .showcase__paddle,
+    .showcase__media-action,
     .showcase__media,
     .showcase__item.is-active .showcase__media,
     .showcase__caption,
     .showcase__item.is-active .showcase__caption,
     .showcase__tabs.is-animatable::before {
       transition: none;
+    }
+
+    .showcase__media-action:active {
+      transform: none;
     }
   }
 </style>
@@ -525,6 +610,18 @@ const id = "work-showcase";
       );
     };
 
+    // One state on the carousel: which sides have tabs beyond the visible
+    // edge. It drives both the mask and whether that paddle is offered.
+    const syncState = () => {
+      if (!nav || !carousel) return;
+      const overflow = nav.scrollWidth > nav.clientWidth + 1;
+
+      carousel.dataset.fadeStart = String(overflow && nav.scrollLeft > 1);
+      carousel.dataset.fadeEnd = String(
+        overflow && nav.scrollLeft + nav.clientWidth < nav.scrollWidth - 1,
+      );
+    };
+
     const revealActive = () => {
       tabs[active]?.scrollIntoView({ block: "nearest", inline: "nearest" });
     };
@@ -546,6 +643,7 @@ const id = "work-showcase";
 
       if (moveFocus) tabs[active]?.focus();
       placeIndicator();
+      syncState();
     };
 
     tabs.forEach((tab, index) => {
@@ -559,10 +657,15 @@ const id = "work-showcase";
     for (const paddle of paddles) {
       paddle.addEventListener("click", () => {
         const direction = Number(paddle.dataset.showcasePaddle);
-        if (!nav || !direction) return;
-        nav.scrollBy({
-          left: direction * Math.round(nav.clientWidth * 0.8),
-        });
+        if (!direction) return;
+
+        // One project per press, and never around the ends: a hidden paddle
+        // is unclickable, but the handler still refuses to wrap.
+        const target = active + direction;
+        if (target < 0 || target >= tabs.length) return;
+
+        select(target);
+        revealActive();
       });
     }
 
@@ -582,24 +685,12 @@ const id = "work-showcase";
 
     select(active);
 
-    // The indicator must not fly in from zero width on the first paint, and
-    // each paddle appears only on a side that still has tabs beyond it.
-    const syncNav = () => {
-      if (!nav || !carousel) return;
-      const overflow = nav.scrollWidth > nav.clientWidth + 1;
-      carousel.dataset.fadeStart = String(overflow && nav.scrollLeft > 1);
-      carousel.dataset.fadeEnd = String(
-        overflow && nav.scrollLeft + nav.clientWidth < nav.scrollWidth - 1,
-      );
-    };
-
-    if (nav) nav.addEventListener("scroll", syncNav, { passive: true });
-    syncNav();
+    if (nav) nav.addEventListener("scroll", syncState, { passive: true });
     requestAnimationFrame(() => tablist.classList.add("is-animatable"));
 
     const replace = () => {
       placeIndicator();
-      syncNav();
+      syncState();
     };
     const observer = new ResizeObserver(replace);
     observer.observe(tablist);
