@@ -3,9 +3,13 @@
  * A page section: the container plus the section rhythm.
  *
  * `spacing` is the only knob, because the rhythm is a design decision:
- *   - `standard` — `space-16` above, between sections (DESIGN.md §5);
- *   - `loose`    — `space-24` from 640, the hero-to-content transition;
- *   - `none`     — no top padding; the consumer owns it.
+ *   - `standard` — `space-16` above and below (DESIGN.md §5);
+ *   - `loose`    — `space-24` above from 640, the hero-to-content transition;
+ *   - `none`     — no padding; the consumer owns it.
+ *
+ * The bottom padding belongs here rather than on each page: a class passed to
+ * this component carries this component's scope, so a page's own
+ * `.page { padding-block-end }` rule would never match.
  */
 import Container from "./Container.astro";
 
@@ -39,11 +43,11 @@ const {
 
 <style>
   .section {
-    padding-block-start: var(--dab-space-16);
+    padding-block: var(--dab-space-16);
   }
 
   .section[data-spacing="none"] {
-    padding-block-start: 0;
+    padding-block: 0;
   }
 
   @media (min-width: 640px) {
