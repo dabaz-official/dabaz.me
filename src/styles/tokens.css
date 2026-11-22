@@ -105,10 +105,6 @@
   --dab-color-background: #ffffff; /* white — project, one step above gray-50 */
   --dab-color-surface: #ffffff; /* white */
   --dab-color-surface-secondary: #f5f5f5; /* gray-100 */
-  /* Temporary: one step under surface-secondary, for panels nested in one.
-     Gray is core-fixed and this role is not, so it comes out with the
-     component that needs it. */
-  --dab-color-surface-tertiary: #e5e5e5; /* gray-200 */
 
   /* Two text tones, not three — project override, AGENTS.md § Exceptions.
      #6f6f6f is 4.81:1 on the background and 5.02:1 on a surface, over the
@@ -164,7 +160,6 @@
   --dab-color-background: #0a0a0a; /* gray-950 */
   --dab-color-surface: #171717; /* gray-900 */
   --dab-color-surface-secondary: #262626; /* gray-800 */
-  --dab-color-surface-tertiary: #404040; /* gray-700 */
 
   --dab-color-text-primary: #fafafa; /* gray-50 */
   --dab-color-text-secondary: #a3a3a3; /* gray-400; project tone */
@@ -395,7 +390,6 @@
   --color-background: var(--dab-color-background);
   --color-surface: var(--dab-color-surface);
   --color-surface-secondary: var(--dab-color-surface-secondary);
-  --color-surface-tertiary: var(--dab-color-surface-tertiary);
 
   --color-text-primary: var(--dab-color-text-primary);
   --color-text-secondary: var(--dab-color-text-secondary);
