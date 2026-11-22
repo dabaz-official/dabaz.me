@@ -54,8 +54,8 @@ const home: HomeCopy = {
     zh: "本职前端工程师， 本能是黑客， 痴迷于音乐， 因需要而设计。 我写界面、 搭系统， 在频谱的两端制造噪音。",
   },
   workIntro: {
-    en: "In 2021 I taught myself PHP to build the pages I had in mind; at the time I assumed CSS would be enough. HTML, CSS, JavaScript and TypeScript followed, then React and mainly Next.js. In 2023 I built Cyclic, a Notion-style knowledge base with Markdown, nested notes and public pages, with assistance from ChatGPT and Claude. Since 2026, vibe coding with agents has become my primary development method.",
-    zh: "2021 年， 我自学 PHP， 只为做出自己想要的页面， 当时以为学会 CSS 就够了。 此后陆续补上 HTML、 CSS、 JavaScript 与 TypeScript， 再往后是 React， 主要是 Next.js。 2023 年我做了 Cyclic， 一个类 Notion 的知识库， 支持 Markdown、 嵌套笔记和公开分享， 过程中借助了 ChatGPT 和 Claude。 从 2026 年起， 与 Agent 一起 Vibe Coding 已经成为我主要的开发方式。",
+    en: "In 2021 I studied PHP to consolidate my cybersecurity foundations; it is also what drew me into building things myself, so I started with CSS. That was not enough on its own, and HTML, JavaScript and TypeScript followed, then React and mainly Next.js. In 2023 I built Cyclic, a Notion-style knowledge base with Markdown, nested notes and public pages, with assistance from ChatGPT and Claude. Since 2026, vibe coding with agents has become my primary development method.",
+    zh: "2021 年， 我当初系统学习 PHP， 是为了巩固网络安全基础， 也正是它让我对创造产生了兴趣， 于是开始学 CSS。 后来发现只会 CSS 远远不够， 又陆续学了 HTML、 JavaScript 和 TypeScript， 再往后是 React， 主要是 Next.js。 2023 年我做了 Cyclic， 一个类 Notion 的知识库， 支持 Markdown、 嵌套笔记和公开分享， 过程中借助了 ChatGPT 和 Claude。 从 2026 年起， 与 Agent 一起 Vibe Coding 已经成为我主要的开发方式。",
   },
   portrait: {
     src: portrait,
