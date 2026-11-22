@@ -1,0 +1,23 @@
+---
+/**
+ * Music — the Chinese page (`/zh/music`).
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MusicPage from "../../components/music/MusicPage.astro";
+import ui from "../../content/ui";
+import { musicPath, otherLocale, type Locale } from "../../lib/i18n";
+
+const locale: Locale = "zh";
+const path = musicPath(locale);
+---
+
+<BaseLayout
+  title={ui.nav.music[locale]}
+  description={ui.music.description[locale]}
+  path={path}
+  locale={locale}
+  alternatePath={musicPath(otherLocale(locale))}
+  translationPath={musicPath(otherLocale(locale))}
+>
+  <MusicPage locale={locale} />
+</BaseLayout>

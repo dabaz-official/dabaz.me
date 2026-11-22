@@ -13,7 +13,7 @@ commit. `DESIGN.md` owns composition; DabDesign, DabFonts, and DabAgents (pins i
 | `src/styles/global.css` | base element styles, link/button conventions, container, prose rhythm, skip link | foundation |
 | `src/layouts/BaseLayout.astro` | document shell, head, skip link, slots, theme attribute | foundation |
 | `src/components/` | shared primitives and the header/footer shell | foundation; extension by later threads |
-| `src/lib/i18n.ts` | `Locale`, `Localized<T>`, `locales`, `defaultLocale`, `htmlLang()`, `localePath()`, `homePath()`, `homeAnchorPath()`, `otherLocale()` | foundation; thread 4 |
+| `src/lib/i18n.ts` | `Locale`, `Localized<T>`, `locales`, `defaultLocale`, `htmlLang()`, `localePath()`, `homePath()`, `workPath()`, `musicPath()`, `contactPath()`, `otherLocale()` | foundation; thread 4 |
 | `src/lib/metadata.ts` | `PageMeta`, `ResolvedMeta`, `resolveMeta()` | foundation; thread 5 added OG, `hreflang`, and JSON-LD fields |
 | `src/lib/structured-data.ts` | `homeJsonLd()`, `collectionJsonLd()`, `postJsonLd()` | thread 5 |
 | `src/lib/dates.ts` | `formatDate(isoDay, locale)`, `dateTime()`, `rssDate()` | foundation; thread 4 |
@@ -25,8 +25,10 @@ commit. `DESIGN.md` owns composition; DabDesign, DabFonts, and DabAgents (pins i
 | `src/content/ui.ts` | every interface string the shell and shared components render | thread 4 |
 | `src/content/` | content records and copy; collections land in `src/content.config.ts` | threads 2–4 |
 | `src/pages/writing/` | `/writing`, `/writing/page/<n>`, `/writing/<slug>`, `/writing/tag/<tag>` | thread 3 |
+| `src/pages/work.astro`, `music.astro`, `contact.astro` | `/work`, `/music`, `/contact`; the Chinese twins live under `src/pages/zh/` | maintenance |
 | `src/pages/zh/` | the same routes under `/zh` | thread 4 |
 | `src/components/writing/` | the post list, its row, tag links, the pager, the shared list/post/tag bodies | thread 3; thread 4 |
+| `src/components/work/`, `music/`, `contact/` | each page's shared body and the page wrapper the home band also renders | maintenance |
 | `src/pages/` | routes | threads 2–4 |
 | `src/pages/sitemap.xml.ts` | every public route plus its `hreflang` alternates | thread 5 |
 | `src/pages/404.astro` | the real 404 document, `noindex` | thread 5 |
@@ -139,7 +141,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `Prose.astro` | `class?`, `lang?` | `type-body` plus the 36em measure and paragraph rhythm; post bodies, heading/list/code/table rhythm from tokens only |
 | `ContentImage.astro` | `src: ImageMetadata`, `alt`, `width`, `height`, `widths?`, `sizes?`, `loading?`, `class?` | `astro:assets` output, required dimensions and `alt`, 1px `radius-lg` frame |
 | `.link`, `.button`, `.button-secondary` | classes | link: accent + underline, 2px offset; buttons: `type-label` typography in markup, 44px minimum, neutral ink or 1px boundary |
-| `src/lib/i18n.ts` | `locales`, `Locale`, `defaultLocale`, `Localized<T>`, `htmlLang()`, `otherLocale()`, `localePath()`, `homePath()`, `homeAnchorPath()` | one vocabulary for locale, BCP 47 tag, and path prefix |
+| `src/lib/i18n.ts` | `locales`, `Locale`, `defaultLocale`, `Localized<T>`, `htmlLang()`, `otherLocale()`, `localePath()`, `homePath()`, `workPath()`, `musicPath()`, `contactPath()` | one vocabulary for locale, BCP 47 tag, and path prefix |
 | `src/lib/metadata.ts` | `PageMeta`, `ResolvedMeta`, `resolveMeta()` | title suffix (`DabAZ - <page>`, one hyphen and spaces in both locales), the home title (site name + tagline), absolute canonical from `site.url`, OG locale/image, `hreflang` set |
 | `src/lib/structured-data.ts` | `homeJsonLd(locale)`, `collectionJsonLd(...)`, `postJsonLd(entry)` | `Person` + `WebSite` on home, `CollectionPage` on lists, `BlogPosting` on a post |
 | `src/content/ui.ts` | `UiCopy` and default export | every interface string, both locales; components never inline one |
@@ -149,10 +151,16 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `components/home/HeroPreload.astro` | — | the art-directed hero preload links for the `head` slot |
 | `components/home/HeroStage.astro` | `locale?` | the cutout portrait over the inline wordmark SVG, art-directed across three widths, plus the scroll cue; sticky, clipped, `z-index: 0` |
 | `components/home/Intro.astro` | `locale: Locale` | the page's only `h1`: role (`type-h3`), name (`type-display-xl`, `lang="en"`), lede (`type-lede`) |
-| `components/home/WorkGrid.astro` | `entries: CollectionEntry<"works">[]`, `locale` | two-up card grid; card = 16:10 screenshot in its own clipped box, `tags[locale]` (`type-label-caps`), title (`type-h3`); hover scales the image 1.03 |
-| `components/home/MusicSection.astro` | `locale?` | streaming links, DabMusic as own player, three latest releases; kind labels and dates follow the locale |
+| `components/home/WorkGrid.astro` | `entries: CollectionEntry<"works">[]`, `locale` | the home band; the two-up card grid lives in `components/work/WorkGallery.astro` |
+| `components/home/MusicSection.astro` | `locale?` | the home band; the streaming links, player, and release rows live in `components/music/MusicContent.astro` |
 | `components/home/WritingSection.astro` | `entries: WritingEntry[]`, `hasMore: boolean`, `locale?` | the newest posts as home rows (`h3` titles, no tags), plus `All writing` only when more exist; the page renders the section only when a post exists |
-| `components/home/ContactSection.astro` | `locale?` | `site.email` and the contact subset of `social.all` |
+| `components/home/ContactSection.astro` | `locale?` | the home band; the address and the contact subset of `social.all` live in `components/contact/ContactDetails.astro` |
+| `components/work/WorkGallery.astro` | `entries: CollectionEntry<"works">[]`, `locale`, `heading?` (`h3` default) | two-up card grid; card = 16:10 screenshot in its own clipped box, `tags[locale]` (`type-label-caps`), title (`type-h3`); hover scales the image 1.03 |
+| `components/work/WorkPage.astro` | `entries: CollectionEntry<"works">[]`, `locale` | `/work` body: `type-h1` heading plus the gallery |
+| `components/music/MusicContent.astro` | `locale?`, `subHeading?` (`h3` default) | streaming links, DabMusic as own player, latest releases; kind labels and dates follow the locale |
+| `components/music/MusicPage.astro` | `locale` | `/music` body: `type-h1` heading plus the content under an `h2` |
+| `components/contact/ContactDetails.astro` | — | `site.email` and the contact subset of `social.all`, as a fragment |
+| `components/contact/ContactPage.astro` | `locale` | `/contact` body: `type-h1` heading plus the details |
 | `components/writing/PostList.astro` | `entries: WritingEntry[]`, `class?` | the dated rows; the last hairlines closes the list |
 | `components/writing/PostRow.astro` | `entry: WritingEntry` | 9rem date column from 640, `type-h3` title link, one-line summary, tags; the row never nests links; title/summary/date use the post's locale |
 | `components/writing/TagLinks.astro` | `tags: string[]`, `locale`, `class?` | `type-caption` chips under the locale's tag route; 44px targets on coarse pointers |
@@ -273,9 +281,11 @@ client router are involved.
   locale when a translation exists (a post or a tag), and at that locale's
   writing list or home otherwise. `alternatePath` on `BaseLayout` is the only
   knob; pages pass it explicitly.
-- The Writing band appears only when the current locale has a published post.
-  The Writing nav item stays, but points at the section when it exists and at
-  the locale's writing list otherwise, so no anchor points at a missing section.
+- The header's four items are real routes in every locale: `/work`, `/music`,
+  `/writing`, and `/contact`. No nav item points at a home anchor; the home
+  bands stay reachable by scrolling and keep their `id`s as deep links.
+- The Writing band appears only when the current locale has a published post;
+  the home band is reached through its `All writing` link.
 - English runs inside a Chinese page carry `lang="en"` (site name, work and
   release titles, platform and social labels). Tags are author strings and are
   not auto-detected; translate them in the record if the post is Chinese.
@@ -391,7 +401,9 @@ switch, and the Chinese spacing guard. Thread 5 built the launch surface:
 head-level `hreflang` and `x-default`, the per-locale OG cards, the icon
 exports and manifest, the `Person`/`BlogPosting`/`CollectionPage` JSON-LD, the
 sitemap, robots, the real 404, the post-build metadata guard, and the home-only
-font subset (50 KB instead of 1.6 MB on `/` and `/zh`).
+font subset (50 KB instead of 1.6 MB on `/` and `/zh`). Maintenance promoted the
+header nav to its own routes — `/work`, `/music`, and `/contact` in both
+locales — with the home bands reusing the same bodies.
 
 Open content items, all owner-supplied: a final portrait to replace the CV photo,
 real 16:10 work covers, and a design pass on the writing surfaces, which reuse

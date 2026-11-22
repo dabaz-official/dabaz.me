@@ -16,7 +16,6 @@ import {
   rssPath,
   type Locale,
 } from "../lib/i18n";
-import { writingPath } from "../lib/writing";
 
 interface Props {
   locale?: Locale;
@@ -32,7 +31,6 @@ const year = new Date().getFullYear();
   <Container class="site-footer__inner">
     <p class="type-caption">© {year} <span lang="en">DabAZ</span></p>
     <div class="site-footer__links type-caption">
-      <a href={writingPath(locale)}>{ui.footer.writing[locale]}</a>
       <a href={rssPath(locale)}>{ui.footer.rss[locale]}</a>
       <a
         href={alternatePath}

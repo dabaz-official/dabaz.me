@@ -42,10 +42,19 @@ export function homePath(locale: Locale): string {
   return localePath(locale, "/");
 }
 
-/** A home anchor that survives the locale prefix: `/#work` or `/zh/#work`. */
-export function homeAnchorPath(locale: Locale, anchor: string): string {
-  const home = homePath(locale);
-  return `${home === "/" ? "" : home}/#${anchor}`;
+/** The locale's work page: `/work` or `/zh/work`. */
+export function workPath(locale: Locale): string {
+  return localePath(locale, "/work");
+}
+
+/** The locale's music page: `/music` or `/zh/music`. */
+export function musicPath(locale: Locale): string {
+  return localePath(locale, "/music");
+}
+
+/** The locale's contact page: `/contact` or `/zh/contact`. */
+export function contactPath(locale: Locale): string {
+  return localePath(locale, "/contact");
 }
 
 /** The locale's writing feed: `/rss.xml` or `/zh/rss.xml`. */

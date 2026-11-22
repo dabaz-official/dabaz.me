@@ -33,7 +33,11 @@ export interface UiCopy {
     scrollDown: Localized;
     logo: Localized<(name: string) => string>;
   };
+  work: {
+    description: Localized;
+  };
   music: {
+    description: Localized;
     streaming: Localized;
     ownPlayer: Localized;
     latest: Localized;
@@ -54,13 +58,15 @@ export interface UiCopy {
     tagDescription: Localized<(label: string) => string>;
     pageTitle: Localized<(page: number) => string>;
   };
+  contact: {
+    description: Localized;
+  };
   notFound: {
     title: Localized;
     description: Localized;
     back: Localized;
   };
   footer: {
-    writing: Localized;
     rss: Localized;
     /** The target language's own name, shown by the switch. */
     languageName: Localized;
@@ -84,7 +90,17 @@ const ui: UiCopy = {
       zh: (name) => `${name} 首页`,
     },
   },
+  work: {
+    description: {
+      en: "Shipped work by DabAZ: web apps, games, and tools built end to end, with the screenshots and the trade-offs behind each one.",
+      zh: "DabAZ 的作品： 从网页应用到小游戏与工具， 每一件都从想法做到上线， 附上截图、 技术选择与背后的取舍， 以及仍在维护的部分。",
+    },
+  },
   music: {
+    description: {
+      en: "Music by DabAZ: released tracks, singles, and albums on the major streaming platforms, plus DabMusic, the player built to host them.",
+      zh: "DabAZ 的音乐： 在各大流媒体平台发布的曲目、 单曲与专辑， 从创作到上线都在这里， 以及为它们搭建的播放器 DabMusic。",
+    },
     streaming: { en: "Streaming", zh: "流媒体" },
     ownPlayer: { en: "Own player", zh: "自建播放器" },
     latest: { en: "Latest", zh: "最新" },
@@ -127,6 +143,12 @@ const ui: UiCopy = {
       zh: (page) => `写作 - 第 ${page} 页`,
     },
   },
+  contact: {
+    description: {
+      en: "Contact DabAZ by email, or find him on X, GitHub, LinkedIn, Instagram, TikTok, and Threads for work, collaborations, and questions.",
+      zh: "联系 DabAZ： 发邮件， 或在 X、 GitHub、 LinkedIn、 Instagram、 TikTok 与 Threads 上找到他。 欢迎工作邀约、 合作与提问。",
+    },
+  },
   notFound: {
     title: { en: "Not found", zh: "页面不存在" },
     description: {
@@ -136,7 +158,6 @@ const ui: UiCopy = {
     back: { en: "Back to home", zh: "回到首页" },
   },
   footer: {
-    writing: { en: "Writing", zh: "写作" },
     rss: { en: "RSS", zh: "RSS" },
     languageName: { en: "English", zh: "中文" },
   },

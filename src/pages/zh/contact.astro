@@ -1,0 +1,23 @@
+---
+/**
+ * Contact — the Chinese page (`/zh/contact`).
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ContactPage from "../../components/contact/ContactPage.astro";
+import ui from "../../content/ui";
+import { contactPath, otherLocale, type Locale } from "../../lib/i18n";
+
+const locale: Locale = "zh";
+const path = contactPath(locale);
+---
+
+<BaseLayout
+  title={ui.nav.contact[locale]}
+  description={ui.contact.description[locale]}
+  path={path}
+  locale={locale}
+  alternatePath={contactPath(otherLocale(locale))}
+  translationPath={contactPath(otherLocale(locale))}
+>
+  <ContactPage locale={locale} />
+</BaseLayout>

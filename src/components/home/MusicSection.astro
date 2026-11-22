@@ -2,15 +2,11 @@
 /**
  * Music: the streaming index, the player I built, and the latest releases.
  *
- * Streaming is the primary destination; DabMusic gets its own line because it
- * is a product, not a platform. Release rows are one link each and format the
- * ISO date they carry.
+ * The home band; `/music` renders the same body under its own `h1`.
  */
-import { Image } from "astro:assets";
 import Container from "../Container.astro";
+import MusicContent from "../music/MusicContent.astro";
 import ui from "../../content/ui";
-import { ownPlayer, platforms, releases } from "../../data/music";
-import { formatDate } from "../../lib/dates";
 import { defaultLocale, type Locale } from "../../lib/i18n";
 
 interface Props {
@@ -24,79 +20,7 @@ const { locale = defaultLocale } = Astro.props;
   <Container>
     <h2 class="music__title type-display" id="music-title">{ui.nav.music[locale]}</h2>
 
-    <div class="music__block">
-      <p class="type-label-caps music__label">{ui.music.streaming[locale]}</p>
-      <ul class="music__links">
-        {
-          platforms.map(({ label, href }) => (
-            <li>
-              <a
-                class="type-h3 music__link"
-                href={href}
-                target="_blank"
-                rel="noreferrer"
-                lang="en"
-              >
-                {label} <span class="music__arrow" aria-hidden="true">↗</span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-
-    <div class="music__block">
-      <p class="type-label-caps music__label">{ui.music.ownPlayer[locale]}</p>
-      <p class="music__own">
-        <a
-          class="type-h3 music__link"
-          href={ownPlayer.href}
-          target="_blank"
-          rel="noreferrer"
-          lang="en"
-          >{ownPlayer.label}
-          <span class="music__arrow" aria-hidden="true">↗</span></a
-        >
-        <span class="type-caption music__note">{ownPlayer.note[locale]}</span>
-      </p>
-    </div>
-
-    <h3 class="type-label-caps music__sub">{ui.music.latest[locale]}</h3>
-    <ul class="releases">
-      {
-        releases.map((release) => (
-          <li class="release">
-            <a
-              class="release__link"
-              href={release.href}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Image
-                class="release__cover"
-                src={release.cover}
-                alt=""
-                width={160}
-                height={160}
-                loading="lazy"
-                fetchpriority="low"
-              />
-              <span class="release__text">
-                <span class="type-h3 release__name" lang="en"
-                  >{release.title}</span
-                >
-                <span class="type-caption release__meta">
-                  {ui.music.kinds[release.kind][locale]} ·{" "}
-                  {formatDate(release.date, locale)} ·{" "}
-                  <span lang="en">{release.platform}</span>
-                </span>
-              </span>
-              <span class="type-h3 release__arrow" aria-hidden="true">↗</span>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+    <MusicContent locale={locale} />
   </Container>
 </section>
 
@@ -111,144 +35,5 @@ const { locale = defaultLocale } = Astro.props;
     margin: 0;
     margin-block-end: var(--dab-space-10);
     color: var(--dab-color-text-primary);
-  }
-
-  /* No box: a wrapper between text blocks makes WebKit paint its full width
-     when a selection crosses it. The gap moves to the list below. */
-  .music__block {
-    display: contents;
-  }
-
-  .music__label {
-    inline-size: fit-content;
-    margin: 0;
-    margin-block-end: var(--dab-space-3);
-    color: var(--dab-color-text-tertiary);
-  }
-
-  .music__links {
-    inline-size: fit-content;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--dab-space-2) var(--dab-space-8);
-    margin: 0 0 var(--dab-space-8);
-    padding: 0;
-    list-style: none;
-  }
-
-  .music__link {
-    color: var(--dab-color-text-primary);
-    text-decoration: none;
-  }
-
-  .music__arrow {
-    display: inline-block;
-    margin-inline-start: var(--dab-space-1);
-    color: var(--dab-color-text-tertiary);
-    transition: transform 150ms var(--dab-easing-standard);
-  }
-
-  .music__link:hover .music__arrow {
-    transform: translate(2px, -2px);
-  }
-
-  .music__own {
-    inline-size: fit-content;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: var(--dab-space-1) var(--dab-space-4);
-    margin: 0;
-  }
-
-  .music__note {
-    color: var(--dab-color-text-tertiary);
-  }
-
-  .music__sub {
-    inline-size: fit-content;
-    margin: 0;
-    margin-block-start: var(--dab-space-16);
-    color: var(--dab-color-text-tertiary);
-  }
-
-  .releases {
-    margin: var(--dab-space-4) 0 0;
-    padding: 0;
-    list-style: none;
-    border-block-start: var(--dab-border-width) solid var(--dab-color-border);
-  }
-
-  .release {
-    border-block-end: var(--dab-border-width) solid var(--dab-color-border);
-  }
-
-  .release__link {
-    display: grid;
-    grid-template-columns: 72px minmax(0, 1fr) auto;
-    align-items: center;
-    gap: var(--dab-space-6);
-    padding-block: var(--dab-space-4);
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .release__cover {
-    inline-size: 72px;
-    block-size: 72px;
-    border: var(--dab-border-width) solid var(--dab-color-border);
-    border-radius: var(--dab-radius-sm);
-    object-fit: cover;
-  }
-
-  .release__text {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--dab-space-1);
-    min-inline-size: 0;
-  }
-
-  .release__name {
-    inline-size: fit-content;
-    color: var(--dab-color-text-primary);
-  }
-
-  .release__meta {
-    inline-size: fit-content;
-    color: var(--dab-color-text-tertiary);
-  }
-
-  .release__arrow {
-    color: var(--dab-color-text-tertiary);
-    transition: transform 150ms var(--dab-easing-standard);
-  }
-
-  .release__link:hover .release__arrow {
-    transform: translate(2px, -2px);
-  }
-
-  @media (max-width: 639.98px) {
-    .release__link {
-      grid-template-columns: 56px minmax(0, 1fr) auto;
-      gap: var(--dab-space-4);
-    }
-
-    .release__cover {
-      inline-size: 56px;
-      block-size: 56px;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .music__arrow,
-    .release__arrow {
-      transition: none;
-    }
-
-    .music__link:hover .music__arrow,
-    .release__link:hover .release__arrow {
-      transform: none;
-    }
   }
 </style>

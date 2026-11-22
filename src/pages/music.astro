@@ -1,0 +1,23 @@
+---
+/**
+ * Music — the music page for the default locale.
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import MusicPage from "../components/music/MusicPage.astro";
+import ui from "../content/ui";
+import { defaultLocale, musicPath, otherLocale } from "../lib/i18n";
+
+const locale = defaultLocale;
+const path = musicPath(locale);
+---
+
+<BaseLayout
+  title={ui.nav.music[locale]}
+  description={ui.music.description[locale]}
+  path={path}
+  locale={locale}
+  alternatePath={musicPath(otherLocale(locale))}
+  translationPath={musicPath(otherLocale(locale))}
+>
+  <MusicPage locale={locale} />
+</BaseLayout>

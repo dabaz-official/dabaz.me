@@ -1,0 +1,30 @@
+---
+/**
+ * Work — the shipped-work page for the default locale.
+ */
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import WorkPage from "../components/work/WorkPage.astro";
+import ui from "../content/ui";
+import { defaultLocale, otherLocale, workPath } from "../lib/i18n";
+
+const locale = defaultLocale;
+const path = workPath(locale);
+const description = ui.work.description[locale];
+
+// Newest first; `year` drives the order (§10).
+const works = (await getCollection("works")).sort(
+  (a, b) => (b.data.year ?? 0) - (a.data.year ?? 0),
+);
+---
+
+<BaseLayout
+  title={ui.nav.work[locale]}
+  description={description}
+  path={path}
+  locale={locale}
+  alternatePath={workPath(otherLocale(locale))}
+  translationPath={workPath(otherLocale(locale))}
+>
+  <WorkPage entries={works} locale={locale} />
+</BaseLayout>

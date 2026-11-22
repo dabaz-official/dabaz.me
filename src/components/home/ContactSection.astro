@@ -1,14 +1,13 @@
 ---
 /**
- * Contact: one address, then the profiles.
+ * Contact: the home band.
  *
- * The profiles are the subset of `social.all` that belongs on a contact card;
- * YouTube and Spotify live in the music section instead.
+ * `ContactDetails` holds the address and the profiles; `/contact` renders the
+ * same body under its own `h1`.
  */
 import Container from "../Container.astro";
+import ContactDetails from "../contact/ContactDetails.astro";
 import ui from "../../content/ui";
-import site from "../../data/site";
-import social, { type Social } from "../../data/social";
 import { defaultLocale, type Locale } from "../../lib/i18n";
 
 interface Props {
@@ -16,12 +15,6 @@ interface Props {
 }
 
 const { locale = defaultLocale } = Astro.props;
-
-const labels = ["X", "GitHub", "LinkedIn", "Instagram", "TikTok", "Threads", "CV"];
-
-const links = labels
-  .map((label) => social.all.find((socialLink) => socialLink.label === label))
-  .filter((socialLink): socialLink is Social => Boolean(socialLink));
 ---
 
 <section class="contact" id="contact" aria-labelledby="contact-title">
@@ -29,22 +22,7 @@ const links = labels
     <h2 class="contact__title type-display" id="contact-title">
       {ui.nav.contact[locale]}
     </h2>
-    <a class="type-h3 contact__email" href={`mailto:${site.email}`}>{site.email}</a>
-    <ul class="contact__links">
-      {
-        links.map(({ label, href }) => (
-          <li>
-            <a
-              class="type-h3"
-              href={href}
-              target="_blank"
-              rel="noreferrer"
-              lang="en">{label}</a
-            >
-          </li>
-        ))
-      }
-    </ul>
+    <ContactDetails />
   </Container>
 </section>
 
@@ -59,37 +37,5 @@ const links = labels
     margin: 0;
     margin-block-end: var(--dab-space-10);
     color: var(--dab-color-text-primary);
-  }
-
-  .contact__email {
-    display: inline-block;
-    color: var(--dab-color-text-primary);
-    text-decoration: none;
-  }
-
-  .contact__email:hover {
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-
-  .contact__links {
-    inline-size: fit-content;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--dab-space-2) var(--dab-space-6);
-    margin: var(--dab-space-6) 0 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .contact__links a {
-    color: var(--dab-color-text-secondary);
-    text-decoration: none;
-  }
-
-  .contact__links a:hover {
-    color: var(--dab-color-text-primary);
-    text-decoration: underline;
-    text-underline-offset: 3px;
   }
 </style>

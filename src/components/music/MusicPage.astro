@@ -1,0 +1,34 @@
+---
+/**
+ * Music — the `/music` body.
+ *
+ * The route file owns the document metadata and the language switch target;
+ * this component owns the heading and the streaming index, the player, and the
+ * release rows the home band also shows.
+ */
+import Section from "../Section.astro";
+import MusicContent from "./MusicContent.astro";
+import ui from "../../content/ui";
+import type { Locale } from "../../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<Section class="music-page">
+  <h1 class="type-h1 music-page__title">{ui.nav.music[locale]}</h1>
+  <MusicContent locale={locale} subHeading="h2" />
+</Section>
+
+<style>
+  .music-page {
+    padding-block-end: var(--dab-space-16);
+  }
+
+  .music-page__title {
+    margin: 0 0 var(--dab-space-8);
+  }
+</style>

@@ -2,10 +2,13 @@ import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 import site from "../data/site";
 import {
+  contactPath,
   homePath,
   htmlLang,
   locales,
+  musicPath,
   otherLocale,
+  workPath,
   type Locale,
 } from "../lib/i18n";
 import {
@@ -89,6 +92,15 @@ export const GET: APIRoute = async () => {
   );
 
   for (const locale of locales) {
+    // Work, Music, and Contact, one page each per locale.
+    for (const page of [workPath, musicPath, contactPath]) {
+      entries.push({
+        path: page(locale),
+        locale,
+        translationPath: page(otherLocale(locale)),
+      });
+    }
+
     // Writing, page 1, and later pages when they exist.
     entries.push({
       path: writingPath(locale),

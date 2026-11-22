@@ -1,0 +1,36 @@
+---
+/**
+ * Work — the `/work` body.
+ *
+ * The route file owns the document metadata and the language switch target;
+ * this component owns the heading and the grid, the same grid the home band
+ * shows.
+ */
+import Section from "../Section.astro";
+import WorkGallery from "./WorkGallery.astro";
+import ui from "../../content/ui";
+import type { Locale } from "../../lib/i18n";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  entries: CollectionEntry<"works">[];
+  locale: Locale;
+}
+
+const { entries, locale } = Astro.props;
+---
+
+<Section class="work-page">
+  <h1 class="type-h1 work-page__title">{ui.nav.work[locale]}</h1>
+  <WorkGallery entries={entries} locale={locale} heading="h2" />
+</Section>
+
+<style>
+  .work-page {
+    padding-block-end: var(--dab-space-16);
+  }
+
+  .work-page__title {
+    margin: 0 0 var(--dab-space-8);
+  }
+</style>

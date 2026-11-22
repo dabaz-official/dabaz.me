@@ -1,0 +1,33 @@
+---
+/**
+ * Contact — the `/contact` body.
+ *
+ * The route file owns the document metadata and the language switch target;
+ * this component owns the heading, the address, and the profiles.
+ */
+import Section from "../Section.astro";
+import ContactDetails from "./ContactDetails.astro";
+import ui from "../../content/ui";
+import type { Locale } from "../../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<Section class="contact-page">
+  <h1 class="type-h1 contact-page__title">{ui.nav.contact[locale]}</h1>
+  <ContactDetails />
+</Section>
+
+<style>
+  .contact-page {
+    padding-block-end: var(--dab-space-16);
+  }
+
+  .contact-page__title {
+    margin: 0 0 var(--dab-space-8);
+  }
+</style>

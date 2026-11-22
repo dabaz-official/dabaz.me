@@ -1,16 +1,14 @@
 ---
 /**
- * Work: a two-up grid of shipped things.
+ * Work: the two-up grid of shipped things.
  *
- * Each card is a screenshot of the live site, then the tags and the name. The
- * cards are not links yet — the case study opens from them later, so nothing
- * here promises a destination it does not have.
+ * The home band; `/work` renders the same grid under its own `h1`.
  */
-import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import Container from "../Container.astro";
+import WorkGallery from "../work/WorkGallery.astro";
 import ui from "../../content/ui";
-import { htmlLang, type Locale } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
 
 interface Props {
   entries: CollectionEntry<"works">[];
@@ -24,40 +22,7 @@ const { entries, locale } = Astro.props;
   <Container>
     <h2 class="work__title type-display" id="work-title">{ui.nav.work[locale]}</h2>
 
-    <ul class="work__grid">
-      {
-        entries.map((entry) => {
-          const { title, tags, cover } = entry.data;
-          return (
-            <li class="card">
-              {cover && (
-                <div class="card__media">
-                  <Image
-                    class="card__image"
-                    src={cover.src}
-                    alt=""
-                    width={1600}
-                    height={1000}
-                    widths={[800, 1600]}
-                    sizes="(min-width: 640px) 50vw, 100vw"
-                    loading="lazy"
-                    fetchpriority="low"
-                  />
-                </div>
-              )}
-              <div class="card__body">
-                {tags[locale].length > 0 && (
-                  <p class="type-label-caps card__tags" lang={htmlLang(locale)}>
-                    {tags[locale].join(" · ")}
-                  </p>
-                )}
-                <h3 class="type-h3 card__name" lang="en">{title}</h3>
-              </div>
-            </li>
-          );
-        })
-      }
-    </ul>
+    <WorkGallery entries={entries} locale={locale} />
   </Container>
 </section>
 
@@ -71,74 +36,6 @@ const { entries, locale } = Astro.props;
     inline-size: fit-content;
     margin: 0;
     margin-block-end: var(--dab-space-10);
-    color: var(--dab-color-text-primary);
-  }
-
-  .work__grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--dab-space-6);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  @media (min-width: 640px) {
-    .work__grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  .card {
-    overflow: clip;
-    border: var(--dab-border-width) solid var(--dab-color-border);
-    border-radius: var(--dab-radius-lg);
-    background-color: var(--dab-color-surface);
-  }
-
-  /* the zoom lives in this box, so it never reaches the card's text */
-  .card__media {
-    aspect-ratio: 16 / 10;
-    overflow: clip;
-    background-color: var(--dab-color-surface-secondary);
-  }
-
-  .card__image {
-    display: block;
-    inline-size: 100%;
-    block-size: 100%;
-    object-fit: cover;
-    transition: transform 400ms cubic-bezier(0.4, 0, 0.25, 1);
-  }
-
-  .card:hover .card__image {
-    transform: scale(1.03);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .card__image {
-      transition: none;
-    }
-
-    .card:hover .card__image {
-      transform: none;
-    }
-  }
-
-  .card__body {
-    padding: var(--dab-space-6);
-  }
-
-  .card__tags {
-    inline-size: fit-content;
-    margin: 0;
-    color: var(--dab-color-text-tertiary);
-  }
-
-  .card__name {
-    inline-size: fit-content;
-    margin: 0;
-    margin-block-start: var(--dab-space-2);
     color: var(--dab-color-text-primary);
   }
 </style>
