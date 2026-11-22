@@ -6,6 +6,8 @@ dist/
 
 # dependencies
 node_modules/
+# font-subset toolchain (`python3 -m venv .venv`, scripts/requirements.txt)
+.venv/
 
 # logs
 *.log

@@ -158,7 +158,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `components/home/HeroPreload.astro` | — | the art-directed hero preload links for the `head` slot |
 | `components/home/HeroStage.astro` | `locale?` | the cutout portrait over the inline wordmark SVG, art-directed across three widths, plus the scroll cue; one viewport tall, clipped, in flow — it scrolls away rather than pinning |
 | `components/home/Intro.astro` | `locale: Locale` | the page's only `h1`: role (`type-h3`), name (`type-display-xl`, `lang="en"`), lede (`type-lede`) |
-| `components/home/WorkSection.astro` | `entries: CollectionEntry<"works">[]`, `locale` | the home band; the project showcase lives in `components/work/WorkShowcase.astro` |
+| `components/home/WorkSection.astro` | `entries: CollectionEntry<"works">[]`, `locale` | the home band: title, the owner's development-path paragraph (`workIntro`), then the showcase in `components/work/WorkShowcase.astro` |
 | `components/home/MusicSection.astro` | `locale?` | the home band; the streaming links, player, and release rows live in `components/music/MusicContent.astro` |
 | `components/home/WritingSection.astro` | `entries: WritingEntry[]`, `hasMore: boolean`, `locale?` | the newest posts as home rows (`h3` titles, no tags), plus `All writing` only when more exist; the page renders the section only when a post exists |
 | `components/home/ContactSection.astro` | `locale?` | the home band; the address and the contact subset of `social.all` live in `components/contact/ContactDetails.astro` |
@@ -179,7 +179,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `src/lib/writing.ts` | `publishedPosts`, `postsForLocale`, `postSlug`, `postPath`, `writingPath`, `tagSlug`, `tagPath`, `tagPathFromSlug`, `collectTags`, `pageCount`, `pageSlice`, `pagePath`, `alternatePostPath`, `alternateTagPath`, `POSTS_PER_PAGE` | one route shape per locale; drafts leave production builds; a duplicate slug within one locale or a locale/directory mismatch fails the build; the same slug may exist once per locale |
 | `src/pages/writing/` and `src/pages/zh/writing/` | `/writing`, `/writing/page/<n>`, `/writing/<slug>`, `/writing/tag/<tag>` under each prefix | static routes; 10 posts per page; each locale lists only its own posts |
 | `src/content.config.ts` | `works`, `experience`, `writing` collections | Zod schemas mirroring DESIGN.md §10; `writing` adds `tags` and `draft` |
-| `src/content/profile.ts` | `HomeCopy` and default export | home copy per locale: role, intro, `now`, about, portrait alt, section labels |
+| `src/content/profile.ts` | `HomeCopy` and default export | home copy per locale: role, intro, `now`, about, `workIntro`, portrait alt, section labels |
 
 Rules: extend a primitive rather than forking it; a new visual need is a token
 decision, not a local value. Home sections after the hero paint their own fill
