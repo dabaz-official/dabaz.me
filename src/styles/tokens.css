@@ -102,9 +102,13 @@
      explicit, so the UA's dark defaults never reach the page. */
   color-scheme: light dark;
 
-  --dab-color-background: #fafafa; /* gray-50 */
+  --dab-color-background: #ffffff; /* white — project, one step above gray-50 */
   --dab-color-surface: #ffffff; /* white */
   --dab-color-surface-secondary: #f5f5f5; /* gray-100 */
+  /* Temporary: one step under surface-secondary, for panels nested in one.
+     Gray is core-fixed and this role is not, so it comes out with the
+     component that needs it. */
+  --dab-color-surface-tertiary: #e5e5e5; /* gray-200 */
 
   /* Two text tones, not three — project override, AGENTS.md § Exceptions.
      #6f6f6f is 4.81:1 on the background and 5.02:1 on a surface, over the
@@ -127,10 +131,12 @@
   --dab-color-primary-text: #1d4ed8; /* blue-700 */
 
   /* Header glass — the only translucent surface (DESIGN.md §7.1). */
-  /* White over a gray-50 page: the bar reads as the hero's continuation. */
-  --dab-header-bg: rgb(255 255 255 / 0.82);
+  /* The bar opens in the band tone — it reads as the hero's continuation — and
+     on the home it turns white once the first screen is behind. Same alpha
+     either way: the scrim never becomes opaque. */
+  --dab-header-bg: rgb(245 245 245 / 0.82);
+  --dab-header-bg-past: rgb(255 255 255 / 0.82);
   --dab-header-blur: blur(16px) saturate(1.8);
-  --dab-header-border: var(--dab-color-border);
 
   /* Media scrim — the medallion over a work screenshot, the same translucent
      grey and ink apple.com puts on its play/pause button. It sits on an image,
@@ -158,6 +164,7 @@
   --dab-color-background: #0a0a0a; /* gray-950 */
   --dab-color-surface: #171717; /* gray-900 */
   --dab-color-surface-secondary: #262626; /* gray-800 */
+  --dab-color-surface-tertiary: #404040; /* gray-700 */
 
   --dab-color-text-primary: #fafafa; /* gray-50 */
   --dab-color-text-secondary: #a3a3a3; /* gray-400; project tone */
@@ -176,6 +183,7 @@
   --dab-color-primary-text: #93c5fd; /* blue-300 */
 
   --dab-header-bg: rgb(10 10 10 / 0.82);
+  --dab-header-bg-past: rgb(23 23 23 / 0.82);
 
   --dab-color-focus: #4c89ef;
   --dab-color-selection-bg: #fafafa; /* gray-50 */
@@ -387,6 +395,7 @@
   --color-background: var(--dab-color-background);
   --color-surface: var(--dab-color-surface);
   --color-surface-secondary: var(--dab-color-surface-secondary);
+  --color-surface-tertiary: var(--dab-color-surface-tertiary);
 
   --color-text-primary: var(--dab-color-text-primary);
   --color-text-secondary: var(--dab-color-text-secondary);

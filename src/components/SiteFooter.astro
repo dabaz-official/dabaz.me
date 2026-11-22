@@ -42,8 +42,11 @@ const year = new Date().getFullYear();
 </footer>
 
 <style>
+  /* The second tone closes the page: no rule above it, the fill does the work.
+     On the routes whose body is already the second tone the band simply
+     disappears into the page. */
   .site-footer {
-    border-block-start: var(--dab-border-width) solid var(--dab-color-border);
+    background-color: var(--dab-color-surface-secondary);
   }
 
   /* `Container` renders this element; see the note in SiteHeader. */

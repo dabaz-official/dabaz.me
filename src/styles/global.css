@@ -155,6 +155,10 @@
      its own. It stays positioned only to hold the fill below. */
   main > section + section {
     position: relative;
+    /* The fill rides on a pseudo-element with a negative index, so the section
+       has to own a stacking context — otherwise the fill lands behind the
+       body's own background and disappears. */
+    isolation: isolate;
   }
 
   /* The band's fill lives on a pseudo-element: WebKit paints a section's own
@@ -166,6 +170,12 @@
     inset: 0;
     z-index: -1;
     background-color: var(--dab-color-background);
+  }
+
+  /* A page whose whole surface is the second tone paints the body, so the
+     header, the section, and the footer all sit on one field. */
+  body[data-surface="secondary"] {
+    background-color: var(--dab-color-surface-secondary);
   }
 
   /* Prose wrapper: measure plus paragraph rhythm. Thread 3 extends it for

@@ -141,7 +141,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 
 | Component / module | Props / exports | Guarantees |
 |---|---|---|
-| `BaseLayout.astro` | `title`, `description`, `path?`, `locale?`, `alternatePath?`, `translationPath?`, `ogType?`, `jsonLd?`; slots `head`, `header`, `footer`, default | charset/viewport, title/description/canonical, OG/Twitter, head-level `hreflang` + `x-default`, theme colours, icons/manifest, JSON-LD, `lang` from the locale, localized skip link and RSS title, the home subset switch, `data-theme` pinned to light, `#main`, header/footer fall back to the localized shell |
+| `BaseLayout.astro` | `title`, `description`, `path?`, `locale?`, `alternatePath?`, `translationPath?`, `ogType?`, `jsonLd?`, `surface?` (`page` \| `secondary`); slots `head`, `header`, `footer`, default | charset/viewport, title/description/canonical, OG/Twitter, head-level `hreflang` + `x-default`, theme colours, icons/manifest, JSON-LD, `lang` from the locale, localized skip link and RSS title, the home subset switch, `data-theme` pinned to light, `#main`, header/footer fall back to the localized shell |
 | `Container.astro` | `as?` (`div` default, `section`, `header`, `footer`, `main`, `nav`), `class?` | `container-lg` width and the 16/24/32 gutter |
 | `Section.astro` | `as?` (`section` default), `spacing?` (`standard` \| `loose` \| `none`), `id?`, `labelledby?`, `class?` | top rhythm: `space-16`, `space-24` from 640 for `loose`, none for `none`; wraps its content in `Container` |
 | `SectionHeader.astro` | `label`, `index?`, `id?`, `as?` (`h2` default), `class?` | index + label + 1px rule row; index is accent, decorative, tabular |
@@ -188,19 +188,24 @@ scrolls with the page.
 
 ## 6. Client JavaScript budget
 
-Two artifacts, no more:
+Three artifacts, no more:
 
 1. **The bootstrap.** `BaseLayout` writes `class="no-js"` on `<html>` and one
    inline `<script>` in `<head>` that replaces it with `js`. It runs before the
-   body parses, so enhancement CSS never flashes, and it is the only inline
-   script on the site.
+   body parses, so enhancement CSS never flashes. It is the only script every
+   route carries.
 2. **The showcase module.** `components/work/WorkShowcase.astro` ships one
    bundled module, loaded by `/` and `/zh` only. Astro inlines it into the
    document while it stays this small, so there is no `/_astro` request; the
    guard accepts either form. It adds the tab behaviour — selected state,
    roving `tabindex`, arrow/Home/End keys, the sliding indicator, and the
    paddles that step the selection on a narrow screen — to markup that
-   already renders as a full list.
+   already renders as a full list, and it works with scripting off.
+3. **The header tone.** `BaseLayout` renders one inline script on `/` and `/zh`
+   that sets `data-past` on `.site-header` once `scrollY` passes one screen.
+   The bar transitions its scrim from the band tone to white over 500ms; alpha
+   stays 0.82 at both ends. Other routes never get the attribute, so their bar
+   keeps the band tone.
 
 Everything else stays static. The showcase is a progressive enhancement: with
 scripting off the nav is hidden and the four panels stack in document order with

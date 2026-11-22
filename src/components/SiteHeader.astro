@@ -1,8 +1,8 @@
 ---
 /**
- * The site header: the mark, the section nav, one hairline, glass. The hairline
- * is a scroll affordance: it fades in once the page leaves the top, driven by
- * a CSS scroll timeline (`animation-timeline`), never by script.
+ * The site header: the mark, the section nav, glass. There is no rule under
+ * the bar — the scrim alone separates it from the page — and on the home it
+ * fades from the band tone to white once the first screen is behind.
  *
  * Sticky at every width; the scrim is the only translucent surface on the
  * site (DESIGN.md §7.1, AGENTS.md → Exceptions). Every nav item points at a
@@ -69,44 +69,32 @@ const { locale = defaultLocale } = Astro.props;
     position: sticky;
     inset-block-start: 0;
     z-index: 20;
-    border-block-end: var(--dab-border-width) solid var(--dab-header-border);
     background-color: var(--dab-header-bg);
+    /* The home flips `data-past` once the first screen is behind; the fade is
+       time-based, which a scroll timeline cannot express. Alpha is 0.82 at
+       both ends, so the bar never stops being glass. */
+    transition: background-color 500ms var(--dab-easing-standard);
     -webkit-backdrop-filter: var(--dab-header-blur);
     backdrop-filter: var(--dab-header-blur);
   }
 
-  /* The hairline is an affordance, not structure: at the top of the page the
-     header ends in the scrim alone, and the rule fades in over the first
-     header-height of scroll. Pure CSS — a scroll-driven animation on the
-     border colour (Baseline newly available 2026, no client JavaScript).
-     Browsers without scroll timelines keep the line at all times, which is
-     the older, safe reading of the same hairline. */
-  @supports (animation-timeline: scroll(root block)) {
-    .site-header {
-      animation: header-hairline linear both;
-      animation-timeline: scroll(root block);
-      animation-range: 0 var(--dab-header-height);
-    }
-  }
-
-  @keyframes header-hairline {
-    from {
-      border-block-end-color: transparent;
-    }
-
-    to {
-      border-block-end-color: var(--dab-header-border);
-    }
+  /* The bar keeps the page tone from the first scroll on: an opaque bar that
+     changes colour is just a colour change, and these clients asked for less
+     transparency, not for a themed bar. */
+  .site-header[data-past] {
+    background-color: var(--dab-header-bg-past);
   }
 
   @supports not (backdrop-filter: blur(1px)) {
-    .site-header {
+    .site-header,
+    .site-header[data-past] {
       background-color: var(--dab-color-background);
     }
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    .site-header {
+    .site-header,
+    .site-header[data-past] {
       background-color: var(--dab-color-background);
       -webkit-backdrop-filter: none;
       backdrop-filter: none;

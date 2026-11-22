@@ -36,6 +36,8 @@ interface Props extends PageMeta {
   locale?: Locale;
   /** Where the footer's language switch points; defaults to the other home. */
   alternatePath?: string;
+  /** The page's surface: the page tone (default) or the second tone. */
+  surface?: "page" | "secondary";
 }
 
 const { locale = defaultLocale } = Astro.props;
@@ -133,9 +135,27 @@ const jsonLd = Astro.props.jsonLd
     <slot name="head" />
     {jsonLd && <script type="application/ld+json" is:inline set:html={jsonLd} />}
   </head>
-  <body class:list={["type-body", isHome && "home-font"]}>
+  <body class:list={["type-body", isHome && "home-font"]} data-surface={Astro.props.surface ?? "page"}>
     <a class="skip-link type-label" href="#main">{ui.skipToContent[locale]}</a>
     <slot name="header"><SiteHeader locale={locale} /></slot>
+    {
+      isHome && (
+        <script is:inline>
+          /* header-tone: the home's bar turns white once the first screen is
+             behind. Home only; every other route keeps the band tone. */
+          (() => {
+            const bar = document.querySelector(".site-header");
+            if (!bar) return;
+            const screen = window.innerHeight;
+            const sync = () => {
+              bar.toggleAttribute("data-past", window.scrollY >= screen);
+            };
+            addEventListener("scroll", sync, { passive: true });
+            sync();
+          })();
+        </script>
+      )
+    }
     <main id="main" tabindex="-1">
       <slot />
     </main>

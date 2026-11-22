@@ -50,7 +50,7 @@ const site = {
   manifest: "/site.webmanifest",
 
   /** Mirrors `--dab-color-background`; the site is pinned light, so both UA surfaces use it. */
-  themeColor: "rgb(250 250 250)",
+  themeColor: "rgb(255 255 255)",
 } as const;
 
 export default site;

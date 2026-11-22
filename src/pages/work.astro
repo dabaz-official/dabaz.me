@@ -24,6 +24,7 @@ const works = sortWorks(await getCollection("works"));
   locale={locale}
   alternatePath={workPath(otherLocale(locale))}
   translationPath={workPath(otherLocale(locale))}
+  surface="secondary"
 >
   <WorkPage entries={works} locale={locale} />
 </BaseLayout>

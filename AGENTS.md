@@ -68,13 +68,15 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
   (`var(--dab-color-text-primary)`, `text-text-primary`, `type-body`).
   `pnpm lint` fails the build on a hex colour, `letter-spacing`, or a raw
   `font-size` anywhere else.
-- **Client JavaScript:** one module, and only for the home work showcase.
-  `BaseLayout` ships a one-line inline bootstrap that swaps `no-js` for `js`
-  before paint; `/` and `/zh` carry the showcase module (bundled, and inlined
-  by Astro while it stays this small) that adds the gallery's tab behaviour.
-  Everything renders and reads without it. `scripts/check-meta.mjs` allows
-  exactly those two artifacts and fails on any other script or bundle. No
-  framework integration, router, or analytics; a new script is a new budget
+- **Client JavaScript:** three artifacts, and nothing else. `BaseLayout` ships
+  a one-line inline bootstrap that swaps `no-js` for `js` before paint; `/` and
+  `/zh` carry the work showcase module (bundled, and inlined by Astro while it
+  stays this small) that adds the gallery's tab behaviour; and `/` and `/zh`
+  carry one inline script that flips the header's `data-past` once the first
+  screen is behind, so its scrim fades from the band tone to white over 500ms.
+  Everything renders, reads and scrolls without them. `scripts/check-meta.mjs`
+  allows exactly those three artifacts and fails on any other script or bundle.
+  No framework integration, router, or analytics; a new script is a new budget
   line and needs a recorded decision here.
 - **Theme:** pinned to `light`. `BaseLayout` sets `data-theme="light"` and the
   toggle is out; the dark tokens stay for its return. It also declares
@@ -148,3 +150,11 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
   `text-disabled`, and every other role keep the DabDesign value. Owner: HQ.
   Review: 2026-12-19. No upstream `DEC-`: the owner chose a project-local
   override, and DabDesign is not modified on this branch.
+- **White page surface.** Rule: DabDesign `core.md` §3.3 fixes
+  `color-background` to `gray-50`. Reason: the site pairs pure white with
+  `gray-100` bands, the way Apple does, so a band sits 3.5 ΔE76 from the page
+  instead of 1.7 — at `gray-50` a `gray-100` band is indistinguishable, which
+  is what made the tone look absent. Scope: `color-background` in the light
+  theme only; every other role keeps its DabDesign value, and `themeColor` plus
+  the manifest mirror the same literal as before. Owner: HQ. Review:
+  2026-12-19. No upstream `DEC-`: the owner chose a project-local override.

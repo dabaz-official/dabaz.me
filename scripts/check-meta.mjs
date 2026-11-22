@@ -68,6 +68,8 @@ const INLINE_BOOTSTRAP =
   'document.documentElement.classList.replace("no-js", "js");';
 /** Astro inlines a small module; this marker proves which one it is. */
 const SHOWCASE_MARKER = "[data-showcase]";
+/** The home header's tone switch, carried by its own comment. */
+const HEADER_TONE_MARKER = "header-tone";
 const HOME_PAGES = new Set(["index.html", "zh/index.html"]);
 const referencedScripts = new Set();
 
@@ -188,6 +190,7 @@ for (const path of htmlFiles) {
   if (!links.some((tag) => tag.rel === "manifest")) errors.push(`${rel}: missing manifest link`);
 
   let showcaseModules = 0;
+  let headerTone = 0;
 
   for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)) {
     const attributes = attrs(match[1]);
@@ -217,6 +220,12 @@ for (const path of htmlFiles) {
 
     if (body === INLINE_BOOTSTRAP) continue;
 
+    // The home's header tone switch: one inline script, home routes only.
+    if (HOME_PAGES.has(rel) && body.includes(HEADER_TONE_MARKER)) {
+      headerTone += 1;
+      continue;
+    }
+
     // Astro inlines a small module into the page; it must be the showcase, on
     // a home route, and only once.
     if (
@@ -233,6 +242,10 @@ for (const path of htmlFiles) {
 
   if (HOME_PAGES.has(rel) && showcaseModules !== 1) {
     errors.push(`${rel}: expected one showcase module, found ${showcaseModules}`);
+  }
+
+  if (HOME_PAGES.has(rel) && headerTone !== 1) {
+    errors.push(`${rel}: expected one header-tone script, found ${headerTone}`);
   }
 }
 
