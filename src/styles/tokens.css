@@ -96,7 +96,11 @@
  * ------------------------------------------------------------------------- */
 
 :root {
-  color-scheme: light;
+  /* Both schemes are declared even though the site renders light: Safari's
+     Adaptive Dark Mode repaints light pages that do not declare dark support,
+     and `light dark` is the only declaration it honours. Every colour below is
+     explicit, so the UA's dark defaults never reach the page. */
+  color-scheme: light dark;
 
   --dab-color-background: #fafafa; /* gray-50 */
   --dab-color-surface: #ffffff; /* white */

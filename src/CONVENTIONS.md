@@ -90,6 +90,12 @@ movement, not colour feedback.
   who once chose dark gets light, and no client can change it.
 - Light is also the fallback by construction: `:root` in `tokens.css` is the
   light theme, so a document with no attribute renders light too.
+- `color-scheme: light dark` is declared in `<head>` and on `:root` even though
+  the site renders light. Safari's Adaptive Dark Mode (27.3) repaints light
+  pages that do not declare dark support, and `light dark` is the only
+  declaration it honours while `light only` is unimplemented. Nothing on the
+  page reads the UA's dark defaults — every colour is a token — so the
+  declaration changes no pixel while the attribute stays `light`.
 - The dark token block, the `@custom-variant dark`, and any
   `[data-theme="dark"]` styles stay in the tree. Restoring the toggle is a
   component restore plus an inline script, not a token change; the last commits

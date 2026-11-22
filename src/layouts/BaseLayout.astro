@@ -63,6 +63,9 @@ const jsonLd = Astro.props.jsonLd
 <html lang={htmlLang(locale)} data-theme="light" class="no-js">
   <head>
     <meta charset="utf-8" />
+    <!-- Adaptive Dark Mode (Safari 27.3) leaves pages that declare dark support
+         alone; this is the only switch it honours while `light only` is unsupported. -->
+    <meta name="color-scheme" content="light dark" />
     <script is:inline>
       document.documentElement.classList.replace("no-js", "js");
     </script>
