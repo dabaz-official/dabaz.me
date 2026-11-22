@@ -24,8 +24,6 @@ const { entries, locale } = Astro.props;
   <Container>
     <h2 class="work__title type-display" id="work-title">{ui.nav.work[locale]}</h2>
 
-    <p class="work__intro type-body-lg measure">{home.workIntro[locale]}</p>
-
     <WorkShowcase entries={entries} locale={locale} />
   </Container>
 </section>
@@ -39,14 +37,8 @@ const { entries, locale } = Astro.props;
   .work__title {
     inline-size: fit-content;
     margin: 0;
-    margin-block-end: var(--dab-space-4);
+    margin-block-end: var(--dab-space-10);
     color: var(--dab-color-text-primary);
   }
 
-  .work__intro {
-    margin: 0;
-    margin-block-end: var(--dab-space-10);
-    color: var(--dab-color-text-secondary);
-    text-wrap: pretty;
-  }
 </style>
