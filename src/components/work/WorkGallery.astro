@@ -36,7 +36,7 @@ const { entries, locale, heading: Heading = "h3" } = Astro.props;
                 src={cover.src}
                 alt=""
                 width={1600}
-                height={1000}
+                height={900}
                 widths={[800, 1600]}
                 sizes="(min-width: 640px) 50vw, 100vw"
                 loading="lazy"
@@ -48,7 +48,7 @@ const { entries, locale, heading: Heading = "h3" } = Astro.props;
                   src={cover.dark}
                   alt=""
                   width={1600}
-                  height={1000}
+                  height={900}
                   widths={[800, 1600]}
                   sizes="(min-width: 640px) 50vw, 100vw"
                   loading="lazy"
@@ -96,7 +96,7 @@ const { entries, locale, heading: Heading = "h3" } = Astro.props;
 
   /* the zoom lives in this box, so it never reaches the card's text */
   .card__media {
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 16 / 9;
     overflow: clip;
     background-color: var(--dab-color-surface-secondary);
   }

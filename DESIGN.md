@@ -213,7 +213,7 @@ grammar below is awaiting a rewrite.
 - Title: `type-h3`; the whole row is one link. Hover and focus underline the
   title; the row itself does not move, tint, or lift.
 - Summary: `type-body-sm`, `color-text-secondary`, ≤38em.
-- Thumbnail, optional: 96–160px wide, 16:10, `radius-lg`, 1px border. Images
+- Thumbnail, optional: 96–160px wide, 16:9, `radius-lg`, 1px border. Images
   sit left of the title on wide screens only when the list stays scannable.
 
 ### 7.5 Writing row
@@ -271,7 +271,7 @@ grammar below is awaiting a rewrite.
   no CDN, no second family.
 - Decorative icons `aria-hidden`; icon-only controls carry `aria-label` and a
   44×44 target.
-- Project imagery: real screenshots, 16:10, `radius-lg`, 1px border, meaningful
+- Project imagery: real screenshots, 16:9, `radius-lg`, 1px border, meaningful
   `alt`. No stock photos, no device mockups with fake browser chrome, no
   gradient thumbnails.
 - Portrait: one photo, neutral background, no filters.

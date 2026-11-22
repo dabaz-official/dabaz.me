@@ -163,7 +163,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `components/home/WritingSection.astro` | `entries: WritingEntry[]`, `hasMore: boolean`, `locale?` | the newest posts as home rows (`h3` titles, no tags), plus `All writing` only when more exist; the page renders the section only when a post exists |
 | `components/home/ContactSection.astro` | `locale?` | the home band; the address and the contact subset of `social.all` live in `components/contact/ContactDetails.astro` |
 | `components/work/WorkShowcase.astro` | `entries: CollectionEntry<"works">[]`, `locale` | pill-tab project gallery: one screenshot and one `summary` per record, cross-fading in one grid cell, with the medallion apple.com puts a play/pause in — a link to that project's case study (`/work/<slug>`, `/zh` alongside) named `ui.work.caseStudy`; the caption row is sized by the tallest summary so tabs never move; a tab list that overflows gets a 44px paddle per side that still has tabs beyond the edge; a press steps the selection by one project; the paddles are skipped in the tab order; the tab behaviour is the site's one client module (CONVENTIONS.md §6); nav hidden and panels stacked with scripting off |
-| `components/work/WorkGallery.astro` | `entries: CollectionEntry<"works">[]`, `locale`, `heading?` (`h3` default) | two-up card grid; card = 16:10 screenshot in its own clipped box, `tags[locale]` (`type-label-caps`), title (`type-h3`); hover scales the image 1.03 |
+| `components/work/WorkGallery.astro` | `entries: CollectionEntry<"works">[]`, `locale`, `heading?` (`h3` default) | two-up card grid; card = 16:9 screenshot in its own clipped box, `tags[locale]` (`type-label-caps`), title (`type-h3`); hover scales the image 1.03 |
 | `components/work/WorkPage.astro` | `entries: CollectionEntry<"works">[]`, `locale` | `/work` body: `type-h1` heading plus the gallery |
 | `components/music/MusicContent.astro` | `locale?`, `subHeading?` (`h3` default) | streaming links, DabMusic as own player, latest releases; kind labels and dates follow the locale |
 | `components/music/MusicPage.astro` | `locale` | `/music` body: `type-h1` heading plus the content under an `h2` |
@@ -443,7 +443,7 @@ header nav to its own routes — `/work`, `/music`, and `/contact` in both
 locales — with the home bands reusing the same bodies.
 
 Open content items, all owner-supplied: a final portrait to replace the CV photo,
-real 16:10 work covers, and a design pass on the writing surfaces, which reuse
+real 16:9 work covers, and a design pass on the writing surfaces, which reuse
 the existing tokens and primitives but have not had thread 1.5 sign-off. Works
 and roles show years by owner decision; the CV's month ranges are not modelled.
 The home and post descriptions are owner copy and sit below rule 07's length
