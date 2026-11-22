@@ -127,7 +127,8 @@
   --dab-color-primary-text: #1d4ed8; /* blue-700 */
 
   /* Header glass — the only translucent surface (DESIGN.md §7.1). */
-  --dab-header-bg: rgb(250 250 250 / 0.82);
+  /* White over a gray-50 page: the bar reads as the hero's continuation. */
+  --dab-header-bg: rgb(255 255 255 / 0.82);
   --dab-header-blur: blur(16px) saturate(1.8);
   --dab-header-border: var(--dab-color-border);
 

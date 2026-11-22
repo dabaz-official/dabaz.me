@@ -74,6 +74,9 @@ const { locale = defaultLocale } = Astro.props;
 <style>
   .stage {
     position: relative;
+    /* The one white band on the page: it carries the header's white, while the
+       sections below stay on the gray-50 page. */
+    background-color: var(--dab-color-surface);
     block-size: calc(100dvh - var(--dab-header-height));
     overflow: clip;
   }
