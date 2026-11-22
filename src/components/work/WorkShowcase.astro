@@ -1,0 +1,442 @@
+---
+/**
+ * Work showcase — the project gallery on the home work band.
+ *
+ * One screenshot per project, one pill tab per project name, and that project's
+ * summary underneath. Changing the tab cross-fades the screenshot and the
+ * summary together, the way Apple's feature galleries do.
+ *
+ * Layout, not measurement: every panel occupies the same grid cell, and each
+ * panel is a `subgrid` of the three-row shell (media, tabs, caption). The
+ * caption row is therefore sized by the tallest summary, so switching tabs
+ * never moves the tabs or the page.
+ *
+ * Progressive enhancement: the markup is a complete, readable list without
+ * JavaScript — the nav is hidden and the panels stack in document order. The
+ * script adds the tab behaviour only; nothing is fetched for it, and no panel
+ * hides content the no-script reader cannot reach.
+ *
+ * The screenshots are covers of the same records `/work` renders in its grid;
+ * `WorkSection` owns the home band around this component.
+ */
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import ui from "../../content/ui";
+import type { Locale } from "../../lib/i18n";
+
+interface Props {
+  entries: CollectionEntry<"works">[];
+  locale: Locale;
+}
+
+const { entries, locale } = Astro.props;
+/** One id prefix per document; home renders this component once. */
+const id = "work-showcase";
+---
+
+{
+  entries.length > 0 && (
+    <div class="showcase" data-showcase>
+      <div class="showcase__nav">
+        <div
+          class="showcase__tabs"
+          role="tablist"
+          aria-label={ui.work.showcaseLabel[locale]}
+        >
+          {entries.map((entry, index) => (
+            <button
+              class="showcase__tab type-body-sm"
+              type="button"
+              role="tab"
+              id={`${id}-tab-${index}`}
+              aria-controls={`${id}-panel-${index}`}
+              aria-selected={index === 0 ? "true" : "false"}
+              tabindex={index === 0 ? 0 : -1}
+              data-showcase-tab={index}
+              lang="en"
+            >
+              {entry.data.title}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div class="showcase__items">
+        {entries.map((entry, index) => {
+          const { title, summary, cover } = entry.data;
+          return (
+            <article
+              class:list={["showcase__item", index === 0 && "is-active"]}
+              id={`${id}-panel-${index}`}
+              role="tabpanel"
+              aria-labelledby={`${id}-tab-${index}`}
+              aria-hidden={index === 0 ? "false" : "true"}
+              data-showcase-item={index}
+            >
+              <figure class="showcase__media">
+                {cover && (
+                  <Image
+                    class="showcase__image"
+                    src={cover.src}
+                    alt={cover.alt[locale]}
+                    width={1600}
+                    height={1000}
+                    widths={[640, 960, 1600]}
+                    sizes="(min-width: 1024px) 960px, 100vw"
+                    loading="lazy"
+                    fetchpriority="low"
+                  />
+                )}
+              </figure>
+              <div class="showcase__caption">
+                <h3 class="type-h3 showcase__name" lang="en">
+                  {title}
+                </h3>
+                <p class="showcase__summary">{summary[locale]}</p>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  )
+}
+
+<style>
+  /* Three rows for every panel: media, tab nav, caption. The nav is a direct
+     child of the shell; the panels span all three rows and inherit the row
+     sizes through `subgrid`. */
+  .showcase {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: auto auto auto;
+  }
+
+  .showcase__items {
+    position: relative;
+    z-index: 1;
+    grid-row: 1 / -1;
+    grid-column: 1;
+    display: grid;
+    grid-template-rows: subgrid;
+  }
+
+  /* The panels are stacked but never faded as a whole: fading two layers at
+     once dips through the page background halfway through, which reads as a
+     flash on a dark screenshot. Each part dissolves on its own below. */
+  .showcase__item {
+    grid-row: 1 / -1;
+    grid-column: 1;
+    display: grid;
+    grid-template-rows: subgrid;
+  }
+
+  .showcase__item.is-active {
+    z-index: 1;
+  }
+
+  /* The incoming screenshot fades in over the outgoing one, which stays fully
+     opaque underneath until the fade is done and then drops in one step —
+     invisible, because by then it is covered. That is a dissolve, not a dip. */
+  .showcase__media {
+    grid-row: 1;
+    margin: 0;
+    aspect-ratio: 16 / 10;
+    overflow: clip;
+    border: var(--dab-border-width) solid var(--dab-color-border);
+    border-radius: var(--dab-radius-lg);
+    background-color: var(--dab-color-surface-secondary);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0s var(--dab-duration-slow),
+      visibility 0s var(--dab-duration-slow);
+  }
+
+  .showcase__item.is-active .showcase__media {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--dab-duration-slow) var(--dab-easing-standard);
+  }
+
+  .showcase__image {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  /* The outgoing summary leaves in one step and the incoming one fades in:
+     two half-transparent paragraphs over each other would ghost. */
+  .showcase__caption {
+    grid-row: 3;
+    max-inline-size: var(--dab-measure);
+    margin-inline: auto;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: none;
+  }
+
+  .showcase__item.is-active .showcase__caption {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--dab-duration-slow) var(--dab-easing-standard);
+  }
+
+  /* With scripting on, the tab above already names the project, so the
+     heading would only repeat it. It stays in the document for the stacked
+     no-script view, where there is no nav to carry the name. */
+  html.js .showcase__name {
+    display: none;
+  }
+
+  .showcase__name {
+    margin: 0;
+    color: var(--dab-color-text-primary);
+  }
+
+  .showcase__summary {
+    margin: 0;
+    color: var(--dab-color-text-secondary);
+  }
+
+  /* The pill bar sits above the panels so it stays clickable while they
+     cross-fade underneath it. */
+  .showcase__nav {
+    grid-row: 2;
+    grid-column: 1;
+    z-index: 2;
+    margin-block: var(--dab-space-6);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+  }
+
+  .showcase__nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* A pill wider than the gutter fades out where it continues; the script
+     only sets the flags for the edges that actually have content beyond them. */
+  .showcase__nav[data-fade-start="true"] {
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      black var(--dab-space-6),
+      black 100%
+    );
+  }
+
+  .showcase__nav[data-fade-end="true"] {
+    mask-image: linear-gradient(
+      90deg,
+      black 0,
+      black calc(100% - var(--dab-space-6)),
+      transparent
+    );
+  }
+
+  .showcase__nav[data-fade-start="true"][data-fade-end="true"] {
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      black var(--dab-space-6),
+      black calc(100% - var(--dab-space-6)),
+      transparent
+    );
+  }
+
+  .showcase__tabs {
+    position: relative;
+    display: flex;
+    inline-size: fit-content;
+    margin-inline: auto;
+    padding: var(--dab-space-1);
+    border-radius: var(--dab-radius-pill);
+    background-color: var(--dab-color-surface);
+  }
+
+  /* One sliding pill behind the labels; the script writes the two vars. */
+  .showcase__tabs::before {
+    content: "";
+    position: absolute;
+    inset-block: var(--dab-space-1);
+    left: var(--showcase-indicator-left, var(--dab-space-1));
+    width: var(--showcase-indicator-width, 0px);
+    border-radius: var(--dab-radius-pill);
+    background-color: var(--dab-color-primary);
+  }
+
+  .showcase__tabs.is-animatable::before {
+    transition:
+      left var(--dab-duration-slow) var(--dab-easing-standard),
+      width var(--dab-duration-slow) var(--dab-easing-standard);
+  }
+
+  .showcase__tab {
+    position: relative;
+    z-index: 1;
+    min-block-size: var(--dab-target-min);
+    padding-inline: var(--dab-space-4);
+    border: 0;
+    border-radius: var(--dab-radius-pill);
+    background-color: transparent;
+    color: var(--dab-color-text-secondary);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color var(--dab-duration-base) var(--dab-easing-standard);
+  }
+
+  .showcase__tab:hover {
+    color: var(--dab-color-text-primary);
+  }
+
+  .showcase__tab[aria-selected="true"] {
+    color: var(--dab-color-on-primary);
+    cursor: auto;
+  }
+
+  /* No script: the nav cannot do anything, so it leaves and the panels stack
+     as a plain list of screenshot plus summary. */
+  html:not(.js) .showcase__nav {
+    display: none;
+  }
+
+  html:not(.js) .showcase__items {
+    display: block;
+  }
+
+  html:not(.js) .showcase__item {
+    display: block;
+  }
+
+  html:not(.js) .showcase__item + .showcase__item {
+    margin-block-start: var(--dab-space-10);
+  }
+
+  html:not(.js) .showcase__media,
+  html:not(.js) .showcase__caption {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  html:not(.js) .showcase__caption {
+    grid-row: auto;
+  }
+
+  html:not(.js) .showcase__summary {
+    margin-block-start: var(--dab-space-2);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .showcase__media,
+    .showcase__item.is-active .showcase__media,
+    .showcase__caption,
+    .showcase__item.is-active .showcase__caption,
+    .showcase__tabs.is-animatable::before {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * The showcase's tab behaviour. Everything it needs is already in the
+   * document: it toggles classes and attributes, positions the one indicator,
+   * and does not fetch or render anything.
+   */
+  for (const root of document.querySelectorAll<HTMLElement>("[data-showcase]")) {
+    const tabs = Array.from(
+      root.querySelectorAll<HTMLButtonElement>("[data-showcase-tab]"),
+    );
+    const items = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-showcase-item]"),
+    );
+    const tablist = root.querySelector<HTMLElement>('[role="tablist"]');
+    const nav = root.querySelector<HTMLElement>(".showcase__nav");
+
+    if (!tablist || tabs.length === 0 || tabs.length !== items.length) continue;
+
+    let active = tabs.findIndex(
+      (tab) => tab.getAttribute("aria-selected") === "true",
+    );
+    if (active < 0) active = 0;
+
+    const placeIndicator = () => {
+      const tab = tabs[active];
+      if (!tab) return;
+      tablist.style.setProperty(
+        "--showcase-indicator-left",
+        `${tab.offsetLeft}px`,
+      );
+      tablist.style.setProperty(
+        "--showcase-indicator-width",
+        `${tab.offsetWidth}px`,
+      );
+    };
+
+    const select = (index: number, moveFocus = false) => {
+      active = (index + tabs.length) % tabs.length;
+
+      tabs.forEach((tab, position) => {
+        const selected = position === active;
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+      });
+
+      items.forEach((item, position) => {
+        const selected = position === active;
+        item.classList.toggle("is-active", selected);
+        item.setAttribute("aria-hidden", String(!selected));
+      });
+
+      if (moveFocus) tabs[active]?.focus();
+      placeIndicator();
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => {
+        select(index);
+      });
+    });
+
+    tablist.addEventListener("keydown", (event) => {
+      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
+        return;
+      }
+
+      event.preventDefault();
+
+      if (event.key === "Home") select(0, true);
+      else if (event.key === "End") select(tabs.length - 1, true);
+      else select(active + (event.key === "ArrowRight" ? 1 : -1), true);
+    });
+
+    select(active);
+
+    // The indicator must not fly in from zero width on the first paint, and a
+    // pill that overflows the gutter needs its fade before the first scroll.
+    const syncNav = () => {
+      if (!nav) return;
+      const overflow = nav.scrollWidth > nav.clientWidth + 1;
+      nav.dataset.fadeStart = String(overflow && nav.scrollLeft > 1);
+      nav.dataset.fadeEnd = String(
+        overflow && nav.scrollLeft + nav.clientWidth < nav.scrollWidth - 1,
+      );
+    };
+
+    if (nav) nav.addEventListener("scroll", syncNav, { passive: true });
+    syncNav();
+    requestAnimationFrame(() => tablist.classList.add("is-animatable"));
+
+    const replace = () => {
+      placeIndicator();
+      syncNav();
+    };
+    const observer = new ResizeObserver(replace);
+    observer.observe(tablist);
+    if (nav) observer.observe(nav);
+    void document.fonts.ready.then(replace);
+  }
+</script>

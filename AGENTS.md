@@ -29,8 +29,8 @@ Versions at those commits: DabDesign 1.0.1, DabFonts 1.0.1, DabAgents 1.0.2.
 ## Stack
 
 - **Framework:** Astro 7.4.13, `output: "static"`, no adapter
-- **Post bodies:** MDX through `@astrojs/mdx` (build-time only; no client
-  runtime, `dist/**/*.js` stays empty)
+- **Post bodies:** MDX through `@astrojs/mdx` (build-time only; it contributes
+  no client runtime and no bundle of its own)
 - **Language:** TypeScript, `strict: true`
 - **Styling:** Tailwind CSS 4.3.5 through `@tailwindcss/vite`; DabDesign tokens
   declared once in `src/styles/tokens.css`
@@ -68,8 +68,14 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
   (`var(--dab-color-text-primary)`, `text-text-primary`, `type-body`).
   `pnpm lint` fails the build on a hex colour, `letter-spacing`, or a raw
   `font-size` anywhere else.
-- **Client JavaScript:** none. The document ships no script and `dist/**/*.js`
-  is empty. No framework integration without a recorded decision.
+- **Client JavaScript:** one module, and only for the home work showcase.
+  `BaseLayout` ships a one-line inline bootstrap that swaps `no-js` for `js`
+  before paint; `/` and `/zh` carry the showcase module (bundled, and inlined
+  by Astro while it stays this small) that adds the gallery's tab behaviour.
+  Everything renders and reads without it. `scripts/check-meta.mjs` allows
+  exactly those two artifacts and fails on any other script or bundle. No
+  framework integration, router, or analytics; a new script is a new budget
+  line and needs a recorded decision here.
 - **Theme:** pinned to `light`. `BaseLayout` sets `data-theme="light"` and the
   toggle is out; the dark tokens stay for its return. Full contract in
   `src/CONVENTIONS.md`.
@@ -99,7 +105,8 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
 - [ ] Accessibility: keyboard path, visible focus, 44×44 targets, contrast on
       the pinned light theme (re-measure when dark returns) (DabAgents rule 04,
       DabDesign `core.md` §9)
-- [ ] No client JavaScript
+- [ ] Client JavaScript stays inside the one-module budget, and every surface
+      still works with scripting off
 - [ ] Copy follows DabAgents rule 07; Chinese copy follows DabFonts
 - [ ] `src/CONVENTIONS.md` updated when an interface changes
 - [ ] Design sign-off recorded for every UI change, with screenshots at 375,

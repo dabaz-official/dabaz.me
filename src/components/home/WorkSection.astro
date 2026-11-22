@@ -1,12 +1,13 @@
 ---
 /**
- * Work: the two-up grid of shipped things.
+ * Work: the home band around the project showcase.
  *
- * The home band; `/work` renders the same grid under its own `h1`.
+ * `/work` keeps the two-up grid (`components/work/WorkPage.astro`); the home
+ * band is the pill-tab showcase, one screenshot and one summary per project.
  */
 import type { CollectionEntry } from "astro:content";
 import Container from "../Container.astro";
-import WorkGallery from "../work/WorkGallery.astro";
+import WorkShowcase from "../work/WorkShowcase.astro";
 import ui from "../../content/ui";
 import type { Locale } from "../../lib/i18n";
 
@@ -22,13 +23,13 @@ const { entries, locale } = Astro.props;
   <Container>
     <h2 class="work__title type-display" id="work-title">{ui.nav.work[locale]}</h2>
 
-    <WorkGallery entries={entries} locale={locale} />
+    <WorkShowcase entries={entries} locale={locale} />
   </Container>
 </section>
 
 <style>
   .work {
-    padding-block-start: var(--dab-space-24);
+    padding-block: var(--dab-space-16);
     scroll-margin-block-start: calc(var(--dab-header-height) + var(--dab-space-4));
   }
 

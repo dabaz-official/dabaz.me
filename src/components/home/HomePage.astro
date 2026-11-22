@@ -12,7 +12,7 @@
 import { getCollection } from "astro:content";
 import HeroStage from "./HeroStage.astro";
 import Intro from "./Intro.astro";
-import WorkGrid from "./WorkGrid.astro";
+import WorkSection from "./WorkSection.astro";
 import MusicSection from "./MusicSection.astro";
 import WritingSection from "./WritingSection.astro";
 import ContactSection from "./ContactSection.astro";
@@ -39,7 +39,7 @@ const posts = postsForLocale(
 
 <HeroStage locale={locale} />
 <Intro locale={locale} />
-<WorkGrid entries={works} locale={locale} />
+<WorkSection entries={works} locale={locale} />
 <MusicSection locale={locale} />
 {
   posts.length > 0 && (

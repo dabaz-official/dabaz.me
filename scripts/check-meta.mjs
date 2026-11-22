@@ -5,7 +5,8 @@
  * Runs after `astro build` as part of `pnpm check`. It asserts the surfaces
  * rule 10 owns: one `<h1>` and title per page, the title pattern, the shared
  * description, the canonical/OG URL, a 1200×630 OG PNG, the icon files, the
- * manifest, the sitemap and robots, `hreflang`, and zero client JavaScript.
+ * manifest, the sitemap and robots, `hreflang`, and the JavaScript budget:
+ * the one shared bootstrap plus the home showcase module, nothing else.
  *
  * A record's own summary may be shorter than rule 07's 120-character floor;
  * the guard reports that as a warning instead of padding owner copy.
@@ -56,9 +57,19 @@ for await (const path of walk(root)) files.push(path);
 
 const htmlFiles = files.filter((path) => path.endsWith(".html"));
 const jsFiles = files.filter((path) => path.endsWith(".js"));
-if (jsFiles.length > 0) {
-  errors.push(`client JavaScript found: ${jsFiles.map((p) => relative(root, p)).join(", ")}`);
-}
+
+/**
+ * The JavaScript budget (AGENTS.md § Project rules, CONVENTIONS.md §6): one
+ * inline bootstrap that swaps `no-js` for `js` before paint, and one bundled
+ * module behind the home work showcase. A third artifact is a second budget
+ * line, so it fails here instead of shipping quietly.
+ */
+const INLINE_BOOTSTRAP =
+  'document.documentElement.classList.replace("no-js", "js");';
+/** Astro inlines a small module; this marker proves which one it is. */
+const SHOWCASE_MARKER = "[data-showcase]";
+const HOME_PAGES = new Set(["index.html", "zh/index.html"]);
+const referencedScripts = new Set();
 
 const ogFiles = new Map();
 for (const path of files.filter((file) => file.endsWith(".png") && file.includes("/og/"))) {
@@ -176,18 +187,63 @@ for (const path of htmlFiles) {
   }
   if (!links.some((tag) => tag.rel === "manifest")) errors.push(`${rel}: missing manifest link`);
 
+  let showcaseModules = 0;
+
   for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)) {
     const attributes = attrs(match[1]);
-    if (attributes.type !== "application/ld+json") {
-      errors.push(`${rel}: unexpected executable script`);
+
+    if (attributes.type === "application/ld+json") {
+      try {
+        JSON.parse(decode(match[2]));
+      } catch {
+        errors.push(`${rel}: JSON-LD does not parse`);
+      }
       continue;
     }
-    try {
-      JSON.parse(decode(match[2]));
-    } catch {
-      errors.push(`${rel}: JSON-LD does not parse`);
+
+    if (attributes.src) {
+      if (!HOME_PAGES.has(rel)) {
+        errors.push(`${rel}: unexpected module script ${attributes.src}`);
+      } else if (!/^\/_astro\/[\w.-]+\.js$/.test(attributes.src)) {
+        errors.push(`${rel}: module script must be a built file under /_astro`);
+      } else {
+        referencedScripts.add(attributes.src.slice(1));
+        showcaseModules += 1;
+      }
+      continue;
     }
+
+    const body = match[2].replace(/\s+/g, " ").trim();
+
+    if (body === INLINE_BOOTSTRAP) continue;
+
+    // Astro inlines a small module into the page; it must be the showcase, on
+    // a home route, and only once.
+    if (
+      attributes.type === "module" &&
+      HOME_PAGES.has(rel) &&
+      body.includes(SHOWCASE_MARKER)
+    ) {
+      showcaseModules += 1;
+      continue;
+    }
+
+    errors.push(`${rel}: unexpected inline script`);
   }
+
+  if (HOME_PAGES.has(rel) && showcaseModules !== 1) {
+    errors.push(`${rel}: expected one showcase module, found ${showcaseModules}`);
+  }
+}
+
+for (const path of jsFiles) {
+  const name = relative(root, path);
+  if (!referencedScripts.has(name)) errors.push(`unreferenced JavaScript: ${name}`);
+}
+if (referencedScripts.size > 1) {
+  errors.push(
+    `JavaScript budget: ${referencedScripts.size} modules (${[...referencedScripts].join(", ")})`,
+  );
 }
 
 for (const file of [

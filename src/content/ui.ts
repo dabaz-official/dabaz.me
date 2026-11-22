@@ -35,6 +35,8 @@ export interface UiCopy {
   };
   work: {
     description: Localized;
+    /** Accessible name of the home showcase's tab list. */
+    showcaseLabel: Localized;
   };
   music: {
     description: Localized;
@@ -95,6 +97,7 @@ const ui: UiCopy = {
       en: "Shipped work by DabAZ: web apps, games, and tools built end to end, with the screenshots and the trade-offs behind each one.",
       zh: "DabAZ 的作品： 从网页应用到小游戏与工具， 每一件都从想法做到上线， 附上截图、 技术选择与背后的取舍， 以及仍在维护的部分。",
     },
+    showcaseLabel: { en: "Projects", zh: "项目" },
   },
   music: {
     description: {

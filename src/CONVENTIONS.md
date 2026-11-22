@@ -28,7 +28,7 @@ commit. `DESIGN.md` owns composition; DabDesign, DabFonts, and DabAgents (pins i
 | `src/pages/work.astro`, `music.astro`, `contact.astro` | `/work`, `/music`, `/contact`; the Chinese twins live under `src/pages/zh/` | maintenance |
 | `src/pages/zh/` | the same routes under `/zh` | thread 4 |
 | `src/components/writing/` | the post list, its row, tag links, the pager, the shared list/post/tag bodies | thread 3; thread 4 |
-| `src/components/work/`, `music/`, `contact/` | each page's shared body and the page wrapper the home band also renders | maintenance |
+| `src/components/work/`, `music/`, `contact/` | each page's shared body, plus the pieces the home band reuses | maintenance |
 | `src/pages/` | routes | threads 2–4 |
 | `src/pages/sitemap.xml.ts` | every public route plus its `hreflang` alternates | thread 5 |
 | `src/pages/404.astro` | the real 404 document, `noindex` | thread 5 |
@@ -151,10 +151,11 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `components/home/HeroPreload.astro` | — | the art-directed hero preload links for the `head` slot |
 | `components/home/HeroStage.astro` | `locale?` | the cutout portrait over the inline wordmark SVG, art-directed across three widths, plus the scroll cue; sticky, clipped, `z-index: 0` |
 | `components/home/Intro.astro` | `locale: Locale` | the page's only `h1`: role (`type-h3`), name (`type-display-xl`, `lang="en"`), lede (`type-lede`) |
-| `components/home/WorkGrid.astro` | `entries: CollectionEntry<"works">[]`, `locale` | the home band; the two-up card grid lives in `components/work/WorkGallery.astro` |
+| `components/home/WorkSection.astro` | `entries: CollectionEntry<"works">[]`, `locale` | the home band; the project showcase lives in `components/work/WorkShowcase.astro` |
 | `components/home/MusicSection.astro` | `locale?` | the home band; the streaming links, player, and release rows live in `components/music/MusicContent.astro` |
 | `components/home/WritingSection.astro` | `entries: WritingEntry[]`, `hasMore: boolean`, `locale?` | the newest posts as home rows (`h3` titles, no tags), plus `All writing` only when more exist; the page renders the section only when a post exists |
 | `components/home/ContactSection.astro` | `locale?` | the home band; the address and the contact subset of `social.all` live in `components/contact/ContactDetails.astro` |
+| `components/work/WorkShowcase.astro` | `entries: CollectionEntry<"works">[]`, `locale` | pill-tab project gallery: one screenshot and one `summary` per record, cross-fading in one grid cell; the caption row is sized by the tallest summary so tabs never move; the tab behaviour is the site's one client module (CONVENTIONS.md §6); nav hidden and panels stacked with scripting off |
 | `components/work/WorkGallery.astro` | `entries: CollectionEntry<"works">[]`, `locale`, `heading?` (`h3` default) | two-up card grid; card = 16:10 screenshot in its own clipped box, `tags[locale]` (`type-label-caps`), title (`type-h3`); hover scales the image 1.03 |
 | `components/work/WorkPage.astro` | `entries: CollectionEntry<"works">[]`, `locale` | `/work` body: `type-h1` heading plus the gallery |
 | `components/music/MusicContent.astro` | `locale?`, `subHeading?` (`h3` default) | streaming links, DabMusic as own player, latest releases; kind labels and dates follow the locale |
@@ -177,23 +178,39 @@ Rules: extend a primitive rather than forking it; a new visual need is a token
 decision, not a local value. Home sections after the hero are opaque and sit at
 `z-index: 1` (`global.css`), because the hero stays pinned at `z-index: 0`.
 
-## 6. Islands budget
+## 6. Client JavaScript budget
 
-Zero client JavaScript. `dist/**/*.js` is empty and the document carries no
-inline script: the theme toggle is out and the theme is pinned to light.
+Two artifacts, no more:
+
+1. **The bootstrap.** `BaseLayout` writes `class="no-js"` on `<html>` and one
+   inline `<script>` in `<head>` that replaces it with `js`. It runs before the
+   body parses, so enhancement CSS never flashes, and it is the only inline
+   script on the site.
+2. **The showcase module.** `components/work/WorkShowcase.astro` ships one
+   bundled module, loaded by `/` and `/zh` only. Astro inlines it into the
+   document while it stays this small, so there is no `/_astro` request; the
+   guard accepts either form. It adds the tab behaviour — selected state,
+   roving `tabindex`, arrow/Home/End keys, and the sliding indicator — to
+   markup that already renders as a full list.
+
+Everything else stays static. The showcase is a progressive enhancement: with
+scripting off the nav is hidden and the four panels stack in document order with
+their screenshots and summaries, so no project copy is reachable only through a
+tab. `prefers-reduced-motion` drops the cross-fade and the indicator slide.
 
 MDX is a build-time integration (`@astrojs/mdx`), not an island: a post body
-may import `ContentImage` or another `.astro` component, and the output is
-still plain HTML with an empty `dist/**/*.js`. Syntax highlighting is off so a
-code block cannot import a palette outside the tokens.
+may import `ContentImage` or another `.astro` component, and the output is still
+plain HTML with no bundle of its own. Syntax highlighting is off so a code block
+cannot import a palette outside the tokens.
 
-Anything else — the toggle's return, audio, command palette, analytics, an
+Anything else — the toggle's return, audio, a command palette, analytics, an
 interactive filter — needs a recorded decision and its own budget line before it
 ships. Restoring the toggle adds one inline script, not a framework island.
 
-JSON-LD is the one `<script>` element in the document and it is data, not
-client code: `type="application/ld+json"`, no `src`, never evaluated. The
-`dist/**/*.js` check stays empty.
+JSON-LD is data, not client code: `type="application/ld+json"`, no `src`, never
+evaluated. `scripts/check-meta.mjs` enforces the budget — the bootstrap's exact
+text, the showcase module (inline or `/_astro`) on the home documents only, and
+no unreferenced `.js` in `dist/`.
 
 **Critical path.** `astro.config.mjs` sets `build.inlineStylesheets: "always"`:
 the whole stylesheet is small, and inlining removes the render-blocking CSS
@@ -412,3 +429,8 @@ and roles show years by owner decision; the CV's month ranges are not modelled.
 The home and post descriptions are owner copy and sit below rule 07's length
 floor; `scripts/check-meta.mjs` reports them as warnings rather than padding
 them.
+
+The home work band now renders `components/work/WorkShowcase.astro` — the
+pill-tab project gallery, and the reason the JavaScript budget exists — while
+`/work` keeps the two-up grid. It reuses the records' existing covers and
+`summary` copy; no new content field was added.
