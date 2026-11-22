@@ -1,5 +1,6 @@
 ---
 title: DabMusic
+order: 1
 year: 2024
 role:
   en: Independent developer
@@ -13,6 +14,7 @@ tags:
 href: https://music.dabaz.me
 cover:
   src: ./music.jpg
+  dark: ./music-dark.jpg
   alt:
     en: ""
     zh: ""

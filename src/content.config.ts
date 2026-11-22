@@ -25,6 +25,11 @@ const works = defineCollection({
     z.object({
       title: z.string(),
       year: z.number().int().optional(),
+      /**
+       * Curated display order in the home showcase and the `/work` grid: lower
+       * first. Omit to fall back to newest year first (`src/lib/works.ts`).
+       */
+      order: z.number().int().optional(),
       role: localized,
       org: z.string().optional(),
       summary: localized,
@@ -34,6 +39,12 @@ const works = defineCollection({
       cover: z
         .object({
           src: image(),
+          /**
+           * The same screen captured in the dark theme. Omitted when the
+           * project has no light/dark pair (Cyclic ships dark only), and the
+           * light capture then serves both themes.
+           */
+          dark: image().optional(),
           alt: localized,
         })
         .optional(),

@@ -87,6 +87,19 @@ const id = "work-showcase";
                     fetchpriority="low"
                   />
                 )}
+                {cover?.dark && (
+                  <Image
+                    class="showcase__image showcase__image--dark"
+                    src={cover.dark}
+                    alt={cover.alt[locale]}
+                    width={1600}
+                    height={1000}
+                    widths={[640, 960, 1600]}
+                    sizes="(min-width: 1024px) 960px, 100vw"
+                    loading="lazy"
+                    fetchpriority="low"
+                  />
+                )}
               </figure>
               <div class="showcase__caption">
                 <h3 class="type-h3 showcase__name" lang="en">
@@ -164,6 +177,22 @@ const id = "work-showcase";
     inline-size: 100%;
     block-size: 100%;
     object-fit: cover;
+  }
+
+  /* A work ships one capture per theme; the dark one replaces the light one
+     when the document flips. A record without a dark capture keeps its single
+     image in both themes (Cyclic is dark-only). The hidden capture stays
+     `lazy`, so the theme that is not in use does not download it. */
+  .showcase__image--dark {
+    display: none;
+  }
+
+  html[data-theme="dark"] .showcase__image {
+    display: none;
+  }
+
+  html[data-theme="dark"] .showcase__image--dark {
+    display: block;
   }
 
   /* The outgoing summary leaves in one step and the incoming one fades in:

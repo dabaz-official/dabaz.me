@@ -1,5 +1,6 @@
 ---
 title: DabMinesweeper
+order: 4
 year: 2026
 role:
   en: Independent developer
@@ -13,6 +14,7 @@ tags:
 href: https://minesweeper.dabaz.me
 cover:
   src: ./minesweeper.jpg
+  dark: ./minesweeper-dark.jpg
   alt:
     en: ""
     zh: ""

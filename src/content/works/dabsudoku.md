@@ -1,5 +1,6 @@
 ---
 title: DabSudoku
+order: 3
 year: 2025
 role:
   en: Independent developer
@@ -13,6 +14,7 @@ tags:
 href: https://sudoku.dabaz.me
 cover:
   src: ./sudoku.jpg
+  dark: ./sudoku-dark.jpg
   alt:
     en: ""
     zh: ""

@@ -19,6 +19,7 @@ commit. `DESIGN.md` owns composition; DabDesign, DabFonts, and DabAgents (pins i
 | `src/lib/dates.ts` | `formatDate(isoDay, locale)`, `dateTime()`, `rssDate()` | foundation; thread 4 |
 | `src/lib/feed.ts` | `buildFeed(locale)` | thread 4 |
 | `src/lib/writing.ts` | post URLs and ordering per locale, tags, pagination, alternate-language targets | thread 3; thread 4; thread 5 translation lookups |
+| `src/lib/works.ts` | `sortWorks(entries)` | one works order for the home showcase and the `/work` grid: `order` first, then newest `year`; a record without `order` never overtakes a curated one |
 | `src/data/site.ts` | site name, URL, email, `role` and `description` (`Localized`), and the surface identity: tagline, OG locale and image, icons, manifest, theme colours | foundation; thread 5 surface fields |
 | `src/data/social.ts` | `Social[]`, `primary` and `all` | foundation |
 | `src/data/music.ts` | `platforms`, `ownPlayer` (`note` is `Localized`), `releases` | thread 2 renders |
@@ -241,10 +242,16 @@ performance decision.
 - `src/content/` is the only home for records and copy. Foundation and thread 2
   created `src/content.config.ts` with `works` and `experience`; thread 3 added
   `writing` to the same file, never a second config.
-- Works are ordered newest first by `year`; experience newest first by `start`.
-  Both are sorted at the page, not in the loader.
-- A work cover lives beside its record (`src/content/works/<slug>.webp`) so the
-  `image()` schema helper resolves it; images are not kept in `public/`.
+- Works are ordered by the curated `order` first and newest `year` second, in
+  one place: `sortWorks()` in `src/lib/works.ts`. The home showcase and the
+  `/work` grid read the same order, so a record's position never disagrees
+  between the two surfaces. Experience is still newest first by `start`, sorted
+  at the page rather than in the loader.
+- A work cover lives beside its record (`src/content/works/<slug>.<ext>`) so
+  the `image()` schema helper resolves it; images are not kept in `public/`.
+  `cover.dark` is the same screen captured in the dark theme and replaces
+  `cover.src` when the document carries `data-theme="dark"`; a record without
+  it (Cyclic, which ships dark only) keeps its one image in both themes.
 - Writing lives at `src/content/writing/<locale>/<slug>.mdx`, one file per post
   per locale. Frontmatter: `title`, `locale`, `date` (`YYYY-MM-DD`; quote it, or
   the loader normalises the date YAML parses), `summary`, `tags`, `draft`. The

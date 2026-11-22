@@ -1,5 +1,6 @@
 ---
 title: Cyclic
+order: 2
 year: 2023
 role:
   en: Independent developer

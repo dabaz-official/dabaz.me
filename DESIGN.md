@@ -297,11 +297,12 @@ type Work = {
   slug: string;               // stable id, also the URL segment if a case page exists
   title: string;              // proper noun, never translated
   year?: number;              // omit rather than guess
+  order?: number;             // curated display order, lower first; year breaks ties
   role: Localized;
   org?: string;
   summary: Localized;         // one sentence, outcome first
   href?: string;
-  cover?: { src: string; alt: Localized };
+  cover?: { src: string; dark?: string; alt: Localized };  // dark: same screen, dark theme
   status: "live" | "archived";
 };
 
@@ -331,7 +332,8 @@ Authoring rules:
 - `title` and `org` are proper nouns and stay untranslated; everything else is
   `Localized`.
 - A missing fact is omitted, never filled with a placeholder in production.
-- Work is ordered newest first; `year` drives the visible meta.
+- Work is ordered by the curated `order` and falls back to newest `year`; the
+  year still drives the visible meta.
 - Writing is ordered newest first per locale. A post exists only in the locale
   it was written in; the other locale's list omits it rather than falling back.
 - Summary voice follows DabAgents rule 07; this document does not set tone.

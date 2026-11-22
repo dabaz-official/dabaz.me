@@ -17,6 +17,7 @@ import MusicSection from "./MusicSection.astro";
 import WritingSection from "./WritingSection.astro";
 import ContactSection from "./ContactSection.astro";
 import type { Locale } from "../../lib/i18n";
+import { sortWorks } from "../../lib/works";
 import { postsForLocale, publishedPosts } from "../../lib/writing";
 
 interface Props {
@@ -25,10 +26,8 @@ interface Props {
 
 const { locale } = Astro.props;
 
-// Newest first; `year` drives the order (§10).
-const works = (await getCollection("works")).sort(
-  (a, b) => (b.data.year ?? 0) - (a.data.year ?? 0),
-);
+// The curated order lives in `src/lib/works.ts` (§10): `order`, then year.
+const works = sortWorks(await getCollection("works"));
 
 // Newest first; the home list shows the first three and links out for the rest.
 const posts = postsForLocale(
