@@ -156,7 +156,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `src/lib/feed.ts` | `buildFeed(locale)` | one channel per locale: own posts, `<language>`, title, description, and self link |
 | `components/home/HomePage.astro` | `locale: Locale` | the home composition in DESIGN.md §6 order; a locale's Writing band only when that locale has a post |
 | `components/home/HeroPreload.astro` | — | the art-directed hero preload links for the `head` slot |
-| `components/home/HeroStage.astro` | `locale?` | the cutout portrait over the inline wordmark SVG, art-directed across three widths, plus the scroll cue; sticky, clipped, `z-index: 0` |
+| `components/home/HeroStage.astro` | `locale?` | the cutout portrait over the inline wordmark SVG, art-directed across three widths, plus the scroll cue; one viewport tall, clipped, in flow — it scrolls away rather than pinning |
 | `components/home/Intro.astro` | `locale: Locale` | the page's only `h1`: role (`type-h3`), name (`type-display-xl`, `lang="en"`), lede (`type-lede`) |
 | `components/home/WorkSection.astro` | `entries: CollectionEntry<"works">[]`, `locale` | the home band; the project showcase lives in `components/work/WorkShowcase.astro` |
 | `components/home/MusicSection.astro` | `locale?` | the home band; the streaming links, player, and release rows live in `components/music/MusicContent.astro` |
@@ -182,8 +182,9 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `src/content/profile.ts` | `HomeCopy` and default export | home copy per locale: role, intro, `now`, about, portrait alt, section labels |
 
 Rules: extend a primitive rather than forking it; a new visual need is a token
-decision, not a local value. Home sections after the hero are opaque and sit at
-`z-index: 1` (`global.css`), because the hero stays pinned at `z-index: 0`.
+decision, not a local value. Home sections after the hero paint their own fill
+on `::before` (`global.css`); no stacking layer is needed, because the hero
+scrolls with the page.
 
 ## 6. Client JavaScript budget
 

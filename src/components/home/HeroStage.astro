@@ -2,6 +2,9 @@
 /**
  * Hero: the cutout portrait over the oversized name, with the scroll cue.
  *
+ * One viewport tall and in flow: the hero scrolls away with the page. It used
+ * to pin so the sections scrolled over it, which read as a parallax drag.
+ *
  * Art direction is a `<picture>`: the tall crop on phones, the 4K master on
  * wide screens, the 2880 otherwise. Each file is already sized for its slot,
  * so the browser never scales a bitmap up.
@@ -70,9 +73,7 @@ const { locale = defaultLocale } = Astro.props;
 
 <style>
   .stage {
-    position: sticky;
-    inset-block-start: var(--dab-header-height);
-    z-index: 0;
+    position: relative;
     block-size: calc(100dvh - var(--dab-header-height));
     overflow: clip;
   }
