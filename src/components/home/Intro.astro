@@ -20,7 +20,7 @@ const { locale } = Astro.props;
 <section class="intro" aria-labelledby="intro-name">
   <Container>
     <div class="intro__inner">
-      <p class="type-h4 intro__eyebrow">{home.role[locale]}</p>
+      <p class="type-h3 intro__eyebrow">{home.role[locale]}</p>
       <h1 class="type-display-xl intro__name" id="intro-name">
         <span lang="en">{site.name}</span>
       </h1>
@@ -32,28 +32,35 @@ const { locale } = Astro.props;
 <style>
   .intro {
     padding-block-start: var(--dab-space-24);
-  }
-
-  .intro__inner {
     text-align: center;
   }
 
+  /* No box: a wrapper between text blocks makes WebKit paint its full width
+     when a selection crosses it. */
+  .intro__inner {
+    display: contents;
+  }
+
+  /* Single-line centred blocks shrink to their text, so a selection that
+     crosses them paints the words rather than the whole column. */
   .intro__eyebrow {
-    margin: 0;
+    inline-size: fit-content;
+    margin: 0 auto;
     color: var(--dab-color-text-primary);
   }
 
   .intro__name {
-    margin: 0;
+    inline-size: fit-content;
+    margin: 0 auto;
     margin-block-start: var(--dab-space-4);
     color: var(--dab-color-text-primary);
     text-wrap: balance;
   }
 
   .intro__lede {
-    margin: 0;
+    inline-size: fit-content;
+    margin: 0 auto;
     margin-block-start: var(--dab-space-8);
-    margin-inline: auto;
     max-inline-size: 34em;
     color: var(--dab-color-text-secondary);
     text-wrap: pretty;

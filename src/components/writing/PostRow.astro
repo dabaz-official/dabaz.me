@@ -50,6 +50,12 @@ const lang = htmlLang(locale);
 </article>
 
 <style>
+  /* Shrink the text column to its content: a full-width box paints its whole
+     row when a selection crosses it in WebKit. */
+  .post-row__content {
+    inline-size: fit-content;
+  }
+
   .post-row {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -85,6 +91,7 @@ const lang = htmlLang(locale);
   }
 
   .post-row__summary {
+    inline-size: fit-content;
     max-inline-size: 38em;
     margin: 0;
     margin-block-start: var(--dab-space-1);

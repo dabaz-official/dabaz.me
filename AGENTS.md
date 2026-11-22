@@ -126,3 +126,15 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
   values mirror `--dab-color-background` and appear only in `src/data/site.ts`
   and `public/site.webmanifest`. The token guard does not scan `public/`.
   Owner: HQ. Review: 2026-12-19.
+- **Two-tone text scale.** Rule: DabDesign `core.md` §3.3 fixes three text
+  tiers (`text-primary` / `text-secondary` / `text-tertiary`) and §1.2 allows a
+  theme to remap only the accent and surface-tint entries. Reason: `gray-700`
+  and `gray-600` sit 18 steps apart and read as one tone, so the page shows
+  near-black plus two interchangeable grays. The site follows Apple's system —
+  one near-black for structure, one quiet tone for everything supporting, with
+  hierarchy carried by size and weight — and maps both text tiers to `#6f6f6f`
+  (4.81:1 on the background, 5.02:1 on a surface; dark `gray-400`, 7.85:1 and
+  7.11:1). Scope: those two roles only; `text-primary`, `text-inverse`,
+  `text-disabled`, and every other role keep the DabDesign value. Owner: HQ.
+  Review: 2026-12-19. No upstream `DEC-`: the owner chose a project-local
+  override, and DabDesign is not modified on this branch.

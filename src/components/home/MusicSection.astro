@@ -22,7 +22,7 @@ const { locale = defaultLocale } = Astro.props;
 
 <section class="music" id="music" aria-labelledby="music-title">
   <Container>
-    <h2 class="music__title type-h2" id="music-title">{ui.nav.music[locale]}</h2>
+    <h2 class="music__title type-display" id="music-title">{ui.nav.music[locale]}</h2>
 
     <div class="music__block">
       <p class="type-label-caps music__label">{ui.music.streaming[locale]}</p>
@@ -91,7 +91,7 @@ const { locale = defaultLocale } = Astro.props;
                   <span lang="en">{release.platform}</span>
                 </span>
               </span>
-              <span class="release__arrow" aria-hidden="true">↗</span>
+              <span class="type-h3 release__arrow" aria-hidden="true">↗</span>
             </a>
           </li>
         ))
@@ -107,26 +107,31 @@ const { locale = defaultLocale } = Astro.props;
   }
 
   .music__title {
+    inline-size: fit-content;
     margin: 0;
-    margin-block-end: var(--dab-space-8);
+    margin-block-end: var(--dab-space-10);
     color: var(--dab-color-text-primary);
   }
 
-  .music__block + .music__block {
-    margin-block-start: var(--dab-space-8);
+  /* No box: a wrapper between text blocks makes WebKit paint its full width
+     when a selection crosses it. The gap moves to the list below. */
+  .music__block {
+    display: contents;
   }
 
   .music__label {
+    inline-size: fit-content;
     margin: 0;
     margin-block-end: var(--dab-space-3);
     color: var(--dab-color-text-tertiary);
   }
 
   .music__links {
+    inline-size: fit-content;
     display: flex;
     flex-wrap: wrap;
     gap: var(--dab-space-2) var(--dab-space-8);
-    margin: 0;
+    margin: 0 0 var(--dab-space-8);
     padding: 0;
     list-style: none;
   }
@@ -148,6 +153,7 @@ const { locale = defaultLocale } = Astro.props;
   }
 
   .music__own {
+    inline-size: fit-content;
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
@@ -160,6 +166,7 @@ const { locale = defaultLocale } = Astro.props;
   }
 
   .music__sub {
+    inline-size: fit-content;
     margin: 0;
     margin-block-start: var(--dab-space-16);
     color: var(--dab-color-text-tertiary);
@@ -197,15 +204,18 @@ const { locale = defaultLocale } = Astro.props;
   .release__text {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: var(--dab-space-1);
     min-inline-size: 0;
   }
 
   .release__name {
+    inline-size: fit-content;
     color: var(--dab-color-text-primary);
   }
 
   .release__meta {
+    inline-size: fit-content;
     color: var(--dab-color-text-tertiary);
   }
 

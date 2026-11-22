@@ -79,12 +79,12 @@
 }
 
 @layer components {
-  /* The page shell: container-lg plus core §7 gutters. */
+  /* The page column: container-lg less the gutters, held off the viewport
+     edges by auto margins rather than by padding. */
   .container-shell {
-    width: 100%;
-    max-width: var(--dab-container-lg);
+    inline-size: calc(min(100%, var(--dab-container-lg)) - 2 * var(--dab-gutter));
     margin-inline: auto;
-    padding-inline: var(--dab-gutter);
+    padding-inline: 0;
   }
 
   /* Body measure. Prose and any long-form copy stay inside it. */
@@ -157,6 +157,16 @@
   main > section + section {
     position: relative;
     z-index: 1;
+  }
+
+  /* The band's fill lives on a pseudo-element: WebKit paints a section's own
+     background box as the selection highlight when a drag crosses its blocks,
+     but ignores a backing pseudo-element. */
+  main > section + section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
     background-color: var(--dab-color-background);
   }
 

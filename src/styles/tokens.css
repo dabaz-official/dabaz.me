@@ -88,6 +88,8 @@
 
 /* ---------------------------------------------------------------------------
  * Color — core §3.3 plus the personal-series accent (DabDesign.md §2).
+ * Exception: this project runs two text tones instead of three (AGENTS.md
+ * § Exceptions), so `text-secondary` and `text-tertiary` share one value.
  * Light is the fallback: no `data-theme` means light. The site currently pins
  * `data-theme="light"` on `<html>` while the theme toggle is out; the dark
  * block stays here, ready for the toggle's return.
@@ -100,9 +102,12 @@
   --dab-color-surface: #ffffff; /* white */
   --dab-color-surface-secondary: #f5f5f5; /* gray-100 */
 
+  /* Two text tones, not three — project override, AGENTS.md § Exceptions.
+     #6f6f6f is 4.81:1 on the background and 5.02:1 on a surface, over the
+     4.5:1 floor; the distance to gray-900 is what reads as hierarchy. */
   --dab-color-text-primary: #171717; /* gray-900 */
-  --dab-color-text-secondary: #404040; /* gray-700 */
-  --dab-color-text-tertiary: #525252; /* gray-600 */
+  --dab-color-text-secondary: #6f6f6f; /* project tone */
+  --dab-color-text-tertiary: var(--dab-color-text-secondary);
   --dab-color-text-inverse: #ffffff; /* white */
   --dab-color-text-disabled: #a3a3a3; /* gray-400 */
 
@@ -137,8 +142,8 @@
   --dab-color-surface-secondary: #262626; /* gray-800 */
 
   --dab-color-text-primary: #fafafa; /* gray-50 */
-  --dab-color-text-secondary: #d4d4d4; /* gray-300 */
-  --dab-color-text-tertiary: #a3a3a3; /* gray-400 */
+  --dab-color-text-secondary: #a3a3a3; /* gray-400; project tone */
+  --dab-color-text-tertiary: var(--dab-color-text-secondary);
   --dab-color-text-inverse: #171717; /* gray-900 */
   --dab-color-text-disabled: #525252; /* gray-600 */
 
@@ -310,9 +315,10 @@
     letter-spacing: -0.02em;
   }
 
-  /* Intro paragraph: one step above body copy, still reading size. */
+  /* Site role: the intro paragraph — h3 size at reading weight, so the role
+     is the weight and line height rather than a size of its own. */
   .type-lede {
-    font-size: clamp(1.25rem, 1.6vw, 1.5rem);
+    font-size: 1.25rem;
     font-weight: 400;
     line-height: 1.5;
   }

@@ -25,7 +25,7 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
 
 <section class="blog" id="blog" aria-labelledby="blog-title">
   <Container>
-    <h2 class="blog__title type-h2" id="blog-title">{ui.nav.blog[locale]}</h2>
+    <h2 class="blog__title type-display" id="blog-title">{ui.nav.blog[locale]}</h2>
 
     <PostList entries={entries} headingLevel="h3" showTags={false} />
 
@@ -48,8 +48,9 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
   }
 
   .blog__title {
+    inline-size: fit-content;
     margin: 0;
-    margin-block-end: var(--dab-space-8);
+    margin-block-end: var(--dab-space-10);
     color: var(--dab-color-text-primary);
   }
 

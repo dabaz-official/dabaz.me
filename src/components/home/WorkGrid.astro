@@ -22,7 +22,7 @@ const { entries, locale } = Astro.props;
 
 <section class="work" id="work" aria-labelledby="work-title">
   <Container>
-    <h2 class="work__title type-h2" id="work-title">{ui.nav.work[locale]}</h2>
+    <h2 class="work__title type-display" id="work-title">{ui.nav.work[locale]}</h2>
 
     <ul class="work__grid">
       {
@@ -68,8 +68,9 @@ const { entries, locale } = Astro.props;
   }
 
   .work__title {
+    inline-size: fit-content;
     margin: 0;
-    margin-block-end: var(--dab-space-8);
+    margin-block-end: var(--dab-space-10);
     color: var(--dab-color-text-primary);
   }
 
@@ -129,11 +130,13 @@ const { entries, locale } = Astro.props;
   }
 
   .card__tags {
+    inline-size: fit-content;
     margin: 0;
     color: var(--dab-color-text-tertiary);
   }
 
   .card__name {
+    inline-size: fit-content;
     margin: 0;
     margin-block-start: var(--dab-space-2);
     color: var(--dab-color-text-primary);

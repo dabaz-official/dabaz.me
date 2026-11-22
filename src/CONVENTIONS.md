@@ -66,7 +66,11 @@ utilities use the core grid: `p-6` is `space-6` (24px), `gap-2` is `space-2`
 **Type roles** are classes, not utilities, so weight and line height travel with
 the size: `type-display`, `type-h1`, `type-h2`, `type-h3`, `type-h4`,
 `type-body-lg`, `type-body`, `type-body-sm`, `type-label`, `type-caption`. Use
-the mapping in `DESIGN.md` §4. `tabular` adds tabular numerals.
+the mapping in `DESIGN.md` §4. `tabular` adds tabular numerals. The site adds
+three roles on top of that set: `type-display-xl` (the intro name), `type-lede`
+(`type-h3` size at regular weight, for the intro paragraph), and
+`type-label-caps` (uppercase kickers and tags). Home section titles use
+`type-display`.
 
 **Shape and motion.** Radius ladder `rounded-xs | sm | md | lg | pill` maps to
 DabDesign's. One shadow (`shadow-floating`) and one lift (`scale(1.01)`, 300ms,
@@ -136,7 +140,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `ContentImage.astro` | `src: ImageMetadata`, `alt`, `width`, `height`, `widths?`, `sizes?`, `loading?`, `class?` | `astro:assets` output, required dimensions and `alt`, 1px `radius-lg` frame |
 | `.link`, `.button`, `.button-secondary` | classes | link: accent + underline, 2px offset; buttons: `type-label` typography in markup, 44px minimum, neutral ink or 1px boundary |
 | `src/lib/i18n.ts` | `locales`, `Locale`, `defaultLocale`, `Localized<T>`, `htmlLang()`, `otherLocale()`, `localePath()`, `homePath()`, `homeAnchorPath()` | one vocabulary for locale, BCP 47 tag, and path prefix |
-| `src/lib/metadata.ts` | `PageMeta`, `ResolvedMeta`, `resolveMeta()` | title suffix (English em dash, Chinese `——`), the home title (site name + tagline), absolute canonical from `site.url`, OG locale/image, `hreflang` set |
+| `src/lib/metadata.ts` | `PageMeta`, `ResolvedMeta`, `resolveMeta()` | title suffix (`DabAZ - <page>`, one hyphen and spaces in both locales), the home title (site name + tagline), absolute canonical from `site.url`, OG locale/image, `hreflang` set |
 | `src/lib/structured-data.ts` | `homeJsonLd(locale)`, `collectionJsonLd(...)`, `postJsonLd(entry)` | `Person` + `WebSite` on home, `CollectionPage` on lists, `BlogPosting` on a post |
 | `src/content/ui.ts` | `UiCopy` and default export | every interface string, both locales; components never inline one |
 | `src/lib/dates.ts` | `formatDate(isoDay, locale)`, `dateTime()`, `rssDate()` | one date format per locale; Chinese uses `YYYY 年 M 月 D 日` |
@@ -144,7 +148,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `components/home/HomePage.astro` | `locale: Locale` | the home composition in DESIGN.md §6 order; a locale's Writing band only when that locale has a post |
 | `components/home/HeroPreload.astro` | — | the art-directed hero preload links for the `head` slot |
 | `components/home/HeroStage.astro` | `locale?` | the cutout portrait over the inline wordmark SVG, art-directed across three widths, plus the scroll cue; sticky, clipped, `z-index: 0` |
-| `components/home/Intro.astro` | `locale: Locale` | the page's only `h1`: role (`type-h4`), name (`type-display-xl`, `lang="en"`), lede (`type-lede`) |
+| `components/home/Intro.astro` | `locale: Locale` | the page's only `h1`: role (`type-h3`), name (`type-display-xl`, `lang="en"`), lede (`type-lede`) |
 | `components/home/WorkGrid.astro` | `entries: CollectionEntry<"works">[]`, `locale` | two-up card grid; card = 16:10 screenshot in its own clipped box, `tags[locale]` (`type-label-caps`), title (`type-h3`); hover scales the image 1.03 |
 | `components/home/MusicSection.astro` | `locale?` | streaming links, DabMusic as own player, three latest releases; kind labels and dates follow the locale |
 | `components/home/BlogSection.astro` | `entries: WritingEntry[]`, `hasMore: boolean`, `locale?` | the newest posts as home rows (`h3` titles, no tags), plus `All writing` only when more exist; the page renders the section only when a post exists |
@@ -348,17 +352,19 @@ build's compiler catches template errors.
 
 ## 13. Measured contrast
 
-Measured 2026-11-19 with the WCAG 2.2 formula on the token values above, not on
-estimates. Text pairs need 4.5:1, non-text 3:1.
+Measured 2026-11-19 and re-measured 2026-11-22 after the two-tone override, with
+the WCAG 2.2 formula on the token values above, not on estimates. Text pairs
+need 4.5:1, non-text 3:1. `text-secondary` and `text-tertiary` are one tone in
+this project (AGENTS.md § Exceptions), so their rows match.
 
 | Pair | Light | Dark | Minimum |
 |---|---:|---:|---|
 | `text-primary` on `background` | 17.18:1 | 18.97:1 | 4.5:1 |
 | `text-primary` on `surface` | 17.93:1 | 17.18:1 | 4.5:1 |
-| `text-secondary` on `background` | 9.93:1 | 13.36:1 | 4.5:1 |
-| `text-secondary` on `surface` | 10.37:1 | 12.09:1 | 4.5:1 |
-| `text-tertiary` on `background` | 7.49:1 | 7.85:1 | 4.5:1 |
-| `text-tertiary` on `surface` | 7.81:1 | 7.11:1 | 4.5:1 |
+| `text-secondary` on `background` | 4.81:1 | 7.85:1 | 4.5:1 |
+| `text-secondary` on `surface` | 5.02:1 | 7.11:1 | 4.5:1 |
+| `text-tertiary` on `background` | 4.81:1 | 7.85:1 | 4.5:1 |
+| `text-tertiary` on `surface` | 5.02:1 | 7.11:1 | 4.5:1 |
 | `primary-text` on `background` | 6.42:1 | 10.98:1 | 4.5:1 |
 | `primary-text` on `surface` | 6.70:1 | 9.94:1 | 4.5:1 |
 | `on-primary` on `primary` | 17.93:1 | 17.18:1 | 4.5:1 |

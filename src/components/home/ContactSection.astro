@@ -26,7 +26,7 @@ const links = labels
 
 <section class="contact" id="contact" aria-labelledby="contact-title">
   <Container>
-    <h2 class="contact__title type-h2" id="contact-title">
+    <h2 class="contact__title type-display" id="contact-title">
       {ui.nav.contact[locale]}
     </h2>
     <a class="type-h3 contact__email" href={`mailto:${site.email}`}>{site.email}</a>
@@ -55,8 +55,9 @@ const links = labels
   }
 
   .contact__title {
+    inline-size: fit-content;
     margin: 0;
-    margin-block-end: var(--dab-space-8);
+    margin-block-end: var(--dab-space-10);
     color: var(--dab-color-text-primary);
   }
 
@@ -72,6 +73,7 @@ const links = labels
   }
 
   .contact__links {
+    inline-size: fit-content;
     display: flex;
     flex-wrap: wrap;
     gap: var(--dab-space-2) var(--dab-space-6);
