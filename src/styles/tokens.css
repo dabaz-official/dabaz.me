@@ -226,6 +226,12 @@
 
   /* Body measure: 34–38em, DESIGN.md §5 fixes it at the middle of the range. */
   --dab-measure: 36em;
+
+  /* Header bar height (DESIGN.md §7.1). The bar is the sticky shell: the
+     scroll offsets below depend on it, so it is a token rather than a value
+     repeated in each section. One step under the old space-16, and the floor
+     the 44px targets allow. */
+  --dab-header-height: var(--dab-space-12);
 }
 
 @media (min-width: 640px) {

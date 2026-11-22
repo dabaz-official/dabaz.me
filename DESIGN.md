@@ -157,8 +157,12 @@ radii, or type sizes.
 
 ### 7.1 Header
 
-- **Sticky** at the top; height `space-16`; one 1px bottom border. Content
-  scrolls under it, which is what makes the glass legible.
+- **Sticky** at the top; height `--dab-header-height` (`space-12`, 48px). At the
+  top of the page the header ends in the scrim alone: the 1px bottom border
+  fades in over the first header-height of scroll, as a scroll affordance
+  driven by a CSS scroll timeline (`animation-timeline: scroll(root block)`),
+  never by script. Browsers without scroll timelines show the line at all
+  times. Content scrolls under the bar, which is what makes the glass legible.
 - Glass: background `--dab-header-bg` (page background at 80% minimum, defined
   in `tokens.css`), `backdrop-filter: blur(16px) saturate(1.8)` via
   `--dab-header-blur`. Text sits on the scrim, never on raw content.
@@ -167,11 +171,12 @@ radii, or type sizes.
 - Contrast is measured over the composited scrim in the pinned light theme; the
   scrim may not drop below 80% until it is re-measured. Re-measure when dark
   returns.
-- Left: wordmark, `type-h4`, weight 600.
-- Right: nav (`type-label`, `color-text-secondary`, current item
+- Left: the mark (SVG, `currentColor`) at 24px inside a 44px target, twice the
+  nav's caption text.
+- Right: nav (`type-caption`, `color-text-secondary`, current item
   `color-text-primary` with an accent marker). No theme control: the theme is
   fixed (§3).
-- Anchored sections set `scroll-margin-top` to the header height plus
+- Anchored sections set `scroll-margin-top` to `--dab-header-height` plus
   `space-4`, so a jump never hides a heading under the bar.
 
 ### 7.2 Hero

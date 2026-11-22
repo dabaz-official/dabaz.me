@@ -1,6 +1,8 @@
 ---
 /**
- * The site header: the mark, the section nav, one hairline, glass.
+ * The site header: the mark, the section nav, one hairline, glass. The hairline
+ * is a scroll affordance: it fades in once the page leaves the top, driven by
+ * a CSS scroll timeline (`animation-timeline`), never by script.
  *
  * Sticky at every width; the scrim is the only translucent surface on the
  * site (DESIGN.md §7.1, AGENTS.md → Exceptions). The nav points at the home
@@ -60,7 +62,7 @@ const blogHref =
     </a>
 
     <nav class="site-nav" aria-label={ui.primaryNav[locale]}>
-      <ul class="site-nav__list type-body-sm">
+      <ul class="site-nav__list type-caption">
         <li><a href={homeAnchorPath(locale, "work")}>{ui.nav.work[locale]}</a></li>
         <li><a href={homeAnchorPath(locale, "music")}>{ui.nav.music[locale]}</a></li>
         <li><a href={blogHref}>{ui.nav.blog[locale]}</a></li>
@@ -85,6 +87,30 @@ const blogHref =
     backdrop-filter: var(--dab-header-blur);
   }
 
+  /* The hairline is an affordance, not structure: at the top of the page the
+     header ends in the scrim alone, and the rule fades in over the first
+     header-height of scroll. Pure CSS — a scroll-driven animation on the
+     border colour (Baseline newly available 2026, no client JavaScript).
+     Browsers without scroll timelines keep the line at all times, which is
+     the older, safe reading of the same hairline. */
+  @supports (animation-timeline: scroll(root block)) {
+    .site-header {
+      animation: header-hairline linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 var(--dab-header-height);
+    }
+  }
+
+  @keyframes header-hairline {
+    from {
+      border-block-end-color: transparent;
+    }
+
+    to {
+      border-block-end-color: var(--dab-header-border);
+    }
+  }
+
   @supports not (backdrop-filter: blur(1px)) {
     .site-header {
       background-color: var(--dab-color-background);
@@ -106,11 +132,13 @@ const blogHref =
     align-items: center;
     justify-content: space-between;
     gap: var(--dab-space-4);
-    min-block-size: var(--dab-space-16);
+    min-block-size: var(--dab-header-height);
   }
 
   .logo {
-    --logo-size: 32px;
+    /* Caption-sized nav text (12px) sets the mark's scale: 24px is a clean
+       2× the text size and keeps the mark reading as a mark, not a headline. */
+    --logo-size: 24px;
 
     display: inline-flex;
     align-items: center;
