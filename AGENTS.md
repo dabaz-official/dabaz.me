@@ -77,7 +77,10 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
   framework integration, router, or analytics; a new script is a new budget
   line and needs a recorded decision here.
 - **Theme:** pinned to `light`. `BaseLayout` sets `data-theme="light"` and the
-  toggle is out; the dark tokens stay for its return. Full contract in
+  toggle is out; the dark tokens stay for its return. It also declares
+  `color-scheme: light dark` in `<head>` and on `:root`: that is the declaration
+  Safari 27.3's Adaptive Dark Mode honours, so the page is not repainted for a
+  visitor on a dark system. Do not "fix" it to `light`. Full contract in
   `src/CONVENTIONS.md`.
 - **Interfaces:** `Container`, `Section`, `SectionHeader`, `Prose`,
   `ContentImage`, `BaseLayout`, `src/content/ui.ts`, `src/lib/i18n.ts`,
