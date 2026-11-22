@@ -232,6 +232,11 @@
      repeated in each section. One step under the old space-16, and the floor
      the 44px targets allow. */
   --dab-header-height: var(--dab-space-12);
+
+  /* The two turns of the home page: hero into the intro, and the contact band
+     into the footer. One step past the section rhythm, so it stays a role
+     rather than a new rung on the spacing ladder. */
+  --dab-section-turn: calc(var(--dab-space-24) + var(--dab-space-8));
 }
 
 @media (min-width: 640px) {
