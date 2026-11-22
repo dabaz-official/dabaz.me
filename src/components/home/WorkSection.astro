@@ -8,7 +8,6 @@
 import type { CollectionEntry } from "astro:content";
 import Container from "../Container.astro";
 import WorkShowcase from "../work/WorkShowcase.astro";
-import home from "../../content/profile";
 import ui from "../../content/ui";
 import type { Locale } from "../../lib/i18n";
 
@@ -24,8 +23,6 @@ const { entries, locale } = Astro.props;
   <Container>
     <h2 class="work__title type-display" id="work-title">{ui.nav.work[locale]}</h2>
 
-    <p class="work__intro type-body-lg measure">{home.workIntro[locale]}</p>
-
     <WorkShowcase entries={entries} locale={locale} />
   </Container>
 </section>
@@ -39,14 +36,7 @@ const { entries, locale } = Astro.props;
   .work__title {
     inline-size: fit-content;
     margin: 0;
-    margin-block-end: var(--dab-space-4);
-    color: var(--dab-color-text-primary);
-  }
-
-  .work__intro {
-    margin: 0;
     margin-block-end: var(--dab-space-10);
-    color: var(--dab-color-text-secondary);
-    text-wrap: pretty;
+    color: var(--dab-color-text-primary);
   }
 </style>
