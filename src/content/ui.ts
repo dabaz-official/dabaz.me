@@ -25,7 +25,7 @@ export interface UiCopy {
   nav: {
     work: Localized;
     music: Localized;
-    blog: Localized;
+    writing: Localized;
     contact: Localized;
   };
   home: {
@@ -73,7 +73,7 @@ const ui: UiCopy = {
   nav: {
     work: { en: "Work", zh: "作品" },
     music: { en: "Music", zh: "音乐" },
-    blog: { en: "Blog", zh: "博客" },
+    writing: { en: "Writing", zh: "写作" },
     contact: { en: "Contact", zh: "联系" },
   },
   home: {

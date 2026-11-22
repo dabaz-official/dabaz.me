@@ -1,6 +1,6 @@
 ---
 /**
- * Blog: the newest three posts, in the same row grammar as `/writing`
+ * Writing: the newest three posts, in the same row grammar as `/writing`
  * (DESIGN.md §6, §7.5).
  *
  * The page decides whether the section exists at all: a locale with no
@@ -23,15 +23,17 @@ interface Props {
 const { entries, hasMore, locale = defaultLocale } = Astro.props;
 ---
 
-<section class="blog" id="blog" aria-labelledby="blog-title">
+<section class="writing" id="writing" aria-labelledby="writing-title">
   <Container>
-    <h2 class="blog__title type-display" id="blog-title">{ui.nav.blog[locale]}</h2>
+    <h2 class="writing__title type-display" id="writing-title">
+      {ui.nav.writing[locale]}
+    </h2>
 
     <PostList entries={entries} headingLevel="h3" showTags={false} />
 
     {
       hasMore && (
-        <p class="blog__more">
+        <p class="writing__more">
           <a class="link type-label" href={writingPath(locale)}>
             {ui.writing.all[locale]}
           </a>
@@ -42,19 +44,19 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
 </section>
 
 <style>
-  .blog {
+  .writing {
     padding-block-start: var(--dab-space-24);
     scroll-margin-block-start: calc(var(--dab-header-height) + var(--dab-space-4));
   }
 
-  .blog__title {
+  .writing__title {
     inline-size: fit-content;
     margin: 0;
     margin-block-end: var(--dab-space-10);
     color: var(--dab-color-text-primary);
   }
 
-  .blog__more {
+  .writing__more {
     margin: 0;
     margin-block-start: var(--dab-space-8);
   }

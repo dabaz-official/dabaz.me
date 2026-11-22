@@ -31,9 +31,9 @@ const posts = postsForLocale(
   publishedPosts(await getCollection("writing")),
   locale,
 );
-const blogHref =
+const writingHref =
   posts.length > 0
-    ? homeAnchorPath(locale, "blog")
+    ? homeAnchorPath(locale, "writing")
     : writingPath(locale);
 ---
 
@@ -65,7 +65,7 @@ const blogHref =
       <ul class="site-nav__list type-caption">
         <li><a href={homeAnchorPath(locale, "work")}>{ui.nav.work[locale]}</a></li>
         <li><a href={homeAnchorPath(locale, "music")}>{ui.nav.music[locale]}</a></li>
-        <li><a href={blogHref}>{ui.nav.blog[locale]}</a></li>
+        <li><a href={writingHref}>{ui.nav.writing[locale]}</a></li>
         <li>
           <a href={homeAnchorPath(locale, "contact")}
             >{ui.nav.contact[locale]}</a

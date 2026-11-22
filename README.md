@@ -5,9 +5,9 @@ fonts, no client runtime.
 
 The rebuild is in progress on `rebuild`. This branch ships the foundation —
 tokens, fonts, the document shell, shared primitives, CI — the home page (hero,
-work, music, blog, contact), the blog (`/writing`, post pages, tags, pagination,
-per-locale RSS), and the Chinese site: `/zh` with the same routes, a footer
-language switch, and DabFonts punctuation and CJK–Latin spacing.
+work, music, writing, contact), the writing (`/writing`, post pages, tags,
+pagination, per-locale RSS), and the Chinese site: `/zh` with the same routes, a
+footer language switch, and DabFonts punctuation and CJK–Latin spacing.
 
 ## Stack
 

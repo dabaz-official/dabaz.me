@@ -66,7 +66,8 @@ const isoDay = z.preprocess(
  *
  * `date` stays an ISO 8601 day string, as in the model; ISO dates sort
  * lexicographically, so no timezone ever shifts a publication day. `tags` and
- * `draft` are the two additions the blog needs; neither is a required fact.
+ * `draft` are the two additions the writing section needs; neither is a
+ * required fact.
  */
 const writing = defineCollection({
   loader: glob({

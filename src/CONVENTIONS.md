@@ -151,7 +151,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `components/home/Intro.astro` | `locale: Locale` | the page's only `h1`: role (`type-h3`), name (`type-display-xl`, `lang="en"`), lede (`type-lede`) |
 | `components/home/WorkGrid.astro` | `entries: CollectionEntry<"works">[]`, `locale` | two-up card grid; card = 16:10 screenshot in its own clipped box, `tags[locale]` (`type-label-caps`), title (`type-h3`); hover scales the image 1.03 |
 | `components/home/MusicSection.astro` | `locale?` | streaming links, DabMusic as own player, three latest releases; kind labels and dates follow the locale |
-| `components/home/BlogSection.astro` | `entries: WritingEntry[]`, `hasMore: boolean`, `locale?` | the newest posts as home rows (`h3` titles, no tags), plus `All writing` only when more exist; the page renders the section only when a post exists |
+| `components/home/WritingSection.astro` | `entries: WritingEntry[]`, `hasMore: boolean`, `locale?` | the newest posts as home rows (`h3` titles, no tags), plus `All writing` only when more exist; the page renders the section only when a post exists |
 | `components/home/ContactSection.astro` | `locale?` | `site.email` and the contact subset of `social.all` |
 | `components/writing/PostList.astro` | `entries: WritingEntry[]`, `class?` | the dated rows; the last hairlines closes the list |
 | `components/writing/PostRow.astro` | `entry: WritingEntry` | 9rem date column from 640, `type-h3` title link, one-line summary, tags; the row never nests links; title/summary/date use the post's locale |
@@ -274,8 +274,8 @@ client router are involved.
   writing list or home otherwise. `alternatePath` on `BaseLayout` is the only
   knob; pages pass it explicitly.
 - The Writing band appears only when the current locale has a published post.
-  The Blog nav item stays, but points at the section when it exists and at the
-  locale's writing list otherwise, so no anchor points at a missing section.
+  The Writing nav item stays, but points at the section when it exists and at
+  the locale's writing list otherwise, so no anchor points at a missing section.
 - English runs inside a Chinese page carry `lang="en"` (site name, work and
   release titles, platform and social labels). Tags are author strings and are
   not auto-detected; translate them in the record if the post is Chinese.
@@ -383,7 +383,7 @@ or 1536 CSS pixels (200% zoom on a 1280px window is the 640px case).
 ## 14. Launch surface
 
 Home sections are built (thread 2): hero, work, earlier, and about, with contact
-links in the hero and the footer. Thread 3 built writing: the home Blog band
+links in the hero and the footer. Thread 3 built writing: the home Writing band
 (newest three), `/writing`, one page per post, tag pages, pagination, and a
 populated `/rss.xml`. Thread 4 built the locale seam: `/zh` for home and every
 writing route, `/zh/rss.xml`, interface-copy extraction, the footer language
