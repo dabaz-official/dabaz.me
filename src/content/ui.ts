@@ -55,6 +55,7 @@ export interface UiCopy {
     description: Localized;
     pageDescription: Localized<(page: number) => string>;
     all: Localized;
+    viewAll: Localized;
     empty: Localized;
     newer: Localized;
     older: Localized;
@@ -133,6 +134,7 @@ const ui: UiCopy = {
       zh: (page) => `写作——第 ${page} 页： DabAZ 的长文笔记归档。`,
     },
     all: { en: "All writing", zh: "全部文章" },
+    viewAll: { en: "View All", zh: "查看全部" },
     empty: { en: "No posts yet.", zh: "暂无文章。" },
     newer: { en: "Newer posts", zh: "较新的文章" },
     older: { en: "Older posts", zh: "更早的文章" },

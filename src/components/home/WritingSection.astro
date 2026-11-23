@@ -1,18 +1,23 @@
 ---
 /**
- * Writing: the newest three posts, in the same row grammar as `/writing`
- * (DESIGN.md §6, §7.5).
+ * Writing — the home band: the newest three posts as cards, after Apple's
+ * newsroom: a 16:9 image, an eyebrow, the headline, the date.
  *
- * The page decides whether the section exists at all: a locale with no
- * published posts renders no Writing section, never an empty heading. The
- * `All writing` link appears only when there are more posts than the list
- * shows. Tags stay on the post page so the home rows stay scannable.
+ * `/writing` keeps the dated row grammar; the home is a shelf, so it shows the
+ * same records as covers. The page decides whether the section exists at all:
+ * a locale with no published posts renders no Writing section, never an empty
+ * heading. `All writing` appears only when more posts exist than the shelf
+ * shows.
+ *
+ * The cover is a placeholder until the writing model grows an image field; the
+ * card crops whatever it gets to 16:9.
  */
 import Container from "../Container.astro";
-import PostList from "../writing/PostList.astro";
+import placeholder from "../../assets/writing/placeholder-16x9.svg";
 import ui from "../../content/ui";
-import { defaultLocale, type Locale } from "../../lib/i18n";
-import { writingPath, type WritingEntry } from "../../lib/writing";
+import { dateTime, formatDate } from "../../lib/dates";
+import { defaultLocale, htmlLang, type Locale } from "../../lib/i18n";
+import { postPath, writingPath, type WritingEntry } from "../../lib/writing";
 
 interface Props {
   entries: WritingEntry[];
@@ -25,21 +30,61 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
 
 <section class="writing" id="writing" aria-labelledby="writing-title">
   <Container>
-    <h2 class="writing__title type-display" id="writing-title">
-      {ui.nav.writing[locale]}
-    </h2>
+    <div class="writing__head">
+      <h2 class="writing__title type-h1" id="writing-title">
+        {ui.nav.writing[locale]}
+      </h2>
 
-    <PostList entries={entries} headingLevel="h3" showTags={false} />
-
-    {
-      hasMore && (
-        <p class="writing__more">
-          <a class="link type-label" href={writingPath(locale)}>
-            {ui.writing.all[locale]}
+      {
+        hasMore && (
+          <a
+            class="button writing__all type-body"
+            href={writingPath(locale)}
+          >
+            {ui.writing.viewAll[locale]}
           </a>
-        </p>
-      )
-    }
+        )
+      }
+    </div>
+
+    <ul class="covers">
+      {
+        entries.map((entry) => {
+          const { title, date, tags, locale: postLocale } = entry.data;
+          const lang = htmlLang(postLocale);
+          const eyebrow = tags[0] ?? ui.nav.writing[locale];
+          return (
+            <li class="cover">
+              <a class="cover__link" href={postPath(entry)}>
+                <span class="cover__media">
+                  <img
+                    src={placeholder.src}
+                    alt=""
+                    width="1600"
+                    height="900"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </span>
+                <span class="cover__body">
+                  <span class="cover__eyebrow type-label-caps">{eyebrow}</span>
+                  <h3 class="cover__title type-h4" lang={lang}>
+                    {title}
+                  </h3>
+                  <time
+                    class="cover__date type-caption tabular"
+                    datetime={dateTime(date)}
+                  >
+                    {formatDate(date, locale)}
+                  </time>
+                </span>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+
   </Container>
 </section>
 
@@ -49,15 +94,126 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
     scroll-margin-block-start: calc(var(--dab-header-height) + var(--dab-space-4));
   }
 
+  /* One row: the title on the left, the pill at the far edge. */
+  .writing__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--dab-space-4);
+    margin-block-end: var(--dab-space-6);
+  }
+
   .writing__title {
     inline-size: fit-content;
     margin: 0;
-    margin-block-end: var(--dab-space-10);
     color: var(--dab-color-text-primary);
   }
 
-  .writing__more {
+  /* Two across at every width below the wide breakpoint: the cards keep the
+     same shelf shape on a phone, only smaller. */
+  .covers {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--dab-space-4);
     margin: 0;
-    margin-block-start: var(--dab-space-8);
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 640px) {
+    .covers {
+      gap: var(--dab-space-6);
+    }
+  }
+
+  /* Three across from the wide breakpoint: the shelf shows exactly the three
+     newest posts, so one row is the whole section. */
+  @media (min-width: 1024px) {
+    .covers {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--dab-space-8);
+    }
+  }
+
+  .cover__link {
+    display: grid;
+    gap: var(--dab-space-4);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* The cover box owns the ratio: whatever image lands here is cropped to
+     16:9, and the rule is the same hairline the work cards use. */
+  .cover__media {
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: clip;
+    border: var(--dab-border-width) solid var(--dab-color-border);
+    border-radius: var(--dab-radius-lg);
+    background-color: var(--dab-color-surface-secondary);
+  }
+
+  .cover__media :global(img) {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    transition: scale var(--dab-duration-slow) var(--dab-easing-standard);
+  }
+
+  .cover__link:hover .cover__media :global(img) {
+    scale: 1.03;
+  }
+
+  .cover__body {
+    display: grid;
+    gap: var(--dab-space-2);
+  }
+
+  .cover__eyebrow {
+    color: var(--dab-color-text-tertiary);
+  }
+
+  .cover__title {
+    margin: 0;
+    color: var(--dab-color-text-primary);
+    text-wrap: balance;
+  }
+
+  .cover__link:hover .cover__title {
+    text-decoration: underline;
+    text-underline-offset: 0.16em;
+  }
+
+  .cover__date {
+    color: var(--dab-color-text-tertiary);
+  }
+
+  .writing__all {
+    flex: none;
+    border: 0;
+    border-radius: var(--dab-radius-pill);
+    padding-inline: var(--dab-space-6);
+    transition:
+      background-color var(--dab-duration-fast) var(--dab-easing-linear),
+      box-shadow var(--dab-duration-base) var(--dab-easing-standard),
+      translate var(--dab-duration-base) var(--dab-easing-standard);
+  }
+
+  /* The pill lifts a pixel and takes the one shadow: the primitive's own
+     fill change is too quiet to read as feedback. */
+  .writing__all:hover {
+    box-shadow: var(--dab-shadow-floating);
+    translate: 0 -1px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .writing__all {
+      transition: background-color var(--dab-duration-fast) var(--dab-easing-linear);
+    }
+
+    .writing__all:hover {
+      translate: none;
+    }
   }
 </style>
