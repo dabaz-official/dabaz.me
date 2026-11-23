@@ -73,7 +73,7 @@ const { locale = defaultLocale } = Astro.props;
     /* The home flips `data-past` once the first screen is behind; the fade is
        time-based, which a scroll timeline cannot express. Alpha is 0.82 at
        both ends, so the bar never stops being glass. */
-    transition: background-color 500ms var(--dab-easing-standard);
+    transition: background-color var(--dab-duration-slower) var(--dab-easing-standard);
     -webkit-backdrop-filter: var(--dab-header-blur);
     backdrop-filter: var(--dab-header-blur);
   }

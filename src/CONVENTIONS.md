@@ -76,9 +76,12 @@ three roles on top of that set: `type-display-xl` (the intro name), `type-lede`
 `type-display`.
 
 **Shape and motion.** Radius ladder `rounded-xs | sm | md | lg | pill` maps to
-DabDesign's. One shadow (`shadow-floating`) and one lift (`scale(1.01)`, 300ms,
-`easing-standard`) exist; nothing else lifts. `prefers-reduced-motion` removes
-movement, not colour feedback.
+DabDesign's. One shadow (`shadow-floating`) and one lift (`scale(1.01)`,
+`easing-standard`) exist; nothing else lifts. The duration ladder follows
+Apple's site: `fast` 100ms for small controls, `base` 300ms for the standard
+colour and state change, `slow` 400ms for media that moves, `slower` 500ms for
+a reveal; `easing-standard` is Apple's `cubic-bezier(0.4, 0, 0.25, 1)`.
+`prefers-reduced-motion` removes movement, not colour feedback.
 
 ## 3. Theme contract
 

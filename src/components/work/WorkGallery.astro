@@ -106,7 +106,7 @@ const { entries, locale, heading: Heading = "h3" } = Astro.props;
     inline-size: 100%;
     block-size: 100%;
     object-fit: cover;
-    transition: transform 400ms cubic-bezier(0.4, 0, 0.25, 1);
+    transition: transform var(--dab-duration-slow) var(--dab-easing-standard);
   }
 
   /* One capture per theme; the dark one takes over when the document flips.

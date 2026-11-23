@@ -230,13 +230,16 @@
   /* The one shadow: interactive-card hover and floating layers only. */
   --dab-shadow-floating: 2px 4px 16px rgb(0 0 0 / 0.16);
 
+  /* The ladder matches Apple's site: 100ms for small controls, 300ms for the
+     standard colour and state change, 400ms for media that moves, and 500ms
+     for a reveal. */
   --dab-duration-fast: 100ms;
-  --dab-duration-base: 200ms;
-  --dab-duration-slow: 300ms;
-  /* The medallion's hover and press read as a slow reveal; keep it separate
-     from `slow`, which the tab transitions own. */
+  --dab-duration-base: 300ms;
+  --dab-duration-slow: 400ms;
   --dab-duration-slower: 500ms;
-  --dab-easing-standard: cubic-bezier(0, 0, 0.5, 1);
+  /* Apple's standard curve: a quick start that settles flat, rather than an
+     ease-in. */
+  --dab-easing-standard: cubic-bezier(0.4, 0, 0.25, 1);
   --dab-easing-linear: linear;
 }
 

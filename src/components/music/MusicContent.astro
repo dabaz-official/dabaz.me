@@ -128,7 +128,7 @@ const { locale = defaultLocale, subHeading: SubHeading = "h3" } = Astro.props;
     display: inline-block;
     margin-inline-start: var(--dab-space-1);
     color: var(--dab-color-text-tertiary);
-    transition: transform 150ms var(--dab-easing-standard);
+    transition: transform var(--dab-duration-fast) var(--dab-easing-standard);
   }
 
   .music__link:hover .music__arrow {
@@ -204,7 +204,7 @@ const { locale = defaultLocale, subHeading: SubHeading = "h3" } = Astro.props;
 
   .release__arrow {
     color: var(--dab-color-text-tertiary);
-    transition: transform 150ms var(--dab-easing-standard);
+    transition: transform var(--dab-duration-fast) var(--dab-easing-standard);
   }
 
   .release__link:hover .release__arrow {
