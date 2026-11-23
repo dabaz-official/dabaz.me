@@ -169,7 +169,7 @@
     position: absolute;
     inset: 0;
     z-index: -1;
-    background-color: var(--dab-color-background);
+    background-color: var(--dab-section-fill, var(--dab-color-background));
   }
 
   /* A page whose whole surface is the second tone paints the body, so the
