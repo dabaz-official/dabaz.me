@@ -15,7 +15,6 @@ import Intro from "./Intro.astro";
 import WorkSection from "./WorkSection.astro";
 import MusicSection from "./MusicSection.astro";
 import WritingSection from "./WritingSection.astro";
-import ContactSection from "./ContactSection.astro";
 import type { Locale } from "../../lib/i18n";
 import { sortWorks } from "../../lib/works";
 import { postsForLocale, publishedPosts } from "../../lib/writing";
@@ -49,4 +48,3 @@ const posts = postsForLocale(
     />
   )
 }
-<ContactSection locale={locale} />
