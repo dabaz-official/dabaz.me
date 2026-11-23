@@ -30,6 +30,10 @@ Rules:
 - A post's images live in `src/assets/writing/<slug>/` and are imported by the
   MDX file; `PostFigure` renders them at the prose measure and carries their
   caption. The same files serve both locales of a post.
+- A post cover is `src/assets/writing/<slug>/cover.webp` (1920×1080, 16:9),
+  declared in each locale file as `cover: { src, alt }` with the alt in that
+  post's language. The home card renders it with `srcset`; a post without a
+  cover keeps the neutral placeholder, never a broken image.
 - Work card tags are `Localized<string[]>` (`tags.en` / `tags.zh`), because a
   category label is copy, not a proper noun. Work titles and orgs stay plain.
 - `entry.id` is `<locale>/<slug>`. Each locale renders its own prefix
