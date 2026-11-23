@@ -135,21 +135,30 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
     }
   }
 
+  /* The card is the link: surface fill, one hairline, and a clip that rounds
+     the image with it, so the picture sits flush to the card's top corners. */
+  .cover {
+    display: grid;
+  }
+
   .cover__link {
     display: grid;
-    gap: var(--dab-space-4);
+    grid-template-rows: auto 1fr;
+    block-size: 100%;
+    overflow: clip;
+    border: var(--dab-border-width) solid var(--dab-color-border);
+    border-radius: var(--dab-radius-lg);
+    background-color: var(--dab-color-surface);
     color: inherit;
     text-decoration: none;
   }
 
   /* The cover box owns the ratio: whatever image lands here is cropped to
-     16:9, and the rule is the same hairline the work cards use. */
+     16:9. No radius of its own — the card's clip does that. */
   .cover__media {
     display: block;
     aspect-ratio: 16 / 9;
     overflow: clip;
-    border: var(--dab-border-width) solid var(--dab-color-border);
-    border-radius: var(--dab-radius-lg);
     background-color: var(--dab-color-surface-secondary);
   }
 
@@ -168,6 +177,17 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
   .cover__body {
     display: grid;
     gap: var(--dab-space-2);
+    align-content: start;
+    padding: var(--dab-space-6);
+  }
+
+  /* A 164px card cannot hold 24px of padding on each side and still fit a
+     headline of more than three words. */
+  @media (max-width: 639.98px) {
+    .cover__body {
+      gap: var(--dab-space-1);
+      padding: var(--dab-space-3);
+    }
   }
 
   .cover__eyebrow {
