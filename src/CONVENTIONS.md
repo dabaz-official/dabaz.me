@@ -172,6 +172,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `components/writing/PostList.astro` | `entries: WritingEntry[]`, `class?` | the dated rows; the last hairlines closes the list |
 | `components/writing/PostRow.astro` | `entry: WritingEntry` | 9rem date column from 640, `type-h3` title link, one-line summary, tags; the row never nests links; title/summary/date use the post's locale |
 | `components/writing/TagLinks.astro` | `tags: string[]`, `locale`, `class?` | `type-caption` chips under the locale's tag route; 44px targets on coarse pointers |
+| `components/writing/PostFigure.astro` | `src: ImageMetadata`, `alt`, `caption?` | a post image at the prose measure, framed by `ContentImage`, with an optional caption |
 | `components/writing/Pager.astro` | `current`, `total`, `locale`, `class?` | prev/next links only when those pages exist; `rel="prev"`/`rel="next"` |
 | `components/writing/WritingListPage.astro` | `locale`, `page?` | the shared list body, empty state, and pager |
 | `components/writing/PostArticle.astro` | `entry: WritingEntry` | the shared post body, prose map, meta, and back link |
