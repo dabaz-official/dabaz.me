@@ -78,6 +78,8 @@ export interface UiCopy {
     rss: Localized;
     /** The target language's own name, shown by the switch. */
     languageName: Localized;
+    /** Names the footer's link columns for assistive tech. */
+    sitemap: Localized;
   };
 }
 
@@ -172,6 +174,7 @@ const ui: UiCopy = {
   },
   footer: {
     rss: { en: "RSS", zh: "RSS" },
+    sitemap: { en: "Site map", zh: "站点地图" },
     languageName: { en: "English", zh: "中文" },
   },
 };

@@ -30,4 +30,18 @@ const social: { primary: Social[]; all: Social[] } = {
   ],
 };
 
+/**
+ * The profiles that belong on a contact card, in order. YouTube and Spotify
+ * live in the music section instead, so they are not part of this list.
+ */
+export const contactLabels = [
+  "X",
+  "GitHub",
+  "LinkedIn",
+  "Instagram",
+  "TikTok",
+  "Threads",
+  "CV",
+];
+
 export default social;

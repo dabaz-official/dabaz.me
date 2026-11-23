@@ -1,21 +1,38 @@
 ---
 /**
- * The site footer: copyright on the left, the site's links on the right.
+ * The site footer: the mark, the map, the legal line — after Apple's.
+ *
+ * The map is the sitemap the page actually has: a page per work, the
+ * streaming platforms and the player that lives outside this site, the four
+ * newest posts, and the contact profiles.
  *
  * The language switch lives here rather than in the header: the header's four
- * anchors already fill the shell at 320px, and thread 4 may not add a new
- * visual device. The switch points at the same page in the other locale when a
- * translation exists, and at that locale's writing list or home otherwise.
+ * items already fill the shell at 320px. It points at the same page in the
+ * other locale when a translation exists, and at that locale's writing list or
+ * home otherwise.
  */
+import { getCollection } from "astro:content";
 import Container from "./Container.astro";
 import ui from "../content/ui";
+import { platforms, ownPlayer } from "../data/music";
+import site from "../data/site";
+import social, { contactLabels, type Social } from "../data/social";
 import {
   defaultLocale,
+  homePath,
   htmlLang,
   otherLocale,
   rssPath,
+  workPath,
   type Locale,
 } from "../lib/i18n";
+import {
+  postPath,
+  postsForLocale,
+  publishedPosts,
+  writingPath,
+} from "../lib/writing";
+import { sortWorks } from "../lib/works";
 
 interface Props {
   locale?: Locale;
@@ -25,56 +42,232 @@ interface Props {
 const { locale = defaultLocale, alternatePath } = Astro.props;
 const target = otherLocale(locale);
 const year = new Date().getFullYear();
+
+const works = sortWorks(await getCollection("works"));
+const posts = postsForLocale(
+  publishedPosts(await getCollection("writing")),
+  locale,
+).slice(0, 4);
+
+const contactLinks = contactLabels
+  .map((label) => social.all.find((link) => link.label === label))
+  .filter((link): link is Social => Boolean(link));
 ---
 
 <footer class="site-footer">
   <Container class="site-footer__inner">
-    <p class="type-caption">© {year} <span lang="en">DabAZ.</span></p>
-    <div class="site-footer__links type-caption">
-      <a href={rssPath(locale)}>{ui.footer.rss[locale]}</a>
-      <a
-        href={alternatePath}
-        hreflang={htmlLang(target)}
-        lang={htmlLang(target)}>{ui.footer.languageName[target]}</a
+    <a
+      class="site-footer__brand"
+      href={homePath(locale)}
+      aria-label={ui.home.logo[locale](site.name)}
+    >
+      <svg
+        class="site-footer__mark"
+        viewBox="0 0 360 360"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        focusable="false"
       >
+        <path
+          d="M24.1155 90C39.9137 62.6366 62.6366 39.9137 90 24.1155C117.363 8.31721 148.403 0 180 0C211.597 0 242.636 8.3171 270 24.1153C297.364 39.9136 320.087 62.6364 335.884 89.9998C351.682 117.364 360 148.404 360 180C360 211.597 351.682 242.636 335.885 270L180 180V360C148.404 360 117.364 351.682 90.0002 335.885C62.6366 320.087 39.9137 297.364 24.1155 270C8.31721 242.636 0 211.597 0 180C0 148.404 8.3171 117.364 24.1155 90Z"
+          fill="currentColor"
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+        />
+      </svg>
+    </a>
+
+    <nav class="site-footer__map" aria-label={ui.footer.sitemap[locale]}>
+      <section class="site-footer__group">
+        <h2 class="site-footer__heading type-label">{ui.nav.work[locale]}</h2>
+        <ul class="site-footer__list type-caption">
+          {
+            works.map((work) => (
+              <li>
+                <a href={`${workPath(locale)}/${work.id}`}>{work.data.title}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+      <section class="site-footer__group">
+        <h2 class="site-footer__heading type-label">{ui.nav.music[locale]}</h2>
+        <ul class="site-footer__list type-caption">
+          {
+            platforms.map((platform) => (
+              <li>
+                <a href={platform.href} target="_blank" rel="noreferrer">
+                  {platform.label}
+                </a>
+              </li>
+            ))
+          }
+          <li>
+            <a href={ownPlayer.href} target="_blank" rel="noreferrer">
+              {ownPlayer.label}
+            </a>
+          </li>
+        </ul>
+      </section>
+      <section class="site-footer__group">
+        <h2 class="site-footer__heading type-label">
+          {ui.nav.contact[locale]}
+        </h2>
+        <ul class="site-footer__list type-caption">
+          {
+            contactLinks.map(({ label, href }) => (
+              <li>
+                <a href={href} target="_blank" rel="noreferrer" lang="en">
+                  {label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+      <section class="site-footer__group">
+        <h2 class="site-footer__heading type-label">
+          {ui.nav.writing[locale]}
+        </h2>
+        <ul class="site-footer__list type-caption">
+          {
+            posts.map((post) => (
+              <li>
+                <a href={postPath(post)} lang={htmlLang(post.data.locale)}>
+                  {post.data.title}
+                </a>
+              </li>
+            ))
+          }
+          <li>
+            <a class="site-footer__all" href={writingPath(locale)}>
+              {ui.writing.viewAll[locale]}
+            </a>
+          </li>
+        </ul>
+      </section>
+    </nav>
+
+    <div class="site-footer__legal type-caption">
+      <p class="site-footer__copy">© {year} <span lang="en">DabAZ.</span></p>
+      <div class="site-footer__meta">
+        <a href={rssPath(locale)}>{ui.footer.rss[locale]}</a>
+        <a
+          href={alternatePath}
+          hreflang={htmlLang(target)}
+          lang={htmlLang(target)}>{ui.footer.languageName[target]}</a
+        >
+      </div>
     </div>
   </Container>
 </footer>
 
 <style>
-  /* The second tone closes the page: no rule above it, the fill does the work.
-     On the routes whose body is already the second tone the band simply
-     disappears into the page. */
+  /* The second tone closes the page. On the routes whose body is already the
+     second tone the band disappears into the page, so the rule below is what
+     marks the edge there. */
   .site-footer {
     background-color: var(--dab-color-surface-secondary);
   }
 
   /* `Container` renders this element; see the note in SiteHeader. */
   :global(.site-footer__inner) {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--dab-space-4);
-    padding-block: var(--dab-space-8);
+    padding-block: var(--dab-space-8) 0;
   }
 
-  .site-footer p {
+  .site-footer__brand {
+    display: inline-flex;
+    color: var(--dab-color-text-primary);
+  }
+
+  /* The same 24px mark the header carries — the footer repeats the mark, it
+     does not enlarge it. */
+  .site-footer__mark {
+    display: block;
+    inline-size: var(--dab-space-6);
+    block-size: var(--dab-space-6);
+  }
+
+  /* Two columns on a phone, four from the medium breakpoint — the newsroom
+     footer's shape, with the site's own four groups. */
+  .site-footer__map {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--dab-space-8) var(--dab-space-6);
+    margin-block-start: var(--dab-space-6);
+  }
+
+  @media (min-width: 768px) {
+    .site-footer__map {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--dab-space-8);
+    }
+  }
+
+  .site-footer__heading {
+    margin: 0 0 var(--dab-space-3);
+    color: var(--dab-color-text-primary);
+  }
+
+  .site-footer__list {
+    display: grid;
+    gap: var(--dab-space-2);
     margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-footer__list a {
+    color: var(--dab-color-text-secondary);
+    text-decoration: none;
+  }
+
+  .site-footer__list a:hover {
+    color: var(--dab-color-text-primary);
+    text-decoration: underline;
+    text-underline-offset: 0.16em;
+  }
+
+  /* "View all" behaves like a list item, so it keeps the column's rhythm. */
+  .site-footer__all {
+    color: var(--dab-color-text-primary);
+  }
+
+  /* The rule closes the map and opens the legal line, and it runs the column
+     rather than the viewport, like the content above it. The row keeps its
+     43px: one for the rule, 12 + 18 + 12 around a caption line. */
+  .site-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--dab-space-2) var(--dab-space-4);
+    /* The same 32px the logo holds above it, so the footer breathes evenly
+       at both ends of the map. */
+    margin-block-start: var(--dab-space-8);
+    border-block-start: var(--dab-border-width) solid var(--dab-color-border);
+    padding-block: var(--dab-space-3);
     color: var(--dab-color-text-tertiary);
   }
 
-  .site-footer__links {
+  .site-footer__copy {
+    margin: 0;
+  }
+
+  .site-footer__meta {
     display: flex;
-    flex-wrap: wrap;
     gap: var(--dab-space-4);
   }
 
-  .site-footer__links a {
+  .site-footer__meta a {
     color: var(--dab-color-text-tertiary);
     text-decoration: none;
   }
 
-  .site-footer__links a:hover {
+  .site-footer__meta a:hover {
     color: var(--dab-color-text-primary);
+    text-decoration: underline;
+    text-underline-offset: 0.16em;
   }
 </style>

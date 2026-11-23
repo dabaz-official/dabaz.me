@@ -8,9 +8,7 @@
  * The home band and `/contact` share this body; each wrapper owns its heading.
  */
 import site from "../../data/site";
-import social, { type Social } from "../../data/social";
-
-const labels = ["X", "GitHub", "LinkedIn", "Instagram", "TikTok", "Threads", "CV"];
+import social, { contactLabels as labels, type Social } from "../../data/social";
 
 const links = labels
   .map((label) => social.all.find((socialLink) => socialLink.label === label))
