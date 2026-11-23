@@ -170,7 +170,7 @@ const ui: UiCopy = {
       en: "The page you asked for is not here.",
       zh: "你要找的页面不在这里。",
     },
-    back: { en: "Back to home", zh: "回到首页" },
+    back: { en: "Back to Home", zh: "返回首页" },
   },
   footer: {
     rss: { en: "RSS", zh: "RSS" },

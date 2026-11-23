@@ -5,7 +5,7 @@
  * index and offers the only useful next step.
  */
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Section from "../components/Section.astro";
+import Container from "../components/Container.astro";
 import ui from "../content/ui";
 import { defaultLocale, homePath } from "../lib/i18n";
 
@@ -19,29 +19,50 @@ const locale = defaultLocale;
   locale={locale}
 >
   <meta slot="head" name="robots" content="noindex" />
-  <Section>
-    <h1 class="type-h1 not-found__title">{ui.notFound.title[locale]}</h1>
-    <p class="type-body-lg not-found__body">{ui.notFound.description[locale]}</p>
-    <p class="not-found__back">
-      <a class="link type-label" href={homePath(locale)}>
-        {ui.notFound.back[locale]}
-      </a>
-    </p>
-  </Section>
+  <section class="not-found">
+    <Container>
+      <h1 class="type-h1 not-found__title">{ui.notFound.title[locale]}</h1>
+      <p class="type-body-lg not-found__body">
+        {ui.notFound.description[locale]}
+      </p>
+      <p class="not-found__back">
+        <a class="button not-found__button type-body" href={homePath(locale)}>
+          {ui.notFound.back[locale]}
+        </a>
+      </p>
+    </Container>
+  </section>
 </BaseLayout>
 
 <style>
+  /* A page-owned section rather than `Section`: the rhythm here is the two
+     turns of 128, not the shared band padding, and a class handed to a
+     component carries that component's scope — the page's own styles would
+     never reach it. */
+  .not-found {
+    padding-block: var(--dab-section-turn);
+    text-align: center;
+  }
+
   .not-found__title {
     margin: 0;
   }
 
   .not-found__body {
     max-inline-size: 34em;
-    margin: var(--dab-space-4) 0 0;
+    margin: var(--dab-space-4) auto 0;
     color: var(--dab-color-text-secondary);
   }
 
   .not-found__back {
     margin: var(--dab-space-8) 0 0;
+  }
+
+  /* The same pill the home's "View All" wears: ink fill, no border, pill
+     radius, 16px label. */
+  .not-found__button {
+    border: 0;
+    border-radius: var(--dab-radius-pill);
+    padding-inline: var(--dab-space-6);
   }
 </style>
