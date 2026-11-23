@@ -27,6 +27,9 @@ Rules:
   `summary` is one sentence for the list and the feed, `tags` are display
   strings written in that post's language, and `draft: true` keeps a post out
   of production builds.
+- A post's images live in `src/assets/writing/<slug>/` and are imported by the
+  MDX file; `PostFigure` renders them at the prose measure and carries their
+  caption. The same files serve both locales of a post.
 - Work card tags are `Localized<string[]>` (`tags.en` / `tags.zh`), because a
   category label is copy, not a proper noun. Work titles and orgs stay plain.
 - `entry.id` is `<locale>/<slug>`. Each locale renders its own prefix

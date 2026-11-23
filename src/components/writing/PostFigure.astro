@@ -1,0 +1,41 @@
+---
+/**
+ * A figure inside a post body: the shared image frame plus an optional caption.
+ *
+ * The rendered width is the prose measure (576 at the current type size); the
+ * source is imported by the MDX file, so `astro:assets` has the intrinsic ratio
+ * and the width/height couple keeps layout shift at zero.
+ */
+import type { ImageMetadata } from "astro";
+import ContentImage from "../ContentImage.astro";
+
+interface Props {
+  src: ImageMetadata;
+  /** Meaningful description of the image for assistive technology. */
+  alt: string;
+  /** Visible caption, usually the original article's caption or credit. */
+  caption?: string;
+}
+
+const { src, alt, caption } = Astro.props;
+const width = 576;
+const height = Math.round((width * src.height) / src.width);
+---
+
+<figure class="post-figure">
+  <ContentImage
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    widths={[576, 1152]}
+    sizes="(min-width: 640px) 576px, 100vw"
+  />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .post-figure {
+    margin: 0;
+  }
+</style>

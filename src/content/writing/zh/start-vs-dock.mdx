@@ -1,0 +1,128 @@
+---
+title: "Start 与 Dock： Apple 与 Microsoft 三十年的分岔哲学"
+locale: zh
+date: 2025-09-19
+summary: 开始菜单用动词安抚恐惧， Dock 用名词搭出一个空间； 三十年互不抄袭的背后， 是两家公司对“计算机用来做什么” 的不同回答。
+tags:
+  - Apple
+  - Microsoft
+  - 设计
+---
+
+import PostFigure from "../../../components/writing/PostFigure.astro";
+import figure1 from "../../../assets/writing/start-vs-dock/01.webp";
+import figure2 from "../../../assets/writing/start-vs-dock/02.webp";
+import figure3 from "../../../assets/writing/start-vs-dock/03.webp";
+import figure4 from "../../../assets/writing/start-vs-dock/04.webp";
+import figure5 from "../../../assets/writing/start-vs-dock/05.webp";
+import figure6 from "../../../assets/writing/start-vs-dock/06.webp";
+import figure7 from "../../../assets/writing/start-vs-dock/07.webp";
+import figure8 from "../../../assets/writing/start-vs-dock/08.webp";
+
+## 引言
+
+在科技界， 抄袭早已司空见惯。 然而， Apple 和 Microsoft 之间却有一个 UI 元素始终未被彼此借鉴——macOS 的 Dock 和 Windows 的任务栏（Taskbar）。 过去三十年里， 双方始终坚持不抄袭对方的这一设计。 这绝非偶然， 而是源于他们对一个核心问题的不同回答： 计算机究竟是用来做什么的？ 正如我们今天所见， 两家公司的答案截然不同。
+
+<PostFigure
+  src={figure1}
+  alt="Apple 与 Microsoft 的标志相对而立"
+  caption="JCC. 2023. From Rivals to Allies: The Inspiring Story of Apple and Microsoft’s Collaboration. Medium."
+/>
+
+在本文中， 我将谈论 **Microsoft 如何使用动词征服用户的恐惧心理、 Apple 如何聚焦于有形物体， 以及为什么 Apple 与 Microsoft 无法真正相互抄袭**。
+
+---
+
+## 1990s
+
+让我们回溯到 **20 世纪 90 年代**。 Microsoft 与 Apple 这两大科技巨头正站在悬崖边上， 处境岌岌可危， 市场压力迫使它们重新定义自己的产品。
+
+在 **1995 年之前的 Windows 系统**中， 核心界面——**程序管理器（Program Manager） **——存在根本性的功能缺陷， 难以满足用户需求。
+
+<PostFigure
+  src={figure2}
+  alt="Windows for Workgroups 3.11 的桌面， 程序管理器以窗口形式排列"
+  caption="Unknown author. Windows for Workgroups 3.11 desktop. Self-taken screenshot. Fair use."
+/>
+
+在 **Windows 3.1** 中， **应用程序列表**只是一个普通的窗口。 用户既可以最小化它， 也可能在繁多的窗口中将其淹没， 甚至误将其关闭， 结果发现**桌面一片空白**。 这一情境几乎就像在 **iPhone 上“关掉” 主屏幕**一样。
+
+<PostFigure
+  src={figure3}
+  alt="一张 iOS 26 的 iPhone 主屏幕截图"
+  caption="DabAZ. iOS 26 interface. Modified self-taken screenshot."
+/>
+
+Microsoft 的**内部研究**[1] 表明， 许多用户在尝试同时运行两个应用时感到困惑。 窗口的**最小化**与**重叠机制**对他们而言并不直观， 导致不少初学者频繁打开同一应用的多个实例， 最终引发**系统过载甚至崩溃**。 这一问题与 **Windows 的核心承诺**——**多任务处理**——背道而驰。
+
+当时， **任务栏**这一后来成为**图形界面核心的 UI 元素**尚未诞生。 结果是， 尽管 **Windows** 已经主宰了个人计算机的图形界面市场， 但相当一部分用户仍因**复杂的窗口管理**而困惑甚至受挫。 问题在于： **Microsoft 究竟是如何化解这一困境的？ ** Microsoft 会找一个其他公司做好的解决方案并抄袭过来。 通常， 这个解决方案就在 **Apple** 手里。 但是这次并没有， **macOS** 处于一个更糟糕的情况。 长话短说， 它不仅有类似的 **UI 问题**， 而且**系统稳定性**降低了大概**十倍**。
+
+回到那个核心问题： 为什么两家公司不直接互相借鉴？ 答案其实很简单——**没有什么可借的**。 于是， 两家公司都开始各自探索新的解决方案。
+
+Microsoft 开始测试**“Chicago” **计划[1]， 即后来的 **Windows 95**。
+
+与此同时， Apple 在濒临崩溃的时刻收购了 NeXT。 这不仅是为了引入更稳定的 NeXTSTEP 操作系统， 更是为了重新召回其最重要的资产——Steve Jobs。 而在 NeXTSTEP 中， 解决方案早已以另一种形式存在。
+
+<PostFigure
+  src={figure4}
+  alt="一段讲述 NeXT 历史的视频封面"
+  caption="Apple Explained. History of NeXT. Video cover."
+/>
+
+<PostFigure
+  src={figure5}
+  alt="NeXTSTEP 桌面， 左侧是一列垂直排列的图标"
+  caption="FutureTG. NeXTSTEP desktop. Image. Fair use."
+/>
+
+在同一时间节点， 两家陷入困境的公司面对同一个问题——**“我该从哪里开始？” **——却给出了截然不同的答案。
+
+当行为科学家 Daniel Oran 加入 Microsoft 时， 没有人预料到他会影响公司未来数十年的设计哲学。 他和 “Chicago” 团队意识到， 问题不在于技术， 而在于心理。
+
+用户普遍对计算机充满恐惧， 担心自己会“搞坏” 系统， 而这种情况在当时确实屡屡发生。 技术上， 修复并不困难。 于是团队设计了一个包含所有关键内容的“系统” 按钮。 然而心理障碍依然存在， 用户并不会主动去点击它。 直到他们在按钮上加上一个简单的词： **“Start” **。 突然之间， 用户毫无畏惧地点击了它。
+
+<PostFigure
+  src={figure6}
+  alt="Windows 95 首次启动后的桌面"
+  caption="User:Hohho56oy. Windows 95 at first run. Screenshot. Fair use."
+/>
+
+功能并没有任何变化， 但结果却惊人。 Microsoft 的高明之处在于， 将行为科学转化为设计哲学。 他们列出了一系列清晰的**动词**：“Run”、“Find”、“Documents”。 对于那些迷茫的用户而言， 这是一份逻辑性极强的、 基于文本的安全指引。 他们没有提供复杂的工具， 而是提供了简洁的语言入口。
+
+<PostFigure
+  src={figure7}
+  alt="Windows 95 的开始菜单， 列出程序与命令"
+  caption="Unknown author. n.d. Windows 95 Start Menu."
+/>
+
+## Dock
+
+那么， Apple 又是如何应对？ 当时的 Apple 致力于让操作系统的 UI 尽可能精致， 以至于 Steve Jobs 打趣说人们会“想要舔它”。 但乍一看， 这种 UI 混乱无序， 完全无法与 Windows 简洁、 动词驱动的结构相比。
+
+Apple 的答案是 **Dock**。 与开始菜单不同， Dock 并非一个列表， 而是一个“空间”——一个架子， 用于存放应用程序。 它展示的是一组**名词**：“Finder”、“Mail”、“Photoshop”， 它们都是直观而具体的对象。 Apple 并未给用户指示， 而是提供了一个仿佛现实世界的空间。
+
+<PostFigure
+  src={figure8}
+  alt="Mac OS X 10.1 的 Dock 选项面板"
+  caption="Unknown author. n.d. MacOS X 10.1 Dock Options."
+/>
+
+## Now
+
+快进到今天， 看看我们是如何管理复杂信息的。 Notion 与 Obsidian 等工具越来越流行， 而它们的核心理念正是严格的层级与结构： 页面中的页面、 标签、 数据库。 为什么我们要强迫思维去适应这种刚性框架？ 答案在 30 年前已经写下： 这是 Windows 留下的遗产——**“系统集成” 模式**。 它用机器逻辑取代了人脑的自然联想， 从而赋予人类“超能力”： 处理原本超出大脑容量的复杂信息。
+
+但如果目标不是组织现有信息， 而是**创造**呢？ 这时我们需要完全不同的模式： Miro、 FigJam、 Freeform。 它们提供的是无限画布， 没有文件夹， 没有层级， 只有散落在上面的元素——一种高效而纯粹的混乱。 这正是 Apple 哲学的延续： **“空白画布” 模式**。 它隐藏了结构， 让大脑能够自由探索非线性连接、 迸发新的点子。
+
+因此， 那句老旧的刻板印象——“Mac 适合创意人士， PC 适合商务人士”——并非空穴来风。 这是两家公司有意放大两种不同思维模式的结果： **一个训练我们成为系统， 另一个引导我们停留在画布上**。
+
+## 解
+
+那么， 为什么两家公司最终没有互相抄袭？ 原因在于： **Start 并不仅仅是一个按钮**。 它背后连接着文件系统、 注册表和 /Program Files——只是庞大隐藏结构的冰山一角。 而 **Dock** 也不仅仅是一个面板， 它体现的是 macOS 的面向对象哲学： 每个应用都是一个独立的包（package）， 可以自由拖放。
+
+若要彼此复制， 对方必须推倒整个地基重新构建。 这也是为什么在使用科技产品时， 我们常常感到“不和谐”。 例如， 当你试图在 Excel 这种结构化工具里画一张混乱的思维导图时， 你真正的对抗对象不是 Excel 本身， 而是它背后的哲学——你正试图在一块并不适合绘画的画布上作画。
+
+这并不是唯一一个“简单设计选择” 暗藏深层哲学的案例。 深度、 空间， 甚至“信任”， 都能通过设计被重塑。 比如模糊效果， 它彻底改变了我们在 UI 中对层级的感知方式。 这些故事的本质， 都是**技术、 心理学与艺术的交汇**。
+
+## 参考
+
+1. Microsoft. 1994. Microsoft Windows "Chicago" Reviewer's Guide. [PDF](https://www.tech-insider.org/windows/research/acrobat/940601.pdf)
