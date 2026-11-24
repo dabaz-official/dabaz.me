@@ -29,10 +29,27 @@ const { class: className, lang, type = "body" } = Astro.props;
 <style>
   /* The shared `.prose > * + *` rhythm never reaches the first child, so the
      page keeps owning the gap above the body. */
+
+  /* Paragraph to paragraph takes one longer breath than the shell's 16px:
+     36px, composed from the scale because the ladder has no 9 step. */
+  .prose :global(p + p) {
+    margin-block-start: calc(var(--dab-space-8) + var(--dab-space-1));
+  }
+
+  /* An image sits on its own beat: 48px between a figure and the text or the
+     next figure around it. */
+  .prose :global(p + figure),
+  .prose :global(figure + p),
+  .prose :global(figure + figure) {
+    margin-block-start: var(--dab-space-12);
+  }
+
+  /* A subheading opens a new beat: one step above the 48 that separates text
+     from a figure, so the heading reads as a break rather than another block. */
   .prose :global(h2),
   .prose :global(h3),
   .prose :global(h4) {
-    margin-block-start: var(--dab-space-8);
+    margin-block-start: var(--dab-space-16);
     margin-block-end: 0;
     color: var(--dab-color-text-primary);
   }
