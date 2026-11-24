@@ -94,10 +94,8 @@ const { class: className, lang, type = "body" } = Astro.props;
     text-underline-offset: 2px;
   }
 
-  /* Back-to-back marks read as one group: 5,6 rather than 56. */
-  .prose :global(sup + sup)::before {
-    content: ",";
-  }
+  /* Back-to-back marks are separated by a real space in the content, not a
+     inserted symbol: the numbers stay bare. */
 
   /* A reference target clears the sticky header when a mark jumps to it. */
   .prose :global([id^="ref-"]) {

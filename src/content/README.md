@@ -31,7 +31,8 @@ Rules:
   MDX file; `PostFigure` renders them at the prose measure and carries their
   caption. The same files serve both locales of a post.
 - Citations use `<Citation n={n} />`; it renders a `type-caption` superscript
-  with no brackets, always underlined, that links to `#ref-<n>`. The reference
+  with no brackets, always underlined, that links to `#ref-<n>`. Back-to-back
+  marks are separated by a plain space, never a punctuation mark. The reference
   list is a Markdown ordered list mapped to `ProseOl` (caption role), and each
   item opens with `<span id="ref-<n>"></span>`; `Prose` restores the decimal
   markers the Tailwind reset removes.
