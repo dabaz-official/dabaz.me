@@ -104,6 +104,7 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
 
 <style>
   .writing {
+    --dab-section-fill: var(--dab-color-surface-secondary);
     padding-block: var(--dab-space-16);
     scroll-margin-block-start: calc(var(--dab-header-height) + var(--dab-space-4));
   }
@@ -123,12 +124,12 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
     color: var(--dab-color-text-primary);
   }
 
-  /* Two across at every width below the wide breakpoint: the cards keep the
-     same shelf shape on a phone, only smaller. */
+  /* One card per row on a phone: at 343px a half-width card leaves ~140px for
+     the headline, which breaks it into three-word lines. */
   .covers {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--dab-space-4);
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--dab-space-6);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -136,7 +137,7 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
 
   @media (min-width: 640px) {
     .covers {
-      gap: var(--dab-space-6);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
@@ -149,8 +150,9 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
     }
   }
 
-  /* The card is the link: surface fill, one hairline, and a clip that rounds
-     the image with it, so the picture sits flush to the card's top corners. */
+  /* The card is the link: surface fill and a clip that rounds the image with
+     it, so the picture sits flush to the card's top corners. No hairline — the
+     band is the second tone, and the fill alone lifts the card off it. */
   .cover {
     display: grid;
   }
@@ -160,7 +162,6 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
     grid-template-rows: auto 1fr;
     block-size: 100%;
     overflow: clip;
-    border: var(--dab-border-width) solid var(--dab-color-border);
     border-radius: var(--dab-radius-lg);
     background-color: var(--dab-color-surface);
     color: inherit;
@@ -188,20 +189,14 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
     scale: 1.03;
   }
 
+  /* Eyebrow, headline, date: the headline row takes the slack, so a card
+     whose title runs one line still holds the height of the longest title in
+     its row and every date lands on the same baseline. */
   .cover__body {
     display: grid;
+    grid-template-rows: auto 1fr auto;
     gap: var(--dab-space-2);
-    align-content: start;
     padding: var(--dab-space-6);
-  }
-
-  /* A 164px card cannot hold 24px of padding on each side and still fit a
-     headline of more than three words. */
-  @media (max-width: 639.98px) {
-    .cover__body {
-      gap: var(--dab-space-1);
-      padding: var(--dab-space-3);
-    }
   }
 
   .cover__eyebrow {
@@ -212,11 +207,6 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
     margin: 0;
     color: var(--dab-color-text-primary);
     text-wrap: balance;
-  }
-
-  .cover__link:hover .cover__title {
-    text-decoration: underline;
-    text-underline-offset: 0.16em;
   }
 
   .cover__date {
