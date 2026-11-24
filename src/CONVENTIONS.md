@@ -133,12 +133,15 @@ The `@font-face` quartet and the `--font-sans` stack are DabFonts 1.0.1
 **Chinese setting.** The document language is `en` or `zh-CN` (`htmlLang()`);
 English runs inside a Chinese page carry `lang="en"`. Chinese copy uses Chinese
 codepoints, one U+0020 after every sentence or closing mark that is followed by
-text, and one U+0020 between Han and Latin letters or digits — DabFonts
-`TYPESETTING.md` §3–§4. There is no `text-autospace`, no body
-`letter-spacing`, and no `word-break` override. `type-label-caps` drops its
-Latin 0.06em tracking on a `zh-CN` document (the token file owns the rule);
-Han carries no uppercase. `scripts/check-copy.mjs` fails `pnpm lint` when a
-Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
+text, one U+0020 before an opening bracket or quote that follows text
+(`睡眠 （REM sleep）`, `所谓 “涌现吸引子网络”`), and one U+0020 between Han and
+Latin letters or digits. The first and last are DabFonts `TYPESETTING.md`
+§3–§4; the opening-mark space is this site's departure from §0, recorded in
+`AGENTS.md`. There is no `text-autospace`, no body `letter-spacing`, and no
+`word-break` override. `type-label-caps` drops its Latin 0.06em tracking on a
+`zh-CN` document (the token file owns the rule); Han carries no uppercase.
+`scripts/check-copy.mjs` fails `pnpm lint` when a Chinese string in
+`src/content/` or `src/data/` breaks the spacing rule.
 
 ## 5. Interfaces
 

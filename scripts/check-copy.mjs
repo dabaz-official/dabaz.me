@@ -8,6 +8,12 @@
  * so the space is what gives the mark its right sidebearing; without it the
  * page reads tight and the specification is broken.
  *
+ * One rule goes beyond the specification: an opening bracket or quote that
+ * follows text takes one U+0020 before it, as an English page writes
+ * `sleep (REM)` and `he said "no"`. DabFonts §0 has the opening mark hug the
+ * preceding text; AGENTS.md records the departure. A markup boundary is not
+ * text, so `**"Chicago"**` keeps its first mark glued to the emphasis.
+ *
  * This check reads the copy home only — `src/content/` and `src/data/` — so it
  * cannot mistake a CSS class or a template expression for Chinese prose.
  *
@@ -23,11 +29,11 @@ const extensions = [".ts", ".md", ".mdx"];
 
 const han = /[\u3400-\u9fff]/;
 
-// Marks that need a space before the next text character. Adjacent marks
-// (。”, 》，) and opening marks (“, （, 《) never take one, so they are part of
-// the "allowed next" set rather than the match.
+// Marks that need a space before the next text character, and the marks that
+// open a pair and need one before themselves. Adjacent marks (。”, 》，, “（)
+// take neither.
 const marks = "。，、：；！？．）］｝〉》」』】〕”’…";
-const adjacent = `${marks}（［｛〈《「『【〔“‘`;
+const opening = "（［｛〈《「『【〔“‘";
 const textStart = `[\\u3400-\\u9fffA-Za-z0-9*\\[]`;
 
 const rules = [
@@ -35,6 +41,11 @@ const rules = [
     label: "mark needs one space after it",
     pattern: new RegExp(`[${marks}](?=${textStart})`),
     hint: "write the Chinese mark, then one U+0020, then the text",
+  },
+  {
+    label: "opening mark needs one space before it",
+    pattern: new RegExp(`[\\u3400-\\u9fffA-Za-z0-9${marks}](?=[${opening}])`),
+    hint: "put one U+0020 before the opening mark, then the mark, then its content",
   },
   {
     label: "Han and Latin need one space between them",

@@ -59,8 +59,11 @@ helpers. There is no silent fallback to English.
 
 **Chinese copy.** Follow DabFonts `TYPESETTING.md` §3–§4: Chinese codepoints,
 one U+0020 after every sentence or closing mark followed by text, and one U+0020
-between Han and Latin letters or digits. `pnpm lint` runs
-`scripts/check-copy.mjs` over this directory and `src/data/`.
+between Han and Latin letters or digits. One rule is local to this site, not the
+specification: an opening bracket or quote that follows text takes one U+0020
+before it — `睡眠 （REM sleep）`, `所谓 “涌现吸引子网络”` — the way an English page
+spaces `sleep (REM)`. `pnpm lint` runs `scripts/check-copy.mjs` over this
+directory and `src/data/`; `AGENTS.md` records the departure from the spec.
 
 `src/CONVENTIONS.md` is the authoritative contract; this file only marks the
 directory.
