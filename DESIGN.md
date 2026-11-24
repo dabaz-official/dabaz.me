@@ -105,7 +105,8 @@ Rules:
 - Tracking stays zero everywhere; uppercase is a content decision, not a type
   token, and never carries added letter-spacing.
 - Chinese copy follows DabFonts: Chinese punctuation, one space between Han and
-  Latin, no `text-autospace`.
+  Latin, no `text-autospace`. One departure, recorded in `AGENTS.md`: an
+  opening bracket or quote takes one space before it, as English sets it.
 
 ## 5. Layout
 
