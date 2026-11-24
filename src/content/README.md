@@ -30,6 +30,9 @@ Rules:
 - A post's images live in `src/assets/writing/<slug>/` and are imported by the
   MDX file; `PostFigure` renders them at the prose measure and carries their
   caption. The same files serve both locales of a post.
+- Citations are literal `<sup>[n]</sup>` in the body, matching the reference
+  list's Markdown ordered list. `Prose` restores the decimal markers the
+  Tailwind reset removes, so numbered sources are always visible.
 - A post cover is `src/assets/writing/<slug>/cover.webp` (1920×1080, 16:9),
   declared in each locale file as `cover: { src, alt }` with the alt in that
   post's language. The home card renders it with `srcset`; a post without a
