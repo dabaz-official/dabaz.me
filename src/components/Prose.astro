@@ -44,10 +44,12 @@ const { class: className, lang, type = "body" } = Astro.props;
     margin-block-start: var(--dab-space-12);
   }
 
+  /* A subheading opens a new beat: one step above the 48 that separates text
+     from a figure, so the heading reads as a break rather than another block. */
   .prose :global(h2),
   .prose :global(h3),
   .prose :global(h4) {
-    margin-block-start: var(--dab-space-8);
+    margin-block-start: var(--dab-space-16);
     margin-block-end: 0;
     color: var(--dab-color-text-primary);
   }
