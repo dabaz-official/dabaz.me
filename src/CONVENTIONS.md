@@ -175,6 +175,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `components/writing/TagLinks.astro` | `tags: string[]`, `locale`, `class?` | `type-caption` chips under the locale's tag route; 44px targets on coarse pointers |
 | `components/writing/PostFigure.astro` | `src: ImageMetadata`, `alt`, `caption?` | a post image at the prose measure, framed by `ContentImage`, with an optional caption |
 | `components/writing/Citation.astro` | `n: number` | a `type-caption` superscript that links to `#ref-<n>` and inherits the text colour |
+| `components/prose/ProseOl.astro` | — | ordered lists in a post (the references) at the `type-caption` role |
 | `components/writing/Pager.astro` | `current`, `total`, `locale`, `class?` | prev/next links only when those pages exist; `rel="prev"`/`rel="next"` |
 | `components/writing/WritingListPage.astro` | `locale`, `page?` | the shared list body, empty state, and pager |
 | `components/writing/PostArticle.astro` | `entry: WritingEntry` | the shared post body, prose map, meta, and back link |

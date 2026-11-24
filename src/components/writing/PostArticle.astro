@@ -15,6 +15,7 @@ import ProseH2 from "../prose/ProseH2.astro";
 import ProseH3 from "../prose/ProseH3.astro";
 import ProseH4 from "../prose/ProseH4.astro";
 import ProseLink from "../prose/ProseLink.astro";
+import ProseOl from "../prose/ProseOl.astro";
 import TagLinks from "./TagLinks.astro";
 import ui from "../../content/ui";
 import { dateTime, formatLongDate } from "../../lib/dates";
@@ -36,6 +37,7 @@ const proseComponents = {
   h3: ProseH3,
   h4: ProseH4,
   a: ProseLink,
+  ol: ProseOl,
 };
 
 const { entry } = Astro.props;
