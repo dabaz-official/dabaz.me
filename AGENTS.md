@@ -166,7 +166,9 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
   English page writes `sleep (REM)` and `he said "no"`. A bracket or a quoted
   phrase then reads as its own unit beside the Han around it, which is how Dab
   Sans already sets Latin. Scope: Chinese copy in `src/content/` and
-  `src/data/`, enforced by `scripts/check-copy.mjs`; a mark that opens a run of
-  `**` keeps its markup boundary, and `——` keeps no space. Owner: HQ. Review:
+  `src/data/`, enforced by `scripts/check-copy.mjs`; a mark that opens or
+  closes a run of `**` keeps its markup boundary, so the space the mark needs
+  sits after the closing run (`**程序管理器 （Program Manager）**——`), and `——`
+  keeps no space. Owner: HQ. Review:
   2026-12-19. A `DEC-` upstream is still open: the fix belongs in DabFonts §0,
   not in a per-site guard, and this entry retires when it lands.

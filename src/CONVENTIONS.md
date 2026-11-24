@@ -141,7 +141,9 @@ Latin letters or digits. The first and last are DabFonts `TYPESETTING.md`
 `word-break` override. `type-label-caps` drops its Latin 0.06em tracking on a
 `zh-CN` document (the token file owns the rule); Han carries no uppercase.
 `scripts/check-copy.mjs` fails `pnpm lint` when a Chinese string in
-`src/content/` or `src/data/` breaks the spacing rule.
+`src/content/` or `src/data/` breaks the spacing rule, or when a run of `**`
+would print as plain text instead of bold — a run that touches a space, an
+unpaired run, or an opener glued to text in front of a bracket.
 
 ## 5. Interfaces
 
