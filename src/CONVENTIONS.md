@@ -173,7 +173,7 @@ Latin letters or digits. The first and last are DabFonts `TYPESETTING.md`
 | `components/work/WorkPage.astro` | `entries: CollectionEntry<"works">[]`, `locale` | `/work` body: `type-h1` heading plus the gallery |
 | `components/music/MusicContent.astro` | `locale?`, `subHeading?` (`h3` default) | streaming links, DabMusic as own player, latest releases; kind labels and dates follow the locale |
 | `components/music/MusicPage.astro` | `locale` | `/music` body: `type-h1` heading plus the content under an `h2` |
-| `components/contact/ContactDetails.astro` | — | `site.email` and the contact subset of `social.all`, as a fragment |
+| `components/contact/ContactDetails.astro` | `locale` | `site.email` and the contact subset of `social.all`, as a fragment; `CV` reads 简历 on a zh page |
 | `components/contact/ContactPage.astro` | `locale` | `/contact` body: `type-h1` heading plus the details |
 | `components/writing/PostCards.astro` | `entries: WritingEntry[]`, `locale?`, `columns?` (`two` default \| `three`), `showSummary?`, `headingLevel?` (`h2` default), `class?` | the card grid shared by the home shelf (`three`) and the list and tag pages (`two`); card = 16:9 cover (the record's `cover`, else the placeholder) inside a rounded surface, eyebrow, headline, optional summary, date held at the card's bottom; one per row below 640 |
 | `components/writing/TagLinks.astro` | `tags: string[]`, `locale`, `class?` | `type-caption` chips under the locale's tag route; 44px targets on coarse pointers |

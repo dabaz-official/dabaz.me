@@ -24,7 +24,11 @@ import ui from "../content/ui";
 import { breadcrumbTrail } from "../lib/breadcrumbs";
 import { platforms, ownPlayer } from "../data/music";
 import site from "../data/site";
-import social, { contactLabels, type Social } from "../data/social";
+import social, {
+  contactLabels,
+  socialLabel,
+  type Social,
+} from "../data/social";
 import {
   defaultLocale,
   homePath,
@@ -70,16 +74,7 @@ const posts = postsForLocale(
 const contactLinks = contactLabels
   .map((label) => social.all.find((link) => link.label === label))
   .filter((link): link is Social => Boolean(link))
-  // `CV` is the one profile label that is a word rather than a proper noun, so
-  // a zh page reads it as 简历 and the link carries the page's language.
-  .map((link) => {
-    const translated = locale === "zh" && link.zh;
-    return {
-      href: link.href,
-      label: translated ? link.zh : link.label,
-      lang: translated ? htmlLang(locale) : "en",
-    };
-  });
+  .map((link) => ({ href: link.href, ...socialLabel(link, locale) }));
 ---
 
 <footer class="site-footer">

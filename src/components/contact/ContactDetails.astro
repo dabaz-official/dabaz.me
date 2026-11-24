@@ -8,19 +8,31 @@
  * The home band and `/contact` share this body; each wrapper owns its heading.
  */
 import site from "../../data/site";
-import social, { contactLabels as labels, type Social } from "../../data/social";
+import social, {
+  contactLabels as labels,
+  socialLabel,
+  type Social,
+} from "../../data/social";
+import type { Locale } from "../../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
 
 const links = labels
   .map((label) => social.all.find((socialLink) => socialLink.label === label))
-  .filter((socialLink): socialLink is Social => Boolean(socialLink));
+  .filter((socialLink): socialLink is Social => Boolean(socialLink))
+  .map((link) => ({ href: link.href, ...socialLabel(link, locale) }));
 ---
 
 <a class="type-h3 contact__email" href={`mailto:${site.email}`}>{site.email}</a>
 <ul class="contact__links">
   {
-    links.map(({ label, href }) => (
+    links.map(({ label, href, lang }) => (
       <li>
-        <a class="type-h3" href={href} target="_blank" rel="noreferrer" lang="en"
+        <a class="type-h3" href={href} target="_blank" rel="noreferrer" lang={lang}
           >{label}</a
         >
       </li>

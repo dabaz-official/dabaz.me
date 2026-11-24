@@ -1,3 +1,5 @@
+import { htmlLang, type Locale } from "../lib/i18n";
+
 /** DESIGN.md §10 `Social`. */
 export type Social = {
   label: string;
@@ -5,6 +7,18 @@ export type Social = {
   zh?: string;
   href: string;
 };
+
+/**
+ * A profile label as a page shows it, and the language that label is in.
+ * `CV` is the one entry whose word translates, so a zh page reads 简历; every
+ * other label is a proper noun and keeps `lang="en"` on both locales.
+ */
+export function socialLabel(link: Social, locale: Locale) {
+  if (locale === "zh" && link.zh) {
+    return { label: link.zh, lang: htmlLang(locale) };
+  }
+  return { label: link.label, lang: "en" };
+}
 
 /**
  * Contact and profile links. `primary` is the short set the footer and hero
