@@ -1,6 +1,7 @@
 ---
 /**
- * Prose wrapper: the body measure plus the `type-body` role.
+ * Prose wrapper: the body measure plus a reading role — `type-body` by default,
+ * `type-body-lg` for a post's prose.
  *
  * Thread 3 uses it for post bodies and extends the paragraph rhythm here; no
  * other measure may be introduced. Markdown carries no classes, so headings
@@ -11,12 +12,17 @@ interface Props {
   class?: string;
   /** BCP 47 tag for a body written in another language than the shell. */
   lang?: string;
+  /** The reading role: `body` for shell copy, `body-lg` for a post's prose. */
+  type?: "body" | "body-lg";
 }
 
-const { class: className, lang } = Astro.props;
+const { class: className, lang, type = "body" } = Astro.props;
 ---
 
-<div class:list={["prose", "measure", "type-body", className]} lang={lang}>
+<div
+  class:list={["prose", "measure", `type-${type}`, className]}
+  lang={lang}
+>
   <slot />
 </div>
 

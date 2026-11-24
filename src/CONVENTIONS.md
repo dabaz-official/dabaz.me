@@ -148,7 +148,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `Container.astro` | `as?` (`div` default, `section`, `header`, `footer`, `main`, `nav`), `class?` | `container-lg` width and the 16/24/32 gutter |
 | `Section.astro` | `as?` (`section` default), `spacing?` (`standard` \| `loose` \| `none`), `id?`, `labelledby?`, `class?` | top rhythm: `space-16`, `space-24` from 640 for `loose`, none for `none`; wraps its content in `Container` |
 | `SectionHeader.astro` | `label`, `index?`, `id?`, `as?` (`h2` default), `class?` | index + label + 1px rule row; index is accent, decorative, tabular |
-| `Prose.astro` | `class?`, `lang?` | `type-body` plus the 36em measure and paragraph rhythm; post bodies, heading/list/code/table rhythm from tokens only |
+| `Prose.astro` | `class?`, `lang?`, `type?` (`body` default \| `body-lg`) | the 36em measure, the reading role (a post asks for `body-lg`), and the paragraph rhythm; heading/list/code/table rhythm from tokens only |
 | `ContentImage.astro` | `src: ImageMetadata`, `alt`, `width`, `height`, `widths?`, `sizes?`, `loading?`, `class?` | `astro:assets` output, required dimensions and `alt`, 1px `radius-lg` frame |
 | `.link`, `.button`, `.button-secondary` | classes | link: accent + underline, 2px offset; buttons: `type-label` typography in markup, 44px minimum, neutral ink or 1px boundary |
 | `src/lib/i18n.ts` | `locales`, `Locale`, `defaultLocale`, `Localized<T>`, `htmlLang()`, `otherLocale()`, `localePath()`, `homePath()`, `workPath()`, `musicPath()`, `contactPath()` | one vocabulary for locale, BCP 47 tag, and path prefix |
@@ -190,7 +190,7 @@ scrolls with the page.
 
 ## 6. Client JavaScript budget
 
-Three artifacts, no more:
+Four artifacts, no more:
 
 1. **The bootstrap.** `BaseLayout` writes `class="no-js"` on `<html>` and one
    inline `<script>` in `<head>` that replaces it with `js`. It runs before the
@@ -208,6 +208,12 @@ Three artifacts, no more:
    The bar transitions its scrim from the band tone to white over 500ms; alpha
    stays 0.82 at both ends. Other routes never get the attribute, so their bar
    keeps the band tone.
+4. **The post's copy button.** `PostArticle` renders one inline script per post
+   page that writes `location.href` to the clipboard and swaps the button label
+   to "Copied" for two seconds — the label arrives as a `data-copied`
+   attribute, since an `is:inline` script takes no expressions. The Share-on-X
+   link beside it is a plain intent URL and needs no script, and the page reads
+   the same without either.
 
 Everything else stays static. The showcase is a progressive enhancement: with
 scripting off the nav is hidden and the four panels stack in document order with

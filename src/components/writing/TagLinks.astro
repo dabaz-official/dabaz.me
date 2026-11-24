@@ -1,8 +1,9 @@
 ---
 /**
- * Tag links — `type-caption` in a 1px chip (DESIGN.md §7.7). They are
- * navigation, not status, so they carry a boundary; colour never carries the
- * meaning. Chips grow to the 44px touch target on coarse pointers.
+ * Tag links — `type-caption` in an ink pill, the same fill the home's
+ * "View All" button wears. They are navigation, not status; the label carries
+ * the meaning and the fill carries the affordance. Chips grow to the 44px
+ * touch target on coarse pointers.
  *
  * The tag string is author copy and is not translated by the locale: only the
  * route prefix follows the post's locale.
@@ -44,19 +45,16 @@ const { tags, locale, class: className } = Astro.props;
   .tag {
     display: inline-flex;
     align-items: center;
-    padding: var(--dab-space-1) var(--dab-space-2);
-    border: var(--dab-border-width) solid var(--dab-color-border);
-    border-radius: var(--dab-radius-xs);
-    color: var(--dab-color-text-secondary);
+    padding: var(--dab-space-1) var(--dab-space-3);
+    border-radius: var(--dab-radius-pill);
+    background-color: var(--dab-color-primary);
+    color: var(--dab-color-on-primary);
     text-decoration: none;
-    transition:
-      color var(--dab-duration-fast) var(--dab-easing-linear),
-      border-color var(--dab-duration-fast) var(--dab-easing-linear);
+    transition: background-color var(--dab-duration-fast) var(--dab-easing-linear);
   }
 
   .tag:hover {
-    border-color: var(--dab-color-border-strong);
-    color: var(--dab-color-text-primary);
+    background-color: var(--dab-color-primary-hover);
   }
 
   @media (pointer: coarse) {

@@ -59,10 +59,11 @@ const htmlFiles = files.filter((path) => path.endsWith(".html"));
 const jsFiles = files.filter((path) => path.endsWith(".js"));
 
 /**
- * The JavaScript budget (AGENTS.md § Project rules, CONVENTIONS.md §6): one
- * inline bootstrap that swaps `no-js` for `js` before paint, and one bundled
- * module behind the home work showcase. A third artifact is a second budget
- * line, so it fails here instead of shipping quietly.
+ * The JavaScript budget (AGENTS.md § Project rules, CONVENTIONS.md §6): the
+ * inline bootstrap that swaps `no-js` for `js` before paint, the bundled module
+ * behind the home work showcase, the home header's tone switch, and the post
+ * page's copy-link button. Another artifact is another budget line, so it fails
+ * here instead of shipping quietly.
  */
 const INLINE_BOOTSTRAP =
   'document.documentElement.classList.replace("no-js", "js");';
@@ -70,7 +71,11 @@ const INLINE_BOOTSTRAP =
 const SHOWCASE_MARKER = "[data-showcase]";
 /** The home header's tone switch, carried by its own comment. */
 const HEADER_TONE_MARKER = "header-tone";
+/** The post page's copy-link button, carried by its own comment. */
+const POST_SHARE_MARKER = "post-share";
 const HOME_PAGES = new Set(["index.html", "zh/index.html"]);
+/** `writing/<slug>/index.html` and `zh/writing/<slug>/index.html`. */
+const isPostPage = (rel) => /^(zh\/)?writing\/[^/]+\/index\.html$/.test(rel);
 const referencedScripts = new Set();
 
 const ogFiles = new Map();
@@ -191,6 +196,7 @@ for (const path of htmlFiles) {
 
   let showcaseModules = 0;
   let headerTone = 0;
+  let postShare = 0;
 
   for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)) {
     const attributes = attrs(match[1]);
@@ -226,6 +232,12 @@ for (const path of htmlFiles) {
       continue;
     }
 
+    // The post page's copy-link button: one inline script, post routes only.
+    if (isPostPage(rel) && body.includes(POST_SHARE_MARKER)) {
+      postShare += 1;
+      continue;
+    }
+
     // Astro inlines a small module into the page; it must be the showcase, on
     // a home route, and only once.
     if (
@@ -246,6 +258,10 @@ for (const path of htmlFiles) {
 
   if (HOME_PAGES.has(rel) && headerTone !== 1) {
     errors.push(`${rel}: expected one header-tone script, found ${headerTone}`);
+  }
+
+  if (isPostPage(rel) && postShare !== 1) {
+    errors.push(`${rel}: expected one post-share script, found ${postShare}`);
   }
 }
 

@@ -18,7 +18,7 @@ const { locale = defaultLocale } = Astro.props;
 
 <section class="music" id="music" aria-labelledby="music-title">
   <Container>
-    <h2 class="music__title type-h1" id="music-title">{ui.nav.music[locale]}</h2>
+    <h2 class="music__title type-display" id="music-title">{ui.nav.music[locale]}</h2>
 
     <MusicContent locale={locale} />
   </Container>

@@ -65,6 +65,10 @@ export interface UiCopy {
     tagTitle: Localized<(label: string) => string>;
     tagDescription: Localized<(label: string) => string>;
     pageTitle: Localized<(page: number) => string>;
+    /** Post actions: the X intent link and the copy-link button. */
+    shareX: Localized;
+    copyLink: Localized;
+    copied: Localized;
   };
   contact: {
     description: Localized;
@@ -136,6 +140,9 @@ const ui: UiCopy = {
       zh: (page) => `写作——第 ${page} 页： DabAZ 的长文笔记归档。`,
     },
     all: { en: "All writing", zh: "全部文章" },
+    shareX: { en: "Share on X", zh: "分享到 X" },
+    copyLink: { en: "Copy link", zh: "复制链接" },
+    copied: { en: "Copied", zh: "已复制" },
     viewAll: { en: "View All", zh: "查看全部" },
     empty: { en: "No posts yet.", zh: "暂无文章。" },
     newer: { en: "Newer posts", zh: "较新的文章" },
