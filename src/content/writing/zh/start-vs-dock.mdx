@@ -13,6 +13,7 @@ tags:
 ---
 
 import PostFigure from "../../../components/writing/PostFigure.astro";
+import Citation from "../../../components/writing/Citation.astro";
 import figure1 from "../../../assets/writing/start-vs-dock/01.webp";
 import figure2 from "../../../assets/writing/start-vs-dock/02.webp";
 import figure3 from "../../../assets/writing/start-vs-dock/03.webp";
@@ -56,13 +57,13 @@ import figure8 from "../../../assets/writing/start-vs-dock/08.webp";
   caption="DabAZ. iOS 26 interface. Modified self-taken screenshot."
 />
 
-Microsoft 的**内部研究**<sup>[1]</sup> 表明， 许多用户在尝试同时运行两个应用时感到困惑。 窗口的**最小化**与**重叠机制**对他们而言并不直观， 导致不少初学者频繁打开同一应用的多个实例， 最终引发**系统过载甚至崩溃**。 这一问题与 **Windows 的核心承诺**——**多任务处理**——背道而驰。
+Microsoft 的**内部研究**<Citation n={1} /> 表明， 许多用户在尝试同时运行两个应用时感到困惑。 窗口的**最小化**与**重叠机制**对他们而言并不直观， 导致不少初学者频繁打开同一应用的多个实例， 最终引发**系统过载甚至崩溃**。 这一问题与 **Windows 的核心承诺**——**多任务处理**——背道而驰。
 
 当时， **任务栏**这一后来成为**图形界面核心的 UI 元素**尚未诞生。 结果是， 尽管 **Windows** 已经主宰了个人计算机的图形界面市场， 但相当一部分用户仍因**复杂的窗口管理**而困惑甚至受挫。 问题在于： **Microsoft 究竟是如何化解这一困境的？ ** Microsoft 会找一个其他公司做好的解决方案并抄袭过来。 通常， 这个解决方案就在 **Apple** 手里。 但是这次并没有， **macOS** 处于一个更糟糕的情况。 长话短说， 它不仅有类似的 **UI 问题**， 而且**系统稳定性**降低了大概**十倍**。
 
 回到那个核心问题： 为什么两家公司不直接互相借鉴？ 答案其实很简单——**没有什么可借的**。 于是， 两家公司都开始各自探索新的解决方案。
 
-Microsoft 开始测试**“Chicago” **计划<sup>[1]</sup>， 即后来的 **Windows 95**。
+Microsoft 开始测试**“Chicago” **计划<Citation n={1} />， 即后来的 **Windows 95**。
 
 与此同时， Apple 在濒临崩溃的时刻收购了 NeXT。 这不仅是为了引入更稳定的 NeXTSTEP 操作系统， 更是为了重新召回其最重要的资产——Steve Jobs。 而在 NeXTSTEP 中， 解决方案早已以另一种形式存在。
 
@@ -128,4 +129,4 @@ Apple 的答案是 **Dock**。 与开始菜单不同， Dock 并非一个列表�
 
 ## 参考
 
-1. Microsoft. 1994. Microsoft Windows "Chicago" Reviewer's Guide. [PDF](https://www.tech-insider.org/windows/research/acrobat/940601.pdf)
+1. <span id="ref-1"></span>Microsoft. 1994. Microsoft Windows "Chicago" Reviewer's Guide. [PDF](https://www.tech-insider.org/windows/research/acrobat/940601.pdf)
