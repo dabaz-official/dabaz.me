@@ -16,7 +16,7 @@ import { Image } from "astro:assets";
 import Container from "../Container.astro";
 import placeholder from "../../assets/writing/placeholder-16x9.svg";
 import ui from "../../content/ui";
-import { dateTime, formatDate } from "../../lib/dates";
+import { dateTime, formatLongDate } from "../../lib/dates";
 import { defaultLocale, htmlLang, type Locale } from "../../lib/i18n";
 import { postPath, writingPath, type WritingEntry } from "../../lib/writing";
 
@@ -89,7 +89,7 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
                     class="cover__date type-caption tabular"
                     datetime={dateTime(date)}
                   >
-                    {formatDate(date, locale)}
+                    {formatLongDate(date, locale)}
                   </time>
                 </span>
               </a>

@@ -10,7 +10,7 @@
  * the home page's section headings. Tags are optional on summary surfaces.
  */
 import type { WritingEntry } from "../../lib/writing";
-import { dateTime, formatDate } from "../../lib/dates";
+import { dateTime, formatLongDate } from "../../lib/dates";
 import { htmlLang } from "../../lib/i18n";
 import { postPath } from "../../lib/writing";
 import TagLinks from "./TagLinks.astro";
@@ -33,7 +33,7 @@ const lang = htmlLang(locale);
 
 <article class="post-row">
   <time class="post-row__date type-caption tabular" datetime={dateTime(date)}>
-    {formatDate(date, locale)}
+    {formatLongDate(date, locale)}
   </time>
 
   <div class="post-row__content">

@@ -16,7 +16,7 @@ import ProseH4 from "../prose/ProseH4.astro";
 import ProseLink from "../prose/ProseLink.astro";
 import TagLinks from "./TagLinks.astro";
 import ui from "../../content/ui";
-import { dateTime, formatDate } from "../../lib/dates";
+import { dateTime, formatLongDate } from "../../lib/dates";
 import { htmlLang } from "../../lib/i18n";
 import { writingPath, type WritingEntry } from "../../lib/writing";
 
@@ -47,7 +47,7 @@ const { Content } = await render(entry);
     <h1 class="type-h1" lang={lang}>{title}</h1>
     <div class="post__meta type-caption">
       <time class="tabular" datetime={dateTime(date)}>
-        {formatDate(date, locale)}
+        {formatLongDate(date, locale)}
       </time>
       {tags.length > 0 && <TagLinks tags={tags} locale={locale} />}
     </div>
