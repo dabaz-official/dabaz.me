@@ -31,10 +31,10 @@ Rules:
   MDX file; `PostFigure` renders them at the prose measure and carries their
   caption. The same files serve both locales of a post.
 - Citations use `<Citation n={n} />`; it renders a `type-caption` superscript
-  that links to `#ref-<n>`. The reference list is a Markdown ordered list
-  mapped to `ProseOl` (caption role), and each item opens with
-  `<span id="ref-<n>"></span>`; `Prose` restores the decimal markers the
-  Tailwind reset removes.
+  with no brackets, always underlined, that links to `#ref-<n>`. The reference
+  list is a Markdown ordered list mapped to `ProseOl` (caption role), and each
+  item opens with `<span id="ref-<n>"></span>`; `Prose` restores the decimal
+  markers the Tailwind reset removes.
 - A post cover is `src/assets/writing/<slug>/cover.webp` (1920×1080, 16:9),
   declared in each locale file as `cover: { src, alt }` with the alt in that
   post's language. The home card renders it with `srcset`; a post without a

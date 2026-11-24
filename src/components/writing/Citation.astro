@@ -3,8 +3,10 @@
  * An inline citation: the source number, raised and set at the caption size,
  * linked to the matching entry in the post's reference list.
  *
- * The link inherits the text colour — 27 blue superscripts would blow the
- * accent budget — and `Prose` styles it with an underline on hover and focus.
+ * The mark carries no brackets and is always underlined, so it reads as a
+ * reference rather than a footnote marker; the link inherits the text colour
+ * (58 blue marks would blow the accent budget). `Prose` draws the underline
+ * and separates back-to-back marks with a comma.
  */
 interface Props {
   /** The reference number the mark points at (`#ref-<n>`). */
@@ -14,4 +16,4 @@ interface Props {
 const { n } = Astro.props;
 ---
 
-<sup class="type-caption"><a href={`#ref-${n}`}>[{n}]</a></sup>
+<sup class="type-caption"><a href={`#ref-${n}`}>{n}</a></sup>
