@@ -160,7 +160,12 @@ const jsonLd = Astro.props.jsonLd
       <slot />
     </main>
     <slot name="footer"
-      ><SiteFooter locale={locale} alternatePath={alternatePath} /></slot
+      ><SiteFooter
+        locale={locale}
+        alternatePath={alternatePath}
+        path={path}
+        title={Astro.props.title}
+      /></slot
     >
   </body>
 </html>

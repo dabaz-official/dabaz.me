@@ -153,6 +153,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `.link`, `.button`, `.button-secondary` | classes | link: accent + underline, 2px offset; buttons: `type-label` typography in markup, 44px minimum, neutral ink or 1px boundary |
 | `src/lib/i18n.ts` | `locales`, `Locale`, `defaultLocale`, `Localized<T>`, `htmlLang()`, `otherLocale()`, `localePath()`, `homePath()`, `workPath()`, `musicPath()`, `contactPath()` | one vocabulary for locale, BCP 47 tag, and path prefix |
 | `src/lib/metadata.ts` | `PageMeta`, `ResolvedMeta`, `resolveMeta()` | title suffix (`DabAZ - <page>`, one hyphen and spaces in both locales), the home title (site name + tagline), absolute canonical from `site.url`, OG locale/image, `hreflang` set |
+| `src/lib/breadcrumbs.ts` | `Crumb`, `breadcrumbTrail({ path, locale, title, works? })` | the footer trail for a page: the mark is the root, a section names itself, a work takes its record title, a post and a tag page take the page title, pagination reads `Page <n>`; an unknown segment yields no trail |
 | `src/lib/structured-data.ts` | `homeJsonLd(locale)`, `collectionJsonLd(...)`, `postJsonLd(entry)` | `Person` + `WebSite` on home, `CollectionPage` on lists, `BlogPosting` on a post |
 | `src/content/ui.ts` | `UiCopy` and default export | every interface string, both locales; components never inline one |
 | `src/lib/dates.ts` | `formatDate(isoDay, locale)`, `dateTime()`, `rssDate()` | one date format per locale; Chinese uses `YYYY 年 M 月 D 日` |
@@ -328,6 +329,15 @@ client router are involved.
   locale when a translation exists (a post or a tag), and at that locale's
   writing list or home otherwise. `alternatePath` on `BaseLayout` is the only
   knob; pages pass it explicitly.
+- The footer's breadcrumb is derived, not passed. `BaseLayout` hands the page's
+  `path` and `title` to `SiteFooter`, and `src/lib/breadcrumbs.ts` turns them
+  into the trail: the mark is the root, a section route names itself, a work
+  takes its record's title, a post and a tag page take the page title, and
+  pagination reads `Page <n>` / `第 <n> 页`. A segment the site does not know
+  (the 404) yields no trail rather than a guessed crumb. Adding a level means
+  teaching that module, not touching every page. The trail holds one line at
+  every width: only the last crumb gives width back, so a long title truncates
+  with an ellipsis while the section keeps its label.
 - The header's four items are real routes in every locale: `/work`, `/music`,
   `/writing`, and `/contact`. No nav item points at a home anchor; the home
   bands stay reachable by scrolling and keep their `id`s as deep links.
