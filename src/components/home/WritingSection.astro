@@ -9,9 +9,10 @@
  * heading. `All writing` appears only when more posts exist than the shelf
  * shows.
  *
- * The cover is a placeholder until the writing model grows an image field; the
- * card crops whatever it gets to 16:9.
+ * The cover is the record's `cover` when it has one, and a neutral placeholder
+ * until the rest of the archive grows one; the card always crops to 16:9.
  */
+import { Image } from "astro:assets";
 import Container from "../Container.astro";
 import placeholder from "../../assets/writing/placeholder-16x9.svg";
 import ui from "../../content/ui";
@@ -50,21 +51,34 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
     <ul class="covers">
       {
         entries.map((entry) => {
-          const { title, date, tags, locale: postLocale } = entry.data;
+          const { title, date, tags, cover, locale: postLocale } = entry.data;
           const lang = htmlLang(postLocale);
           const eyebrow = tags[0] ?? ui.nav.writing[locale];
           return (
             <li class="cover">
               <a class="cover__link" href={postPath(entry)}>
                 <span class="cover__media">
-                  <img
-                    src={placeholder.src}
-                    alt=""
-                    width="1600"
-                    height="900"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  {cover ? (
+                    <Image
+                      src={cover.src}
+                      alt={cover.alt}
+                      width={1920}
+                      height={1080}
+                      widths={[480, 960, 1920]}
+                      sizes="(min-width: 1024px) 300px, 50vw"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <img
+                      src={placeholder.src}
+                      alt=""
+                      width="1920"
+                      height="1080"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  )}
                 </span>
                 <span class="cover__body">
                   <span class="cover__eyebrow type-label-caps">{eyebrow}</span>

@@ -85,22 +85,31 @@ const writing = defineCollection({
     pattern: "**/*.{md,mdx}",
     base: "./src/content/writing",
   }),
-  schema: z.object({
-    title: z.string().min(1),
-    locale: z.enum(locales),
-    date: isoDay,
-    summary: z.string().min(1),
-    tags: z
-      .array(z.string().min(1))
-      .refine(
-        (tags) =>
-          new Set(tags.map((tag) => tag.trim().toLowerCase())).size ===
-          tags.length,
-        "tags must be unique within a post",
-      )
-      .default([]),
-    draft: z.boolean().default(false),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string().min(1),
+      locale: z.enum(locales),
+      date: isoDay,
+      summary: z.string().min(1),
+      /** The home card's 16:9 image; the card crops whatever it gets. */
+      cover: z
+        .object({
+          src: image(),
+          /** Alt text in the post's own language. */
+          alt: z.string().min(1),
+        })
+        .optional(),
+      tags: z
+        .array(z.string().min(1))
+        .refine(
+          (tags) =>
+            new Set(tags.map((tag) => tag.trim().toLowerCase())).size ===
+            tags.length,
+          "tags must be unique within a post",
+        )
+        .default([]),
+      draft: z.boolean().default(false),
+    }),
 });
 
 export const collections = { works, experience, writing };
