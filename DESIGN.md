@@ -250,10 +250,47 @@ grammar below is awaiting a rewrite.
 
 ### 7.9 Footer
 
-- 1px top border. Left: `© year`, `built YYYY-MM-DD`. Right: email and socials.
-- `type-caption` / `type-label`, `color-text-tertiary`, hover to
-  `color-text-primary`.
-- No newsletter box, no oversized sign-off, no sitemap dump.
+The second tone closes the page: `color-surface-secondary` fills the band. On the
+routes whose body already carries that tone the band merges with the page, and
+the rule above the legal row is what marks the edge there.
+
+- **Crumb row.** The mark links to the locale's home and the breadcrumb trail
+  sits to its right on the same centre line. The reference is Apple's newsroom
+  footer: every crumb is preceded by a 6×11 chevron, the current page closes the
+  trail as plain text with `aria-current="page"`, and no rule divides this row
+  from the map. The mark is `--dab-size-icon-sm` (`currentColor`,
+  `color-text-primary`) — one step above the trail's `type-caption`, and smaller
+  than the header's mark.
+- **The trail is derived from the route**, never passed by pages:
+  `src/lib/breadcrumbs.ts` turns the page's `path` and `title` into crumbs. A
+  section route names itself, a work takes its record's title, a post and a tag
+  page take the page title, pagination reads `Page <n>` / `第 <n> 页`, and an
+  unknown segment (the 404) yields no trail rather than a guessed crumb. The
+  home has no trail: the mark stands alone and its row stays unruled.
+- **One line, always.** The trail never wraps. Only the last crumb gives width
+  back, so a long title truncates with an ellipsis while the section keeps its
+  whole label; the full title stays in the document for assistive tech, and
+  nothing overflows at 320px.
+- **Trail tone.** `type-caption` in `color-text-secondary`; a crumb's link hovers
+  to `color-text-primary` with the site's underline; chevrons are decorative and
+  `aria-hidden`.
+- **Map.** This is the site's sitemap, and it lists only what the build has:
+  Work (each shipped record, linked under `/work`), Music (the streaming
+  platforms and the own player), Contact (the profiles), and Writing (the four
+  newest posts plus `View All`). Two columns below 768, four from 768; headings
+  `type-label` in `color-text-primary`, items `type-caption` in
+  `color-text-secondary`, hover to `color-text-primary` with the site's
+  underline; `space-6` between columns and `space-8` between rows (`space-8` on
+  both axes from 768).
+- **Legal row.** The footer's only rule: 1px `color-border` at `space-8` above
+  it and `space-3` padding within. Left: `© year DabAZ.`. Right: `RSS` and the
+  language switch, which names the other locale in its own language, `space-4`
+  apart. `type-caption` in `color-text-tertiary`, hover to
+  `color-text-primary`. The switch lives here because the header's four items
+  already fill the shell at 320px, and the footer's `alternatePath` decides
+  whether it points at the translated page or that locale's nearest list.
+- No newsletter box, no oversized sign-off, no built date, no decorative
+  imagery.
 
 ## 8. Motion and interaction
 
@@ -400,6 +437,7 @@ One decision is still open; the earlier asset and content blockers have shipped
 | 2026-11-19 | Shell is `container-lg`; no new container token | This document, §5 |
 | 2026-11-19 | Header is sticky and the only surface allowed glass; project exception recorded | Owner |
 | 2026-11-22 | The owner designed the shipped home directly; the thread 1.5 options (A and The Sheet) are archived, not adopted | Owner |
+| 2026-11-25 | The footer opens with the mark and a route-derived breadcrumb trail on one line; the map and the legal row follow, and only the legal rule separates | Owner |
 
 ## 16. Visual direction
 
