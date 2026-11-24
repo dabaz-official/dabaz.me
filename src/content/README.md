@@ -49,7 +49,9 @@ Rules:
   that locale omits the post and the language switch falls back to the list.
 - A missing fact is omitted, never filled with a placeholder in production.
 - Proper nouns (`title`, `org`, `tags`, platform labels) stay untranslated;
-  everything else is `Localized<T>` from `src/lib/i18n.ts`.
+  everything else is `Localized<T>` from `src/lib/i18n.ts`. Social labels are
+  proper nouns too, with one exception: `CV` carries a `zh` label and reads
+  简历 on a zh page.
 
 **Adding a locale.** Extend `locales` in `src/lib/i18n.ts` and fill every
 `Localized` record: TypeScript fails the build until `ui.ts`, `profile.ts`,
