@@ -7,9 +7,12 @@
  * and a neutral placeholder until the rest of the archive grows one; the card
  * always crops to 16:9, so either shape works.
  *
- * The body is a column with the date pushed down by `margin-block-start: auto`:
- * in a row of equal-height cards, every date then sits on the same baseline
- * whether the headline runs one line or three.
+ * A row of cards shares its track sizes: the cover, eyebrow, headline,
+ * optional summary and date are rows of the grid, and every card in the row
+ * spans the same tracks through `subgrid`. A one-line headline therefore
+ * leaves the room its neighbour's two-line headline needs, and every summary
+ * and date starts on the same line across the row. Below 640 there is one
+ * card per row, so each card sizes its own tracks and no space is reserved.
  */
 import { Image } from "astro:assets";
 import placeholder from "../../assets/writing/placeholder-16x9.svg";
@@ -39,7 +42,14 @@ const {
 } = Astro.props;
 ---
 
-<ul class:list={["cards", `cards--${columns}`, className]}>
+<ul
+  class:list={[
+    "cards",
+    `cards--${columns}`,
+    showSummary && "cards--summary",
+    className,
+  ]}
+>
   {
     entries.map((entry) => {
       const { title, date, tags, summary, cover, locale: postLocale } =
@@ -76,23 +86,21 @@ const {
                 />
               )}
             </span>
-            <span class="card__body">
-              <span class="card__eyebrow type-label-caps">{eyebrow}</span>
-              <Heading class="card__title type-h4" lang={lang}>
-                {title}
-              </Heading>
-              {showSummary && (
-                <span class="card__summary type-body-sm" lang={lang}>
-                  {summary}
-                </span>
-              )}
-              <time
-                class="card__date type-caption tabular"
-                datetime={dateTime(date)}
-              >
-                {formatLongDate(date, locale)}
-              </time>
-            </span>
+            <span class="card__eyebrow type-label-caps">{eyebrow}</span>
+            <Heading class="card__title type-h4" lang={lang}>
+              {title}
+            </Heading>
+            {showSummary && (
+              <span class="card__summary type-body-sm" lang={lang}>
+                {summary}
+              </span>
+            )}
+            <time
+              class="card__date type-caption tabular"
+              datetime={dateTime(date)}
+            >
+              {formatLongDate(date, locale)}
+            </time>
           </a>
         </li>
       );
@@ -132,14 +140,23 @@ const {
     }
   }
 
+  /* The card spans one row's worth of tracks — cover, eyebrow, headline,
+     summary, date — so its neighbours in the row size those tracks with it. */
   .card {
     display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 4;
+  }
+
+  .cards--summary .card {
+    grid-row: span 5;
   }
 
   .card__link {
+    grid-row: 1 / -1;
     display: grid;
-    grid-template-rows: auto 1fr;
-    block-size: 100%;
+    grid-template-rows: subgrid;
+    row-gap: 0;
     overflow: clip;
     border-radius: var(--dab-radius-lg);
     background-color: var(--dab-color-surface);
@@ -168,34 +185,38 @@ const {
     scale: 1.03;
   }
 
-  .card__body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--dab-space-2);
-    padding: var(--dab-space-6);
+  /* Every text row carries the card's inset; the vertical spacing between
+     rows is the row's own padding-block-start, because the shared tracks
+     leave no gap to spend. */
+  .card__eyebrow,
+  .card__title,
+  .card__summary,
+  .card__date {
+    padding-inline: var(--dab-space-6);
   }
 
   .card__eyebrow {
+    padding-block-start: var(--dab-space-6);
     color: var(--dab-color-text-tertiary);
   }
 
   .card__title {
     margin: 0;
+    padding-block-start: var(--dab-space-2);
     color: var(--dab-color-text-primary);
     text-wrap: balance;
   }
 
   .card__summary {
-    margin: 0;
+    padding-block-start: var(--dab-space-2);
     color: var(--dab-color-text-secondary);
     text-wrap: pretty;
   }
 
-  /* The date holds the bottom of the card, so a one-line headline still leaves
-     the room its neighbour's two-line headline needs. */
+  /* The date holds the bottom of the card. */
   .card__date {
-    margin-block-start: auto;
-    padding-block-start: var(--dab-space-2);
+    padding-block-start: var(--dab-space-4);
+    padding-block-end: var(--dab-space-6);
     color: var(--dab-color-text-tertiary);
   }
 </style>
