@@ -171,8 +171,7 @@ Chinese string in `src/content/` or `src/data/` breaks the spacing rule.
 | `components/music/MusicPage.astro` | `locale` | `/music` body: `type-h1` heading plus the content under an `h2` |
 | `components/contact/ContactDetails.astro` | — | `site.email` and the contact subset of `social.all`, as a fragment |
 | `components/contact/ContactPage.astro` | `locale` | `/contact` body: `type-h1` heading plus the details |
-| `components/writing/PostList.astro` | `entries: WritingEntry[]`, `class?` | the dated rows; the last hairlines closes the list |
-| `components/writing/PostRow.astro` | `entry: WritingEntry` | 9rem date column from 640, `type-h3` title link, one-line summary, tags; the row never nests links; title/summary/date use the post's locale |
+| `components/writing/PostCards.astro` | `entries: WritingEntry[]`, `locale?`, `columns?` (`two` default \| `three`), `showSummary?`, `headingLevel?` (`h2` default), `class?` | the card grid shared by the home shelf (`three`) and the list and tag pages (`two`); card = 16:9 cover (the record's `cover`, else the placeholder) inside a rounded surface, eyebrow, headline, optional summary, date held at the card's bottom; one per row below 640 |
 | `components/writing/TagLinks.astro` | `tags: string[]`, `locale`, `class?` | `type-caption` chips under the locale's tag route; 44px targets on coarse pointers |
 | `components/writing/PostFigure.astro` | `src: ImageMetadata`, `alt`, `caption?` | a post image at the prose measure, framed by `ContentImage`, with an optional caption |
 | `components/writing/Pager.astro` | `current`, `total`, `locale`, `class?` | prev/next links only when those pages exist; `rel="prev"`/`rel="next"` |

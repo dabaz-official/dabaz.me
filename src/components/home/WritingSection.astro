@@ -1,24 +1,19 @@
 ---
 /**
  * Writing — the home band: the newest three posts as cards, after Apple's
- * newsroom: a 16:9 image, an eyebrow, the headline, the date.
+ * newsroom. The cards themselves live in `components/writing/PostCards.astro`,
+ * which the list and tag pages also use; this band owns the head, the band
+ * tone, and the decision to render at all.
  *
- * `/writing` keeps the dated row grammar; the home is a shelf, so it shows the
- * same records as covers. The page decides whether the section exists at all:
- * a locale with no published posts renders no Writing section, never an empty
- * heading. `All writing` appears only when more posts exist than the shelf
- * shows.
- *
- * The cover is the record's `cover` when it has one, and a neutral placeholder
- * until the rest of the archive grows one; the card always crops to 16:9.
+ * The page decides whether the section exists: a locale with no published
+ * posts renders no Writing section, never an empty heading. `View All` appears
+ * only when more posts exist than the shelf shows.
  */
-import { Image } from "astro:assets";
 import Container from "../Container.astro";
-import placeholder from "../../assets/writing/placeholder-16x9.svg";
+import PostCards from "../writing/PostCards.astro";
 import ui from "../../content/ui";
-import { dateTime, formatLongDate } from "../../lib/dates";
-import { defaultLocale, htmlLang, type Locale } from "../../lib/i18n";
-import { postPath, writingPath, type WritingEntry } from "../../lib/writing";
+import { defaultLocale, type Locale } from "../../lib/i18n";
+import { writingPath, type WritingEntry } from "../../lib/writing";
 
 interface Props {
   entries: WritingEntry[];
@@ -48,56 +43,12 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
       }
     </div>
 
-    <ul class="covers">
-      {
-        entries.map((entry) => {
-          const { title, date, tags, cover, locale: postLocale } = entry.data;
-          const lang = htmlLang(postLocale);
-          const eyebrow = tags[0] ?? ui.nav.writing[locale];
-          return (
-            <li class="cover">
-              <a class="cover__link" href={postPath(entry)}>
-                <span class="cover__media">
-                  {cover ? (
-                    <Image
-                      src={cover.src}
-                      alt={cover.alt}
-                      width={1920}
-                      height={1080}
-                      widths={[480, 960, 1920]}
-                      sizes="(min-width: 1024px) 300px, 50vw"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : (
-                    <img
-                      src={placeholder.src}
-                      alt=""
-                      width="1920"
-                      height="1080"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  )}
-                </span>
-                <span class="cover__body">
-                  <span class="cover__eyebrow type-label-caps">{eyebrow}</span>
-                  <h3 class="cover__title type-h4" lang={lang}>
-                    {title}
-                  </h3>
-                  <time
-                    class="cover__date type-caption tabular"
-                    datetime={dateTime(date)}
-                  >
-                    {formatLongDate(date, locale)}
-                  </time>
-                </span>
-              </a>
-            </li>
-          );
-        })
-      }
-    </ul>
+    <PostCards
+      entries={entries}
+      locale={locale}
+      columns="three"
+      headingLevel="h3"
+    />
 
   </Container>
 </section>
@@ -122,95 +73,6 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
     inline-size: fit-content;
     margin: 0;
     color: var(--dab-color-text-primary);
-  }
-
-  /* One card per row on a phone: at 343px a half-width card leaves ~140px for
-     the headline, which breaks it into three-word lines. */
-  .covers {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--dab-space-6);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  @media (min-width: 640px) {
-    .covers {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  /* Three across from the wide breakpoint: the shelf shows exactly the three
-     newest posts, so one row is the whole section. */
-  @media (min-width: 1024px) {
-    .covers {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: var(--dab-space-8);
-    }
-  }
-
-  /* The card is the link: surface fill and a clip that rounds the image with
-     it, so the picture sits flush to the card's top corners. No hairline — the
-     band is the second tone, and the fill alone lifts the card off it. */
-  .cover {
-    display: grid;
-  }
-
-  .cover__link {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    block-size: 100%;
-    overflow: clip;
-    border-radius: var(--dab-radius-lg);
-    background-color: var(--dab-color-surface);
-    color: inherit;
-    text-decoration: none;
-  }
-
-  /* The cover box owns the ratio: whatever image lands here is cropped to
-     16:9. No radius of its own — the card's clip does that. */
-  .cover__media {
-    display: block;
-    aspect-ratio: 16 / 9;
-    overflow: clip;
-    background-color: var(--dab-color-surface-secondary);
-  }
-
-  .cover__media :global(img) {
-    display: block;
-    inline-size: 100%;
-    block-size: 100%;
-    object-fit: cover;
-    transition: scale var(--dab-duration-slow) var(--dab-easing-standard);
-  }
-
-  .cover__link:hover .cover__media :global(img) {
-    scale: 1.03;
-  }
-
-  /* Eyebrow, headline, date: the headline row takes the slack, so a card
-     whose title runs one line still holds the height of the longest title in
-     its row and every date lands on the same baseline. */
-  .cover__body {
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    gap: var(--dab-space-2);
-    padding: var(--dab-space-6);
-  }
-
-  .cover__eyebrow {
-    color: var(--dab-color-text-tertiary);
-  }
-
-  .cover__title {
-    margin: 0;
-    color: var(--dab-color-text-primary);
-    text-wrap: balance;
-  }
-
-  .cover__date {
-    color: var(--dab-color-text-tertiary);
   }
 
   .writing__all {

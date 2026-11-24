@@ -9,7 +9,7 @@
 import { getCollection } from "astro:content";
 import Section from "../Section.astro";
 import Pager from "./Pager.astro";
-import PostList from "./PostList.astro";
+import PostCards from "./PostCards.astro";
 import ui from "../../content/ui";
 import type { Locale } from "../../lib/i18n";
 import {
@@ -40,7 +40,7 @@ const visible = pageSlice(posts, page);
 
   {
     visible.length > 0 ? (
-      <PostList entries={visible} />
+      <PostCards entries={visible} locale={locale} showSummary />
     ) : (
       <p class="writing__empty type-body-lg">{ui.writing.empty[locale]}</p>
     )
