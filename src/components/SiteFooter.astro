@@ -1,6 +1,13 @@
 ---
 /**
- * The site footer: the mark, the map, the legal line — after Apple's.
+ * The site footer: the mark, the trail, the map, the legal line — after Apple's.
+ *
+ * The mark and the breadcrumb share one row, the way Apple's newsroom footer
+ * opens: the mark is the trail's root, each crumb is preceded by a chevron, and
+ * the last crumb is this page and is not a link. No rule divides that row from
+ * the map — one border above the legal line is the footer's only rule. The
+ * trail is derived from the page's path and title (see
+ * `src/lib/breadcrumbs.ts`), so a route names its levels without passing them.
  *
  * The map is the sitemap the page actually has: a page per work, the
  * streaming platforms and the player that lives outside this site, the four
@@ -14,6 +21,7 @@
 import { getCollection } from "astro:content";
 import Container from "./Container.astro";
 import ui from "../content/ui";
+import { breadcrumbTrail } from "../lib/breadcrumbs";
 import { platforms, ownPlayer } from "../data/music";
 import site from "../data/site";
 import social, { contactLabels, type Social } from "../data/social";
@@ -37,13 +45,23 @@ import { sortWorks } from "../lib/works";
 interface Props {
   locale?: Locale;
   alternatePath: string;
+  /** This page's path, for the breadcrumb trail. */
+  path: string;
+  /** This page's title, the trail's last crumb. */
+  title: string;
 }
 
-const { locale = defaultLocale, alternatePath } = Astro.props;
+const { locale = defaultLocale, alternatePath, path, title } = Astro.props;
 const target = otherLocale(locale);
 const year = new Date().getFullYear();
 
 const works = sortWorks(await getCollection("works"));
+const trail = breadcrumbTrail({
+  path,
+  locale,
+  title,
+  works: works.map((work) => ({ id: work.id, title: work.data.title })),
+});
 const posts = postsForLocale(
   publishedPosts(await getCollection("writing")),
   locale,
@@ -56,27 +74,76 @@ const contactLinks = contactLabels
 
 <footer class="site-footer">
   <Container class="site-footer__inner">
-    <a
-      class="site-footer__brand"
-      href={homePath(locale)}
-      aria-label={ui.home.logo[locale](site.name)}
+    <div
+      class:list={[
+        "site-footer__crumbs",
+        trail.length > 0 && "site-footer__crumbs--trail",
+      ]}
     >
-      <svg
-        class="site-footer__mark"
-        viewBox="0 0 360 360"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-        focusable="false"
+      <a
+        class="site-footer__brand"
+        href={homePath(locale)}
+        aria-label={ui.home.logo[locale](site.name)}
       >
-        <path
-          d="M24.1155 90C39.9137 62.6366 62.6366 39.9137 90 24.1155C117.363 8.31721 148.403 0 180 0C211.597 0 242.636 8.3171 270 24.1153C297.364 39.9136 320.087 62.6364 335.884 89.9998C351.682 117.364 360 148.404 360 180C360 211.597 351.682 242.636 335.885 270L180 180V360C148.404 360 117.364 351.682 90.0002 335.885C62.6366 320.087 39.9137 297.364 24.1155 270C8.31721 242.636 0 211.597 0 180C0 148.404 8.3171 117.364 24.1155 90Z"
-          fill="currentColor"
-          fill-rule="evenodd"
-          clip-rule="evenodd"
-        />
-      </svg>
-    </a>
+        <svg
+          class="site-footer__mark"
+          viewBox="0 0 360 360"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            d="M24.1155 90C39.9137 62.6366 62.6366 39.9137 90 24.1155C117.363 8.31721 148.403 0 180 0C211.597 0 242.636 8.3171 270 24.1153C297.364 39.9136 320.087 62.6364 335.884 89.9998C351.682 117.364 360 148.404 360 180C360 211.597 351.682 242.636 335.885 270L180 180V360C148.404 360 117.364 351.682 90.0002 335.885C62.6366 320.087 39.9137 297.364 24.1155 270C8.31721 242.636 0 211.597 0 180C0 148.404 8.3171 117.364 24.1155 90Z"
+            fill="currentColor"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </a>
+
+      {
+        trail.length > 0 && (
+          <nav
+            class="site-footer__breadcrumb"
+            aria-label={ui.footer.breadcrumb[locale]}
+          >
+            <ol class="site-footer__trail type-caption">
+              {trail.map((crumb) => (
+                <li class="site-footer__crumb">
+                  {/* Apple's 6×11 chevron, the same one its newsroom footer
+                      puts before every crumb. */}
+                  <svg
+                    class="site-footer__chevron"
+                    viewBox="0 0 6 11"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <polyline
+                      points=".675 .925 5.323 5.5 .675 10.075"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.1"
+                    />
+                  </svg>
+                  {crumb.href ? (
+                    <a class="site-footer__crumb-link" href={crumb.href}>
+                      {crumb.label}
+                    </a>
+                  ) : (
+                    <span class="site-footer__crumb-current" aria-current="page">
+                      {crumb.label}
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )
+      }
+    </div>
 
     <nav class="site-footer__map" aria-label={ui.footer.sitemap[locale]}>
       <section class="site-footer__group">
@@ -176,17 +243,98 @@ const contactLinks = contactLabels
     padding-block: var(--dab-space-8) 0;
   }
 
+  /* The mark and the trail share one row; the map follows with the footer's own
+     rhythm. The home has no trail, so the mark stands alone as before. */
+  .site-footer__crumbs {
+    display: flex;
+    /* One centre line for the mark, every chevron, and the text. */
+    align-items: center;
+    gap: var(--dab-space-3);
+  }
+
   .site-footer__brand {
     display: inline-flex;
     color: var(--dab-color-text-primary);
   }
 
-  /* The same 24px mark the header carries — the footer repeats the mark, it
-     does not enlarge it. */
+  /* One step above the trail's 12px text: the footer repeats the mark, it does
+     not compete with it. The header keeps the larger 24px mark. */
   .site-footer__mark {
     display: block;
-    inline-size: var(--dab-space-6);
-    block-size: var(--dab-space-6);
+    inline-size: var(--dab-size-icon-sm);
+    block-size: var(--dab-size-icon-sm);
+  }
+
+  /* The mark's link carries a 24px target; the padding is symmetric, so the
+     16px mark still sits on the row's centre line. */
+  .site-footer__crumbs--trail .site-footer__brand {
+    padding-block: var(--dab-space-1);
+  }
+
+  .site-footer__breadcrumb {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+
+  /* Apple's trail: one line, always. A crumb never wraps — the last one, which
+     carries the page's title, truncates with an ellipsis when it outgrows the
+     row, while the section crumbs keep their whole label. */
+  .site-footer__trail {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    min-inline-size: 0;
+  }
+
+  .site-footer__crumb {
+    display: flex;
+    align-items: center;
+    flex: none;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+  }
+
+  /* Only the current page's crumb gives width back, so a long title is what
+     truncates and never the section above it. */
+  .site-footer__crumb:last-child {
+    flex: 0 1 auto;
+  }
+
+  .site-footer__chevron {
+    flex: none;
+    inline-size: 6px;
+    block-size: 11px;
+    color: var(--dab-color-text-tertiary);
+  }
+
+  .site-footer__crumb-link,
+  .site-footer__crumb-current {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-block: var(--dab-space-1);
+    text-decoration: none;
+  }
+
+  /* The 12px either side of a crumb is Apple's spacing around its chevron;
+     the current crumb needs only the side that follows the chevron. */
+  .site-footer__crumb-link {
+    padding-inline: var(--dab-space-3);
+    color: var(--dab-color-text-secondary);
+  }
+
+  .site-footer__crumb-current {
+    padding-inline-start: var(--dab-space-3);
+    color: var(--dab-color-text-secondary);
+  }
+
+  .site-footer__crumb-link:hover {
+    color: var(--dab-color-text-primary);
+    text-decoration: underline;
+    text-underline-offset: 0.16em;
   }
 
   /* Two columns on a phone, four from the medium breakpoint — the newsroom

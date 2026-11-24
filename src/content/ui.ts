@@ -65,6 +65,8 @@ export interface UiCopy {
     tagTitle: Localized<(label: string) => string>;
     tagDescription: Localized<(label: string) => string>;
     pageTitle: Localized<(page: number) => string>;
+    /** The footer trail's crumb for a paginated list page. */
+    pageLabel: Localized<(page: number) => string>;
     /** Post actions: the X intent link and the copy-link button. */
     shareX: Localized;
     copyLink: Localized;
@@ -84,6 +86,8 @@ export interface UiCopy {
     languageName: Localized;
     /** Names the footer's link columns for assistive tech. */
     sitemap: Localized;
+    /** Names the footer's breadcrumb trail for assistive tech. */
+    breadcrumb: Localized;
   };
 }
 
@@ -164,6 +168,10 @@ const ui: UiCopy = {
       en: (page) => `Writing - page ${page}`,
       zh: (page) => `写作 - 第 ${page} 页`,
     },
+    pageLabel: {
+      en: (page) => `Page ${page}`,
+      zh: (page) => `第 ${page} 页`,
+    },
   },
   contact: {
     description: {
@@ -182,6 +190,7 @@ const ui: UiCopy = {
   footer: {
     rss: { en: "RSS", zh: "RSS" },
     sitemap: { en: "Site map", zh: "站点地图" },
+    breadcrumb: { en: "Breadcrumb", zh: "当前位置" },
     languageName: { en: "English", zh: "中文" },
   },
 };
