@@ -65,6 +65,45 @@ const { class: className, lang, type = "body" } = Astro.props;
     padding-inline-start: var(--dab-space-6);
   }
 
+  /* Tailwind's preflight strips list markers. Prose puts them back: an
+     ordered list (the references) must show its numbers, and an unordered
+     list must read as a list. The marker itself stays quiet. */
+  .prose :global(ul) {
+    list-style: disc;
+  }
+
+  .prose :global(ol) {
+    list-style: decimal;
+  }
+
+  .prose :global(li)::marker {
+    color: var(--dab-color-text-tertiary);
+  }
+
+  /* A citation mark rides above the line without stretching the leading. */
+  .prose :global(sup) {
+    line-height: 0;
+  }
+
+  /* The mark is a link to its source: no brackets, always underlined, but in
+     the text colour so the accent budget is untouched. */
+  .prose :global(sup a) {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  /* Back-to-back marks are separated by a real space in the content, not a
+     inserted symbol: the numbers stay bare. */
+
+  /* A reference target clears the sticky header when a mark jumps to it. */
+  .prose :global([id^="ref-"]) {
+    scroll-margin-block-start: calc(
+      var(--dab-header-height) + var(--dab-space-4)
+    );
+  }
+
   .prose :global(li + li),
   .prose :global(li > ul),
   .prose :global(li > ol) {

@@ -1,0 +1,12 @@
+---
+/**
+ * An ordered list inside a post body: the reference list.
+ *
+ * Markdown carries no classes, so the element is mapped here to give the
+ * sources the caption role — smaller and quieter than the prose they support.
+ * The marker itself is restored by `Prose` (Tailwind's reset removes it).
+ */
+const { class: className, ...rest } = Astro.props;
+---
+
+<ol class:list={["type-caption", className]} {...rest}><slot /></ol>
