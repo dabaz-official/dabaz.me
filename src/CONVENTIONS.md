@@ -21,7 +21,7 @@ commit. `DESIGN.md` owns composition; DabDesign, DabFonts, and DabAgents (pins i
 | `src/lib/writing.ts` | post URLs and ordering per locale, tags, pagination, alternate-language targets | thread 3; thread 4; thread 5 translation lookups |
 | `src/lib/works.ts` | `sortWorks(entries)` | one works order for the home showcase and the `/work` grid: `order` first, then newest `year`; a record without `order` never overtakes a curated one |
 | `src/data/site.ts` | site name, URL, email, `role` and `description` (`Localized`), and the surface identity: tagline, OG locale and image, icons, manifest, theme colours | foundation; thread 5 surface fields |
-| `src/data/social.ts` | `Social[]`, `primary` and `all` | foundation |
+| `src/data/social.ts` | `Social[]`, `primary`, `all`, `contactLabels`, `contactProfiles` | foundation |
 | `src/data/music.ts` | `platforms`, `ownPlayer` (`note` is `Localized`), `releases` | thread 2 renders |
 | `src/content/ui.ts` | every interface string the shell and shared components render | thread 4 |
 | `src/content/` | content records and copy; collections land in `src/content.config.ts` | threads 2–4 |
@@ -175,8 +175,10 @@ unpaired run, or an opener glued to text in front of a bracket.
 | `components/work/WorkPage.astro` | `entries: CollectionEntry<"works">[]`, `locale` | `/work` body: `type-h1` heading plus the gallery |
 | `components/music/MusicContent.astro` | `locale?`, `subHeading?` (`h3` default) | streaming links, DabMusic as own player, latest releases; kind labels and dates follow the locale |
 | `components/music/MusicPage.astro` | `locale` | `/music` body: `type-h1` heading plus the content under an `h2` |
-| `components/contact/ContactDetails.astro` | `locale` | `site.email` and the contact subset of `social.all`, as a fragment; `CV` reads 简历 on a zh page |
-| `components/contact/ContactPage.astro` | `locale` | `/contact` body: `type-h1` heading plus the details |
+| `components/contact/ContactDetails.astro` | `locale` | the contact page's two pill buttons: the email and the CV (简历 on a zh page), each filling the width the page gives the group, with the `button` primitive, the pill radius, and the same hover lift as `Read more` |
+| `components/contact/ContactSocials.astro` | `locale` | the profile marks under the buttons — X, GitHub, LinkedIn, Instagram, TikTok, Threads — each a 24px glyph with its name as `aria-label` and a 44px target on a pseudo-element; the marks hold a 20px gap and start-aligned, matching the buttons' width at desktop only; YouTube and Spotify stay in the music section |
+| `components/contact/ContactMusic.astro` | `locale` | the music marks under the profiles — Spotify, Apple Music, YouTube, Bandcamp, SoundCloud, and DabMusic (the DabAZ mark) — read from `platforms` and `ownPlayer`, each a 24px glyph with its name as `aria-label` and a 44px target; the marks keep the same 20px gap and start alignment |
+| `components/contact/ContactPage.astro` | `locale` | `/contact` body: the section-route title, then a magazine spread in the page shell — the square contact photo and, on the right, the identity, the pills, and the marks on one `space-8` rhythm, with the two mark rows also `space-8` apart; the pills share the marks' width at desktop and are full width on a phone |
 | `components/writing/PostCards.astro` | `entries: WritingEntry[]`, `locale?`, `columns?` (`two` default \| `three`), `showSummary?`, `headingLevel?` (`h2` default), `class?` | the card grid shared by the home shelf (`three`) and the list and tag pages (`two`); card = 16:9 cover (the record's `cover`, else the placeholder) inside a rounded surface, eyebrow, headline, optional summary, date held at the card's bottom; one per row below 640; a row shares its cover, eyebrow, headline, summary and date tracks through `subgrid`, so a one-line headline still leaves the room the row's tallest headline needs |
 | `components/writing/PostRows.astro` | `entries: WritingEntry[]`, `locale?`, `headingLevel?` (`h3` default), `class?` | the post page's related shelf: one article per row, 16:9 cover on the left and the eyebrow, headline and date stacked on the right, a hairline between rows; stays one article wide at every size |
 | `components/writing/ReadMoreLink.astro` | `href`, `locale` | the pill that closes a writing surface: the `Read more` label on the button primitive, pill radius, one shadow and a 1px lift on hover; the post and tag pages place it, the caller centres it |
@@ -472,7 +474,10 @@ exports and manifest, the `Person`/`BlogPosting`/`CollectionPage` JSON-LD, the
 sitemap, robots, the real 404, the post-build metadata guard, and the home-only
 font subset (50 KB instead of 1.6 MB on `/` and `/zh`). Maintenance promoted the
 header nav to its own routes — `/work`, `/music`, and `/contact` in both
-locales — with the home bands reusing the same bodies.
+locales — with the home bands reusing the same bodies. It also rebuilt
+`/contact` as an editorial profile: the contact photo, the page title, the
+name and role, the email and CV pills, the `Elsewhere` profile marks, and the
+music platform marks, inside the page shell.
 
 Open content items, all owner-supplied: a final portrait to replace the CV photo,
 real 16:9 work covers, and a design pass on the writing surfaces, which reuse

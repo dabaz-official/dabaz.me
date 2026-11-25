@@ -51,7 +51,8 @@ const social: { primary: Social[]; all: Social[] } = {
 
 /**
  * The profiles that belong on a contact card, in order. YouTube and Spotify
- * live in the music section instead, so they are not part of this list.
+ * live in the music section instead. The footer maps all of them; the contact
+ * page lists the rest as names.
  */
 export const contactLabels = [
   "X",
@@ -62,5 +63,11 @@ export const contactLabels = [
   "Threads",
   "CV",
 ];
+
+/**
+ * The subset the contact page lists under `Elsewhere`: every label but the CV,
+ * which is a link row rather than a profile name.
+ */
+export const contactProfiles = contactLabels.filter((label) => label !== "CV");
 
 export default social;
