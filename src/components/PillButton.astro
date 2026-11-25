@@ -1,0 +1,86 @@
+---
+/**
+ * The site's capsule button.
+ *
+ * The `button` primitive (global.css) with the three things every pill on the
+ * site shares: the pill radius, the wider label padding, and the one shadow it
+ * lifts into on hover. A surface that needs nothing else is one call; `fill`,
+ * the label's own language, and the new-tab boundary are the only variants.
+ *
+ * The caller owns placement. A pill is a child component, so a parent's scoped
+ * rule reaches the root through `:global` (CONVENTIONS.md §5).
+ */
+interface Props {
+  href: string;
+  label: string;
+  /** A destination outside the site, so it opens in a new tab. */
+  external?: boolean;
+  /** Fills the caller's column, at the large control height. */
+  fill?: boolean;
+  /** The label's own language, when it is not the page's. */
+  lang?: string;
+  /** The caller's layout hook. */
+  class?: string;
+}
+
+const {
+  href,
+  label,
+  external = false,
+  fill = false,
+  lang,
+  class: className,
+} = Astro.props;
+---
+
+<a
+  class:list={[
+    "button type-body pill-button",
+    fill && "pill-button--fill",
+    className,
+  ]}
+  href={href}
+  lang={lang}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noreferrer" : undefined}
+>
+  {label}
+</a>
+
+<style>
+  /* The primitive owns the fill, the height, and the three states; this adds
+     only the capsule, and the one movement a pill has. */
+  .pill-button {
+    border: 0;
+    border-radius: var(--dab-radius-pill);
+    padding-inline: var(--dab-space-6);
+    transition:
+      background-color var(--dab-duration-fast) var(--dab-easing-linear),
+      box-shadow var(--dab-duration-base) var(--dab-easing-standard),
+      translate var(--dab-duration-base) var(--dab-easing-standard);
+  }
+
+  /* The primitive's fill change is too quiet to read as feedback, so the pill
+     also lifts a pixel into the one shadow. */
+  .pill-button:hover {
+    box-shadow: var(--dab-shadow-floating);
+    translate: 0 -1px;
+  }
+
+  /* The contact page's pair: each takes the width its caller sets, one control
+     step taller than the primitive's minimum. */
+  .pill-button--fill {
+    inline-size: 100%;
+    min-height: var(--dab-control-height-lg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pill-button {
+      transition: background-color var(--dab-duration-fast) var(--dab-easing-linear);
+    }
+
+    .pill-button:hover {
+      translate: none;
+    }
+  }
+</style>

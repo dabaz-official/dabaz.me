@@ -10,6 +10,7 @@
  * only when more posts exist than the shelf shows.
  */
 import Container from "../Container.astro";
+import PillButton from "../PillButton.astro";
 import PostCards from "../writing/PostCards.astro";
 import ui from "../../content/ui";
 import { defaultLocale, type Locale } from "../../lib/i18n";
@@ -33,12 +34,11 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
 
       {
         hasMore && (
-          <a
-            class="button writing__all type-body"
+          <PillButton
+            class="writing__all"
             href={writingPath(locale)}
-          >
-            {ui.writing.viewAll[locale]}
-          </a>
+            label={ui.writing.viewAll[locale]}
+          />
         )
       }
     </div>
@@ -75,31 +75,9 @@ const { entries, hasMore, locale = defaultLocale } = Astro.props;
     color: var(--dab-color-text-primary);
   }
 
-  .writing__all {
+  /* The pill is a child component, so its layout hook arrives through
+     `:global`, the documented way: no shrink in the head row. */
+  .writing__head :global(.writing__all) {
     flex: none;
-    border: 0;
-    border-radius: var(--dab-radius-pill);
-    padding-inline: var(--dab-space-6);
-    transition:
-      background-color var(--dab-duration-fast) var(--dab-easing-linear),
-      box-shadow var(--dab-duration-base) var(--dab-easing-standard),
-      translate var(--dab-duration-base) var(--dab-easing-standard);
-  }
-
-  /* The pill lifts a pixel and takes the one shadow: the primitive's own
-     fill change is too quiet to read as feedback. */
-  .writing__all:hover {
-    box-shadow: var(--dab-shadow-floating);
-    translate: 0 -1px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .writing__all {
-      transition: background-color var(--dab-duration-fast) var(--dab-easing-linear);
-    }
-
-    .writing__all:hover {
-      translate: none;
-    }
   }
 </style>

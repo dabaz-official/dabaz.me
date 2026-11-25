@@ -3,10 +3,12 @@
  * Contact — the link buttons.
  *
  * Two pills only: the address, which is what the page is for, and the CV. They
- * use the site's pill button, so the fill, the height, and the hover are the
- * same ones `View All` and `Read more` use. The CV is the one profile whose
- * word translates, so it reads 简历 on a zh page.
+ * are the site's `PillButton`, filled to the width the page gives the group, so
+ * the fill, the height, and the hover are the same ones `View All` and
+ * `Read more` use. The CV is the one profile whose word translates, so it reads
+ * 简历 on a zh page.
  */
+import PillButton from "../PillButton.astro";
 import site from "../../data/site";
 import social, { socialLabel } from "../../data/social";
 import type { Locale } from "../../lib/i18n";
@@ -48,15 +50,13 @@ const links: Link[] = [
   {
     links.map(({ label, href, lang, external }) => (
       <li>
-        <a
-          class="button type-body contact-links__button"
+        <PillButton
+          fill
           href={href}
+          label={label}
           lang={lang}
-          target={external ? "_blank" : undefined}
-          rel={external ? "noreferrer" : undefined}
-        >
-          {label}
-        </a>
+          external={external}
+        />
       </li>
     ))
   }
@@ -69,35 +69,5 @@ const links: Link[] = [
     margin: 0;
     padding: 0;
     list-style: none;
-  }
-
-  /* The caller sets the group's width; each pill fills it. */
-  .contact-links__button {
-    inline-size: 100%;
-    min-height: var(--dab-control-height-lg);
-    padding-inline: var(--dab-space-6);
-    border-radius: var(--dab-radius-pill);
-    box-shadow: none;
-    transition:
-      background-color var(--dab-duration-fast) var(--dab-easing-linear),
-      box-shadow var(--dab-duration-base) var(--dab-easing-standard),
-      translate var(--dab-duration-base) var(--dab-easing-standard);
-  }
-
-  /* The same lift the site's other pill has, so the two read as one control
-     family. */
-  .contact-links__button:hover {
-    box-shadow: var(--dab-shadow-floating);
-    translate: 0 -1px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .contact-links__button {
-      transition: background-color var(--dab-duration-fast) var(--dab-easing-linear);
-    }
-
-    .contact-links__button:hover {
-      translate: none;
-    }
   }
 </style>

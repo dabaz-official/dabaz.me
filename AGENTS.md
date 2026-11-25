@@ -86,9 +86,9 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
   visitor on a dark system. Do not "fix" it to `light`. Full contract in
   `src/CONVENTIONS.md`.
 - **Interfaces:** `Container`, `Section`, `SectionHeader`, `Prose`,
-  `ContentImage`, `BaseLayout`, `src/content/ui.ts`, `src/lib/i18n.ts`,
-  `src/lib/metadata.ts`, `src/lib/dates.ts` are the shared surface. Extend
-  them; do not fork them.
+  `ContentImage`, `PillButton`, `BaseLayout`, `src/content/ui.ts`,
+  `src/lib/i18n.ts`, `src/lib/metadata.ts`, `src/lib/dates.ts` are the shared
+  surface. Extend them; do not fork them.
 - **Content:** `src/content/` for records and copy, `src/data/site.ts` and
   `src/data/social.ts` for identity. See `src/content/README.md`.
 - **Design ownership:** the owner owns composition, rhythm, and visual detail;

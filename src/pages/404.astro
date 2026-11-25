@@ -6,6 +6,7 @@
  */
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Container from "../components/Container.astro";
+import PillButton from "../components/PillButton.astro";
 import ui from "../content/ui";
 import { defaultLocale, homePath } from "../lib/i18n";
 
@@ -26,9 +27,7 @@ const locale = defaultLocale;
         {ui.notFound.description[locale]}
       </p>
       <p class="not-found__back">
-        <a class="button not-found__button type-body" href={homePath(locale)}>
-          {ui.notFound.back[locale]}
-        </a>
+        <PillButton href={homePath(locale)} label={ui.notFound.back[locale]} />
       </p>
     </Container>
   </section>
@@ -56,13 +55,5 @@ const locale = defaultLocale;
 
   .not-found__back {
     margin: var(--dab-space-8) 0 0;
-  }
-
-  /* The same pill the home's "View All" wears: ink fill, no border, pill
-     radius, 16px label. */
-  .not-found__button {
-    border: 0;
-    border-radius: var(--dab-radius-pill);
-    padding-inline: var(--dab-space-6);
   }
 </style>
