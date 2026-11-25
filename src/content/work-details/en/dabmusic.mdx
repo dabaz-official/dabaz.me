@@ -19,36 +19,37 @@ import WorkDetails from "../../../components/work/WorkDetails.astro";
 
 ## Overview
 
-DabMusic is where my music lives under my own roof. The releases are already on Bandcamp, Apple Music, Spotify, YouTube, and SoundCloud; this site gathers them into one page I control, and adds the part the platforms cannot carry: unreleased tracks.
+DabMusic is where my music lives under my own roof: a static site and player for a fixed catalogue. Albums, audio, artwork, and lyrics sit in one folder on disk; the build reads that folder and prerenders every page, so there is no database, no CMS, and no account. 16 albums, 46 tracks, and lyrics for 34 of them.
 
-The page is a single room. A fixed sidebar holds the two destinations, and the catalogue fills the rest — unreleased work first, then the latest releases, each as a row of sleeves. A player bar stays at the bottom while you move through it. The music page keeps the links out to each platform, for the times a visitor would rather listen in an app they already pay for.
+The home page is two shelves, unreleased and released. Every album opens on its own page, which paints itself in a tint taken from its cover. An artist view lives at `/dabaz`, and `/design` documents the foundation the site is built on.
 
 ## Outcome
 
-- One address for everything I have released, and for the tracks I have not.
-- A player that keeps going while the page is browsed, instead of one embed per album.
-- A surface that belongs to dabaz.me — the same type, spacing, and light and dark tones — so the music does not read as a site bolted on the side.
+- Every release in one place, unreleased included; the platforms still handle distribution.
+- One player for the whole site — a mini bar, a full-screen view, and a queue — with the track, position, volume, shuffle, and repeat mode surviving a reload.
+- Lyrics that follow the record word by word, with ad-libs on their own line and a line-level fallback where the timing does not exist.
+- A site that installs and reloads offline, with per-album share images, a sitemap, and robots.
 
 ## Solution
 
-The catalogue is the navigation. Released and unreleased work share one screen; each release opens into its artwork and track list, and the player bar holds whatever is playing, so there is no separate "now playing" page to come back from.
+The catalogue is the build. Each album is a folder with an `album.json`; a server-side scan turns those into typed albums and tracks, reads durations, and fails the build when a cover, an audio file, or a lyric file is missing. Adding a release means adding a folder, not filling in a form.
 
-Artwork is part of the interface. Covers are square and shown large enough to read, because for a catalogue this size the sleeve is often the only visual identity a track carries.
+One client owner holds the single `<audio>` element. The mini bar, the full-screen player, and the queue all read from it, so playback survives navigation; every two seconds it writes the track, position, volume, shuffle, and repeat mode to local storage and restores them on the next visit.
 
-Nothing asks for an account. There is no library to build, no playlist to name, no listening history to sync. The page keeps what is playing for the length of the visit and nothing more, which keeps it honest about what it is: a listening room, not a service.
+Lyrics are the reason the site exists in this shape. Stock LRC can time a line, not a word, and has no room for the ad-libs that sit under one. So the site reads DMLL, a small superset of LRC: word-level spans, `[ad:]` lines, and a left/right voice switch. The full-screen view sweeps a bright mask across the current line, lifts each word as its time arrives, keeps ad-libs dim until they belong, and collapses to the plain line highlight under reduced motion. The waveform beneath the cover doubles as the seek bar.
 
 ## Ideation
 
-The obvious route was an embed. Every platform offers one, and a page of embeds would have taken an afternoon. It would also have handed the design to five different players, each with its own idea of what a track looks like, and it would have left the unreleased work outside the page.
+The first version could have been a page of platform embeds. It would have taken an afternoon, and it would have handed the design to five different players, each with its own idea of what a track looks like. It would also have left the unreleased work — the part no platform carries — outside the page.
 
-The other extreme was a full streaming application: accounts, playlists, uploads, rights, and royalties. That is a product with a business behind it, and the platforms already do that job.
+The other extreme was a streaming service: accounts, uploads, rights, royalties, a database. That is a business, and the platforms already run it.
 
-The middle held. Keep the catalogue and the listening in one place, let the platforms handle delivery, and design the part that is actually mine: the presentation.
+What was left was a player for one catalogue, owned end to end. The lyrics came from the same instinct: the available formats could not say what the records do, so I wrote the smallest one that could, and kept it plain text.
 
 ## Reflection
 
-The player bar was designed on a wide screen and had to be re-thought for a phone, where it competes with the browser's own chrome and with the thumb. It now collapses to the essentials and keeps the artwork visible, which is the part that tells you what is playing.
+The word timings are mostly estimated. Converting 32 line-level LRC files to DMLL gave every track a sweep, but only one was tuned by ear; refining the rest is slower than building the player was, and it is the work that remains. Eighteen files still carry text without line timing, so they can be read but not followed.
 
-The catalogue is small enough that search is not needed yet, and I am in no hurry to add it. When the list outgrows a screen or two, moving through it will become the next real problem — not another feature.
+The queue works and has no surface of its own yet. Search waits until the shelves outgrow a screen. Both are honest gaps, not missing features: the catalogue is still small enough to browse.
 
-Maintenance is the cost I underestimated. Every release means new artwork, a new entry, and a link to a platform that may change its address. The site is only as current as the last time I sat down with it.
+Maintenance is the part I underestimated. Every release means artwork, a folder, lyrics, a waveform, and a tint — and the site is only as current as the last folder I added.
