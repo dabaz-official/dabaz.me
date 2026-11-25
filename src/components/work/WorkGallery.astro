@@ -1,17 +1,26 @@
 ---
 /**
- * Work: the two-up grid of shipped things.
+ * Work — the card list of shipped projects on `/work`.
  *
- * Each card is a screenshot of the live site, then the tags and the name. The
- * cards are not links yet — the case study opens from them later, so nothing
- * here promises a destination it does not have.
+ * The writing list sets the form: a 16:9 cover flush inside a rounded
+ * surface, then four text rows — the keywords, the project name, the summary
+ * and the year, the year holding the card's bottom.
  *
- * The home band and `/work` share this grid; each wrapper owns its own heading
- * and rhythm.
+ * A row of cards shares its tracks: the cover and the four text rows are rows
+ * of the grid, and every card in the row spans the same tracks through
+ * `subgrid`. A one-line name therefore leaves the room its neighbour's
+ * two-line name needs, and every summary and year starts on the same line
+ * across the row. Below 640 there is one card per row, so each card sizes its
+ * own tracks and no space is reserved.
+ *
+ * The whole card is the link, to the project's page on this site
+ * (`/work/<id>`); the record's own URL is that page's action.
  */
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
+import ui from "../../content/ui";
 import { htmlLang, type Locale } from "../../lib/i18n";
+import { workDetailPath } from "../../lib/works";
 
 interface Props {
   entries: CollectionEntry<"works">[];
@@ -23,48 +32,60 @@ interface Props {
 const { entries, locale, heading: Heading = "h3" } = Astro.props;
 ---
 
-<ul class="work-grid">
+<ul class="cards">
   {
     entries.map((entry) => {
-      const { title, tags, cover } = entry.data;
+      const { title, tags, summary, year, cover } = entry.data;
+      const keywords =
+        tags[locale].length > 0 ? tags[locale].join(" · ") : ui.nav.work[locale];
       return (
         <li class="card">
-          {cover && (
+          <a class="card__frame" href={workDetailPath(locale, entry)}>
             <div class="card__media">
-              <Image
-                class="card__image"
-                src={cover.src}
-                alt=""
-                width={1600}
-                height={900}
-                widths={[800, 1600]}
-                sizes="(min-width: 640px) 50vw, 100vw"
-                loading="lazy"
-                fetchpriority="low"
-              />
-              {cover.dark && (
+              {cover && (
+                <Image
+                  class="card__image"
+                  src={cover.src}
+                  alt=""
+                  width={1600}
+                  height={900}
+                  widths={[480, 800, 1600]}
+                  sizes="(min-width: 640px) 50vw, 100vw"
+                  loading="lazy"
+                  decoding="async"
+                  fetchpriority="low"
+                />
+              )}
+              {cover?.dark && (
                 <Image
                   class="card__image card__image--dark"
                   src={cover.dark}
                   alt=""
                   width={1600}
                   height={900}
-                  widths={[800, 1600]}
+                  widths={[480, 800, 1600]}
                   sizes="(min-width: 640px) 50vw, 100vw"
                   loading="lazy"
+                  decoding="async"
                   fetchpriority="low"
                 />
               )}
             </div>
-          )}
-          <div class="card__body">
-            {tags[locale].length > 0 && (
-              <p class="type-label-caps card__tags" lang={htmlLang(locale)}>
-                {tags[locale].join(" · ")}
+            <p class="card__eyebrow type-label-caps" lang={htmlLang(locale)}>
+              {keywords}
+            </p>
+            <Heading class="card__title type-h4" lang="en">
+              {title}
+            </Heading>
+            <p class="card__summary type-body-sm" lang={htmlLang(locale)}>
+              {summary[locale]}
+            </p>
+            {year !== undefined && (
+              <p class="card__year type-caption tabular">
+                <time datetime={String(year)}>{year}</time>
               </p>
             )}
-            <Heading class="type-h3 card__name" lang="en">{title}</Heading>
-          </div>
+          </a>
         </li>
       );
     })
@@ -72,7 +93,7 @@ const { entries, locale, heading: Heading = "h3" } = Astro.props;
 </ul>
 
 <style>
-  .work-grid {
+  .cards {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: var(--dab-space-6);
@@ -82,19 +103,48 @@ const { entries, locale, heading: Heading = "h3" } = Astro.props;
   }
 
   @media (min-width: 640px) {
-    .work-grid {
+    .cards {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--dab-space-8);
     }
   }
 
+  /* The card spans one row's worth of tracks — cover, keywords, name,
+     summary, year — so its neighbours in the row size those tracks with it.
+     The surface and the clip sit here, on the grid item: the frame inside is
+     a subgrid, and the clip is what rounds the cover. */
   .card {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 5;
     overflow: clip;
-    border: var(--dab-border-width) solid var(--dab-color-border);
     border-radius: var(--dab-radius-lg);
     background-color: var(--dab-color-surface);
   }
 
-  /* the zoom lives in this box, so it never reaches the card's text */
+  /* The frame fills the card, so its own focus ring would sit outside the
+     card's clip and never show; the card draws the ring in its place, round
+     its radius. */
+  .card:has(.card__frame:focus-visible) {
+    outline: 2px solid var(--dab-color-focus);
+    outline-offset: 2px;
+  }
+
+  /* The frame spans the whole card and lays the five rows out through the
+     card's tracks. A subgrid inherits the list's gap, so a frame would sit
+     its rows `space-8` apart; the text rows space themselves, so it takes no
+     gap of its own. */
+  .card__frame {
+    grid-row: 1 / -1;
+    display: grid;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* The media box owns the ratio: whatever image lands here is cropped to
+     16:9. No radius of its own — the card's clip does that. */
   .card__media {
     aspect-ratio: 16 / 9;
     overflow: clip;
@@ -106,7 +156,12 @@ const { entries, locale, heading: Heading = "h3" } = Astro.props;
     inline-size: 100%;
     block-size: 100%;
     object-fit: cover;
-    transition: transform var(--dab-duration-slow) var(--dab-easing-standard);
+    transition: scale var(--dab-duration-slow) var(--dab-easing-standard);
+  }
+
+  /* The writing card's hover: the cover eases in a little, the text stays. */
+  .card__frame:hover .card__image {
+    scale: 1.03;
   }
 
   /* One capture per theme; the dark one takes over when the document flips.
@@ -123,8 +178,42 @@ const { entries, locale, heading: Heading = "h3" } = Astro.props;
     display: block;
   }
 
-  .card:hover .card__image {
-    transform: scale(1.03);
+  /* Every text row carries the card's inset; the vertical spacing between
+     rows is the row's own padding-block-start, because the shared tracks
+     leave no gap to spend. */
+  .card__eyebrow,
+  .card__title,
+  .card__summary,
+  .card__year {
+    padding-inline: var(--dab-space-6);
+  }
+
+  .card__eyebrow {
+    margin: 0;
+    padding-block-start: var(--dab-space-6);
+    color: var(--dab-color-text-tertiary);
+  }
+
+  .card__title {
+    margin: 0;
+    padding-block-start: var(--dab-space-2);
+    color: var(--dab-color-text-primary);
+    text-wrap: balance;
+  }
+
+  .card__summary {
+    margin: 0;
+    padding-block-start: var(--dab-space-2);
+    color: var(--dab-color-text-secondary);
+    text-wrap: pretty;
+  }
+
+  /* The year holds the bottom of the card. */
+  .card__year {
+    margin: 0;
+    padding-block-start: var(--dab-space-4);
+    padding-block-end: var(--dab-space-6);
+    color: var(--dab-color-text-tertiary);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -132,25 +221,8 @@ const { entries, locale, heading: Heading = "h3" } = Astro.props;
       transition: none;
     }
 
-    .card:hover .card__image {
-      transform: none;
+    .card__frame:hover .card__image {
+      scale: none;
     }
-  }
-
-  .card__body {
-    padding: var(--dab-space-6);
-  }
-
-  .card__tags {
-    inline-size: fit-content;
-    margin: 0;
-    color: var(--dab-color-text-tertiary);
-  }
-
-  .card__name {
-    inline-size: fit-content;
-    margin: 0;
-    margin-block-start: var(--dab-space-2);
-    color: var(--dab-color-text-primary);
   }
 </style>

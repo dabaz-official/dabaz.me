@@ -1,0 +1,175 @@
+---
+/**
+ * One project, shared by both locale routes.
+ *
+ * The page owns the only `h1` and reads entirely from the record: the
+ * keywords and the year, the name, the summary as a deck, the role and the
+ * org, and the project's own site as its one action. The cover runs the
+ * container the way a post's does, and a record body — when a case study
+ * grows one — renders at the prose measure underneath.
+ */
+import { Image } from "astro:assets";
+import { render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import Prose from "../Prose.astro";
+import ProseH1 from "../prose/ProseH1.astro";
+import ProseH2 from "../prose/ProseH2.astro";
+import ProseH3 from "../prose/ProseH3.astro";
+import ProseH4 from "../prose/ProseH4.astro";
+import ProseLink from "../prose/ProseLink.astro";
+import ProseOl from "../prose/ProseOl.astro";
+import Section from "../Section.astro";
+import ui from "../../content/ui";
+import { htmlLang, type Locale } from "../../lib/i18n";
+
+interface Props {
+  entry: CollectionEntry<"works">;
+  locale: Locale;
+}
+
+/** Markdown output carries no classes; the same map the post body uses. */
+const proseComponents = {
+  h1: ProseH1,
+  h2: ProseH2,
+  h3: ProseH3,
+  h4: ProseH4,
+  a: ProseLink,
+  ol: ProseOl,
+};
+
+const { entry, locale } = Astro.props;
+const { title, year, role, org, summary, tags, href, cover } = entry.data;
+const lang = htmlLang(locale);
+const keywords = tags[locale].join(" · ");
+const { Content } = await render(entry);
+---
+
+<Section as="article" class="work">
+  <header class="work__head measure">
+    {keywords && (
+      <p class="work__keywords type-label-caps" lang={lang}>{keywords}</p>
+    )}
+    <h1 class="type-display" lang="en">{title}</h1>
+    <p class="work__summary type-lede" lang={lang}>{summary[locale]}</p>
+
+    <p class="work__facts type-caption">
+      {role[locale]}{org && ` · ${org}`}{year !== undefined && " · "}{year !==
+        undefined && (
+        <time class="tabular" datetime={String(year)}>{year}</time>
+      )}
+    </p>
+
+    {
+      href && (
+        <a
+          class="button work__visit type-body"
+          href={href}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {ui.work.visit[locale]}
+        </a>
+      )
+    }
+  </header>
+
+  {
+    cover && (
+      <figure class="work__cover">
+        <Image
+          src={cover.src}
+          alt={cover.alt[locale]}
+          width={1600}
+          height={900}
+          widths={[720, 1440, 1600]}
+          sizes="(min-width: 1024px) 960px, 100vw"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+    )
+  }
+
+  <Prose class="work__body" type="body-lg">
+    <Content components={proseComponents} />
+  </Prose>
+</Section>
+
+<style>
+  .work__head {
+    margin-inline: auto;
+    margin-block-end: var(--dab-space-12);
+  }
+
+  .work__keywords {
+    margin: 0;
+    color: var(--dab-color-text-tertiary);
+  }
+
+  /* The headline picks up the space the keywords used to hold. */
+  .work__head h1 {
+    margin: var(--dab-space-4) 0 0;
+    color: var(--dab-color-text-primary);
+  }
+
+  /* The record's summary as a deck, the same sentence the card teases with. */
+  .work__summary {
+    margin: var(--dab-space-4) 0 0;
+    color: var(--dab-color-text-secondary);
+    text-wrap: pretty;
+  }
+
+  /* Role, org and year: the facts the card carries, on one quiet line. */
+  .work__facts {
+    margin: var(--dab-space-4) 0 0;
+    color: var(--dab-color-text-tertiary);
+  }
+
+  /* The pill is the button primitive with the radius and the lift the site's
+     other pills use: one shadow, 1px up, nothing else. */
+  .work__visit {
+    margin-block-start: var(--dab-space-6);
+    border: 0;
+    border-radius: var(--dab-radius-pill);
+    padding-inline: var(--dab-space-6);
+    transition:
+      background-color var(--dab-duration-fast) var(--dab-easing-linear),
+      box-shadow var(--dab-duration-base) var(--dab-easing-standard),
+      translate var(--dab-duration-base) var(--dab-easing-standard);
+  }
+
+  .work__visit:hover {
+    box-shadow: var(--dab-shadow-floating);
+    translate: 0 -1px;
+  }
+
+  /* The cover runs the container, not the measure. */
+  .work__cover {
+    margin: 0 0 var(--dab-space-12);
+    overflow: clip;
+    border-radius: var(--dab-radius-lg);
+    background-color: var(--dab-color-surface-secondary);
+  }
+
+  .work__cover :global(img) {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  /* `Prose` is a child component: its root carries its own scope, so the
+     centring reaches it through `:global`, the documented way. */
+  .work :global(.work__body) {
+    margin-inline: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .work__visit {
+      transition: background-color var(--dab-duration-fast) var(--dab-easing-linear);
+    }
+
+    .work__visit:hover {
+      translate: none;
+    }
+  }
+</style>

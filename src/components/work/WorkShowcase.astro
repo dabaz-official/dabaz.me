@@ -22,7 +22,8 @@
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import ui from "../../content/ui";
-import { workPath, type Locale } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+import { workDetailPath } from "../../lib/works";
 
 interface Props {
   entries: CollectionEntry<"works">[];
@@ -153,7 +154,7 @@ const id = "work-showcase";
                     the project's case study, with a plus for now. */}
                 <a
                   class="showcase__media-action"
-                  href={`${workPath(locale)}/${entry.id}`}
+                  href={workDetailPath(locale, entry)}
                   aria-label={ui.work.caseStudy[locale]}
                 >
                   <svg
