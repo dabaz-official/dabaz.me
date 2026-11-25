@@ -5,8 +5,8 @@
  * The page takes the article page's shape and rhythm, so a reader who steps
  * from a post to a project does not feel the page move under them: the year
  * and the keywords as the meta block, the name, the summary as a deck, the
- * action at the deck's 45px beat, the share marks one step under it, then the
- * cover running the container. A record body — when a case study grows one —
+ * share marks at the deck's 45px beat, the action one step under them, then
+ * the cover running the container. A record body — when a case study grows one —
  * renders at the prose measure underneath.
  */
 import { Image } from "astro:assets";
@@ -61,6 +61,14 @@ const { Content } = await render(entry);
       <h1 class="type-display" lang="en">{title}</h1>
       <p class="work__summary type-lede" lang={lang}>{summary[locale]}</p>
 
+      <div class="work__share">
+        <ShareActions
+          title={title}
+          locale={locale}
+          path={workDetailPath(locale, entry)}
+        />
+      </div>
+
       {
         href && (
           <PillButton
@@ -71,14 +79,6 @@ const { Content } = await render(entry);
           />
         )
       }
-
-      <div class="work__share">
-        <ShareActions
-          title={title}
-          locale={locale}
-          path={workDetailPath(locale, entry)}
-        />
-      </div>
     </header>
 
     {
@@ -144,18 +144,18 @@ const { Content } = await render(entry);
     text-wrap: pretty;
   }
 
-  /* The action takes the post's share beat: 45px under the deck, which is the
-     48 step less the 3px the summary's descender eats. */
-  .work__head :global(.work__visit) {
-    margin-block-start: calc(var(--dab-space-12) - 3px);
-  }
-
-  /* The share marks sit one spacing step under the action, in the same 24px
-     box and 12px gap the post's share row uses. */
+  /* The share marks take the post's share beat: 45px under the deck, which is
+     the 48 step less the 3px the summary's descender eats, in the same 24px
+     box and 12px gap a post's row uses. */
   .work__share {
     display: flex;
     align-items: center;
     gap: var(--dab-space-3);
+    margin-block-start: calc(var(--dab-space-12) - 3px);
+  }
+
+  /* The action sits one spacing step under the share row. */
+  .work__head :global(.work__visit) {
     margin-block-start: var(--dab-space-6);
   }
 
