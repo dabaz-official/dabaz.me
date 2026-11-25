@@ -1,0 +1,54 @@
+---
+locale: en
+---
+
+import WorkDetails from "../../../components/work/WorkDetails.astro";
+
+## Details
+
+<WorkDetails
+  rows={[
+    { label: "Role", value: "Sole Designer and Developer." },
+    {
+      label: "Focus",
+      value:
+        "UI Design, Interaction Design, Prototyping, Technology Selection, Design System, Art Direction.",
+    },
+  ]}
+/>
+
+## Overview
+
+DabMusic is where my music lives under my own roof. The releases are already on Bandcamp, Apple Music, Spotify, YouTube, and SoundCloud; this site gathers them into one page I control, and adds the part the platforms cannot carry: unreleased tracks.
+
+The page is a single room. A fixed sidebar holds the two destinations, and the catalogue fills the rest — unreleased work first, then the latest releases, each as a row of sleeves. A player bar stays at the bottom while you move through it. The music page keeps the links out to each platform, for the times a visitor would rather listen in an app they already pay for.
+
+## Outcome
+
+- One address for everything I have released, and for the tracks I have not.
+- A player that keeps going while the page is browsed, instead of one embed per album.
+- A surface that belongs to dabaz.me — the same type, spacing, and light and dark tones — so the music does not read as a site bolted on the side.
+
+## Solution
+
+The catalogue is the navigation. Released and unreleased work share one screen; each release opens into its artwork and track list, and the player bar holds whatever is playing, so there is no separate "now playing" page to come back from.
+
+Artwork is part of the interface. Covers are square and shown large enough to read, because for a catalogue this size the sleeve is often the only visual identity a track carries.
+
+Nothing asks for an account. There is no library to build, no playlist to name, no listening history to sync. The page keeps what is playing for the length of the visit and nothing more, which keeps it honest about what it is: a listening room, not a service.
+
+## Ideation
+
+The obvious route was an embed. Every platform offers one, and a page of embeds would have taken an afternoon. It would also have handed the design to five different players, each with its own idea of what a track looks like, and it would have left the unreleased work outside the page.
+
+The other extreme was a full streaming application: accounts, playlists, uploads, rights, and royalties. That is a product with a business behind it, and the platforms already do that job.
+
+The middle held. Keep the catalogue and the listening in one place, let the platforms handle delivery, and design the part that is actually mine: the presentation.
+
+## Reflection
+
+The player bar was designed on a wide screen and had to be re-thought for a phone, where it competes with the browser's own chrome and with the thumb. It now collapses to the essentials and keeps the artwork visible, which is the part that tells you what is playing.
+
+The catalogue is small enough that search is not needed yet, and I am in no hurry to add it. When the list outgrows a screen or two, moving through it will become the next real problem — not another feature.
+
+Maintenance is the cost I underestimated. Every release means new artwork, a new entry, and a link to a platform that may change its address. The site is only as current as the last time I sat down with it.

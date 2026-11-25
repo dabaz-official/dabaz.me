@@ -6,8 +6,9 @@ import { locales } from "./lib/i18n";
  * Content collections — DESIGN.md §10.
  *
  * `works` and `experience` land here in thread 2; thread 3 adds
- * `writing/<locale>/`. The schema mirrors the record types in DESIGN.md §10
- * exactly: add a field only after the model changes upstream.
+ * `writing/<locale>/`; the work case studies live in `work-details/<locale>/`.
+ * The record schemas mirror the record types in DESIGN.md §10: add a field
+ * only after the model changes upstream.
  */
 
 /** A field that exists in every locale (DESIGN.md §10 `Localized`). */
@@ -129,4 +130,21 @@ const writing = defineCollection({
     }),
 });
 
-export const collections = { works, experience, writing };
+/**
+ * Work case studies — the long form, one file per locale.
+ *
+ * The facts stay in `works`; this collection holds the prose, keyed
+ * `<locale>/<slug>` so a project page renders only its own language and never
+ * the other locale's draft (rule 07 §1).
+ */
+const workDetails = defineCollection({
+  loader: glob({
+    pattern: "**/*.{md,mdx}",
+    base: "./src/content/work-details",
+  }),
+  schema: z.object({
+    locale: z.enum(locales),
+  }),
+});
+
+export const collections = { works, experience, writing, workDetails };

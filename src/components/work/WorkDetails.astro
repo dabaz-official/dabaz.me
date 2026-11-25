@@ -1,0 +1,81 @@
+---
+/**
+ * The facts a case study opens with: a two-column list, the label on the left
+ * and its value on the right, the way a spec sheet reads.
+ *
+ * A case study supplies its own rows from the MDX body, so the block is code
+ * rather than a heading per line. Label and value share one ink; the weight
+ * carries the hierarchy. The label column is as wide as the widest label, so
+ * the values line up while the two sides stay close. On a phone the two
+ * columns stack, because a fixed label column would leave the value too narrow
+ * to read.
+ */
+interface Row {
+  /** The left column: `Role`, `Focus`. */
+  label: string;
+  /** The right column: one line or a short list. */
+  value: string;
+}
+
+interface Props {
+  rows: Row[];
+}
+
+const { rows } = Astro.props;
+---
+
+<dl class="details">
+  {
+    rows.map(({ label, value }) => (
+      <div class="details__row">
+        <dt class="type-body details__label">{label}</dt>
+        <dd class="type-body details__value">{value}</dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .details {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    column-gap: var(--dab-space-4);
+    row-gap: var(--dab-space-4);
+    /* No margin of its own: Prose owns the gap under the heading, and the
+       block takes the same step a paragraph does. */
+  }
+
+  /* Each row spans both tracks and lays its two cells on the same columns. */
+  .details__row {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    align-items: baseline;
+  }
+
+  /* One ink for both cells; the label's weight is the only distinction. */
+  .details__label {
+    color: var(--dab-color-text-primary);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .details__value {
+    margin: 0;
+    color: var(--dab-color-text-primary);
+    text-wrap: pretty;
+  }
+
+  /* Stacked on a phone: label, then its value one breath below. */
+  @media (max-width: 639px) {
+    .details {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: var(--dab-space-4);
+    }
+
+    .details__row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--dab-space-1);
+    }
+  }
+</style>

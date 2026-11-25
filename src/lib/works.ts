@@ -31,3 +31,28 @@ export function workDetailPath(
 ): string {
   return localePath(locale, `/work/${entry.id}`);
 }
+
+export type WorkDetailEntry = CollectionEntry<"workDetails">;
+
+/**
+ * The case study a project page renders: the file in the page's own locale.
+ *
+ * A detail lives at `<locale>/<slug>`; the prefix is the locale, so a copy in
+ * the other language never leaks into this page. A file whose frontmatter
+ * disagrees with its directory fails the build.
+ */
+export function workDetailFor(
+  details: WorkDetailEntry[],
+  locale: Locale,
+  entry: { id: string },
+): WorkDetailEntry | undefined {
+  const detail = details.find(
+    (candidate) => candidate.id === `${locale}/${entry.id}`,
+  );
+  if (detail && detail.data.locale !== locale) {
+    throw new Error(
+      `work-details/${detail.id}: frontmatter locale "${detail.data.locale}" does not match its directory`,
+    );
+  }
+  return detail;
+}

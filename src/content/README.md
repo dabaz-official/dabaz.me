@@ -5,7 +5,8 @@ per kind of record; it does not gain a second pattern.
 
 | Path | Owner | Shape |
 |---|---|---|
-| `works/*.md` | thread 2 | DESIGN.md §10 `Work`; a `*.webp` cover sits beside each record |
+| `works/*.md` | thread 2 | DESIGN.md §10 `Work`; a `*.webp` cover sits beside each record, and `start`/`end`/`shipped` carry the timeline |
+| `work-details/<locale>/*.mdx` | thread 2 | a project's case study, one file per locale; the record keeps the facts, this keeps the long form |
 | `experience/*.md` | thread 2 | DESIGN.md §10 `Experience` |
 | `profile.ts` | thread 2 | home copy per locale (`HomeCopy`) |
 | `ui.ts` | thread 4 | every interface string the shell and shared components render |
@@ -40,6 +41,10 @@ Rules:
   declared in each locale file as `cover: { src, alt }` with the alt in that
   post's language. The home card renders it with `srcset`; a post without a
   cover keeps the neutral placeholder, never a broken image.
+- A work case study is `work-details/<locale>/<slug>.mdx`. The directory is the
+  locale, so a project page renders only its own language; the frontmatter
+  `locale` must match it. A project without a case study in that locale renders
+  its facts and no body.
 - Work card tags are `Localized<string[]>` (`tags.en` / `tags.zh`), because a
   category label is copy, not a proper noun. Work titles and orgs stay plain.
 - `entry.id` is `<locale>/<slug>`. Each locale renders its own prefix
