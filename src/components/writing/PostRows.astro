@@ -1,0 +1,165 @@
+---
+/**
+ * Writing rows — one article per line, cover on the left and the eyebrow,
+ * headline and date stacked on the right, separated by a hairline.
+ *
+ * This is the article page's related shelf. It is deliberately not the card
+ * grid: the row stays one article wide at every size, so three related posts
+ * read as a list rather than as a second promotion band. The cover is the
+ * record's own when it has one, else the neutral placeholder, cropped to 16:9.
+ */
+import { Image } from "astro:assets";
+import placeholder from "../../assets/writing/placeholder-16x9.svg";
+import ui from "../../content/ui";
+import { dateTime, formatLongDate } from "../../lib/dates";
+import { defaultLocale, htmlLang, type Locale } from "../../lib/i18n";
+import { postPath, type WritingEntry } from "../../lib/writing";
+
+interface Props {
+  entries: WritingEntry[];
+  locale?: Locale;
+  headingLevel?: "h2" | "h3";
+  class?: string;
+}
+
+const {
+  entries,
+  locale = defaultLocale,
+  headingLevel: Heading = "h3",
+  class: className,
+} = Astro.props;
+---
+
+<ul class:list={["rows", className]}>
+  {
+    entries.map((entry) => {
+      const { title, date, tags, cover, locale: postLocale } = entry.data;
+      const lang = htmlLang(postLocale);
+      const eyebrow = tags[0] ?? ui.nav.writing[locale];
+      return (
+        <li class="row">
+          <a class="row__link" href={postPath(entry)}>
+            <span class="row__media">
+              {cover ? (
+                <Image
+                  src={cover.src}
+                  alt={cover.alt}
+                  width={1920}
+                  height={1080}
+                  widths={[176, 352, 704]}
+                  sizes="(min-width: 640px) 176px, 112px"
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <img
+                  src={placeholder.src}
+                  alt=""
+                  width="1920"
+                  height="1080"
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
+            </span>
+            <span class="row__text">
+              <span class="row__eyebrow type-label-caps">{eyebrow}</span>
+              <Heading class="row__title type-h4" lang={lang}>
+                {title}
+              </Heading>
+              <time
+                class="row__date type-caption tabular"
+                datetime={dateTime(date)}
+              >
+                {formatLongDate(date, locale)}
+              </time>
+            </span>
+          </a>
+        </li>
+      );
+    })
+  }
+</ul>
+
+<style>
+  .rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* A hairline between rows only: the section's own rule already sits above
+     the heading, so the list opens without a second line. */
+  .row + .row {
+    border-block-start: var(--dab-border-width) solid var(--dab-color-border);
+  }
+
+  /* Cover left, text right, at every width: the row never becomes a card. */
+  .row__link {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr);
+    align-items: start;
+    gap: var(--dab-space-4);
+    padding-block: var(--dab-space-4);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  @media (min-width: 640px) {
+    .row__link {
+      grid-template-columns: 11rem minmax(0, 1fr);
+      gap: var(--dab-space-6);
+      padding-block: var(--dab-space-6);
+    }
+  }
+
+  .row__media {
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: clip;
+    border-radius: var(--dab-radius-md);
+    background-color: var(--dab-color-surface-secondary);
+  }
+
+  .row__media :global(img) {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    transition: scale var(--dab-duration-slow) var(--dab-easing-standard);
+  }
+
+  .row__link:hover .row__media :global(img) {
+    scale: 1.03;
+  }
+
+  .row__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--dab-space-2);
+  }
+
+  .row__eyebrow {
+    color: var(--dab-color-text-tertiary);
+  }
+
+  .row__title {
+    margin: 0;
+    color: var(--dab-color-text-primary);
+    text-wrap: balance;
+  }
+
+  .row__date {
+    color: var(--dab-color-text-tertiary);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .row__media :global(img) {
+      transition: none;
+    }
+
+    .row__link:hover .row__media :global(img) {
+      scale: none;
+    }
+  }
+</style>

@@ -45,6 +45,7 @@ const { label, slug, entries, all } = Astro.props;
   locale={locale}
   alternatePath={alternateTagPath(slug, locale, all)}
   translationPath={translationTagPath(slug, locale, all)}
+  surface="secondary"
   jsonLd={collectionJsonLd({
     locale,
     path: tagPathFromSlug(slug, locale),

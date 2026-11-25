@@ -54,7 +54,6 @@ export interface UiCopy {
     title: Localized;
     description: Localized;
     pageDescription: Localized<(page: number) => string>;
-    all: Localized;
     viewAll: Localized;
     empty: Localized;
     newer: Localized;
@@ -71,6 +70,12 @@ export interface UiCopy {
     shareX: Localized;
     copyLink: Localized;
     copied: Localized;
+    /** Heading of the share row that closes the article. */
+    shareArticle: Localized;
+    /** Heading of the post page's related-posts shelf, named for the author. */
+    moreFrom: Localized<(name: string) => string>;
+    /** The pill that closes a writing surface and opens the writing list. */
+    readMore: Localized;
   };
   contact: {
     description: Localized;
@@ -143,10 +148,15 @@ const ui: UiCopy = {
         `Writing, page ${page}: the archive of long-form notes by DabAZ on hardware, software, music, and the web.`,
       zh: (page) => `写作——第 ${page} 页： DabAZ 的长文笔记归档。`,
     },
-    all: { en: "All writing", zh: "全部文章" },
     shareX: { en: "Share on X", zh: "分享到 X" },
     copyLink: { en: "Copy link", zh: "复制链接" },
     copied: { en: "Copied", zh: "已复制" },
+    shareArticle: { en: "Share article", zh: "分享文章" },
+    moreFrom: {
+      en: (name) => `More from ${name}`,
+      zh: (name) => `${name} 的更多文章`,
+    },
+    readMore: { en: "Read more", zh: "阅读更多" },
     viewAll: { en: "View All", zh: "查看全部" },
     empty: { en: "No posts yet.", zh: "暂无文章。" },
     newer: { en: "Newer posts", zh: "较新的文章" },

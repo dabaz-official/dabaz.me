@@ -184,6 +184,21 @@ export function alternatePostPath(
 }
 
 /**
+ * The posts a post page suggests next: the newest posts in the same locale,
+ * the one on screen removed. A locale never borrows the other language's
+ * posts (DESIGN.md §10, §11), and a page with no siblings renders no section.
+ */
+export function moreFromPosts(
+  entry: WritingEntry,
+  published: WritingEntry[],
+  limit = 3,
+): WritingEntry[] {
+  return postsForLocale(published, entry.data.locale)
+    .filter((candidate) => candidate.id !== entry.id)
+    .slice(0, limit);
+}
+
+/**
  * The same tag in the other locale, when it exists. Tags are author strings,
  * so a translation may use a different label and therefore a different slug;
  * in that case there is no alternate.

@@ -4,7 +4,9 @@
  *
  * The page owns the only `h1`; the body is wrapped in `Prose`, so the shell's
  * measure and paragraph rhythm apply unchanged. A post keeps its own language:
- * `lang` marks the title and the body, and the shell carries the locale.
+ * `lang` marks the title and the body, and the shell carries the locale. Below
+ * the share block, a hairline opens the same-locale shelf of newer posts, set
+ * as one row per article inside the prose measure.
  */
 import { Image } from "astro:assets";
 import { render } from "astro:content";
@@ -16,15 +18,20 @@ import ProseH3 from "../prose/ProseH3.astro";
 import ProseH4 from "../prose/ProseH4.astro";
 import ProseLink from "../prose/ProseLink.astro";
 import ProseOl from "../prose/ProseOl.astro";
+import PostRows from "./PostRows.astro";
+import ReadMoreLink from "./ReadMoreLink.astro";
+import ShareActions from "./ShareActions.astro";
 import TagLinks from "./TagLinks.astro";
 import ui from "../../content/ui";
-import { dateTime, formatLongDate } from "../../lib/dates";
 import site from "../../data/site";
+import { dateTime, formatLongDate } from "../../lib/dates";
 import { htmlLang } from "../../lib/i18n";
-import { postPath, writingPath, type WritingEntry } from "../../lib/writing";
+import { writingPath, type WritingEntry } from "../../lib/writing";
 
 interface Props {
   entry: WritingEntry;
+  /** The newest posts in this locale, the one on screen removed. */
+  related: WritingEntry[];
 }
 
 /**
@@ -40,12 +47,9 @@ const proseComponents = {
   ol: ProseOl,
 };
 
-const { entry } = Astro.props;
+const { entry, related } = Astro.props;
 const { title, date, tags, summary, cover, locale } = entry.data;
 const lang = htmlLang(locale);
-const canonical = new URL(postPath(entry), site.url).href;
-const shareHref = `https://x.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(canonical)}`;
-const copied = ui.writing.copied[locale];
 const { Content } = await render(entry);
 ---
 
@@ -62,65 +66,7 @@ const { Content } = await render(entry);
       <p class="post__summary type-lede" lang={lang}>{summary}</p>
 
       <div class="post__share">
-        <a
-          class="post__share-button"
-          href={shareHref}
-          target="_blank"
-          rel="noreferrer"
-          aria-label={ui.writing.shareX[locale]}
-        >
-          <svg
-            class="post__share-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <path
-              d="M21.742 21.75L14.179 10.571L21.235 2.25H18.779L13.088 8.964L8.548 2.25H2.359L9.649 13.026L2.25 21.75H4.706L10.741 14.632L15.559 21.75H21.75H21.742ZM7.739 3.818L18.81 20.182H16.363L5.29 3.818H7.737H7.739Z"
-              fill="currentColor"
-            />
-          </svg>
-        </a>
-        <button
-          class="post__share-button"
-          type="button"
-          data-copy-link
-          aria-label={ui.writing.copyLink[locale]}
-          data-copied-label={copied}
-        >
-          <svg
-            class="post__share-icon post__share-icon--link"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <path d="M9 15l6 -6" />
-            <path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" />
-            <path
-              d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463"
-            />
-          </svg>
-          <svg
-            class="post__share-icon post__share-icon--check"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <path d="M5 12l5 5l10 -10" />
-          </svg>
-        </button>
+        <ShareActions entry={entry} />
       </div>
     </header>
 
@@ -145,33 +91,62 @@ const { Content } = await render(entry);
       <Content components={proseComponents} />
     </Prose>
 
-    <nav class="post__foot" aria-label={ui.writing.postNav[locale]}>
-      <a class="link type-label" href={writingPath(locale)}>
-        {ui.writing.all[locale]}
-      </a>
+    <section class="post__share-end measure type-body-lg" aria-labelledby="post-share">
+      <h2 class="type-h4" id="post-share">
+        {ui.writing.shareArticle[locale]}
+      </h2>
+      <div class="post__share post__share--end">
+        <ShareActions entry={entry} />
+      </div>
+    </section>
+
+    {
+      related.length > 0 && (
+        <>
+          <hr class="post__divider measure type-body-lg" />
+          <section
+            class="post__more measure type-body-lg"
+            aria-labelledby="post-more"
+          >
+            <h2 class="post__more-title type-h2" id="post-more">
+              {ui.writing.moreFrom[locale](site.name)}
+            </h2>
+            <PostRows entries={related} locale={locale} headingLevel="h3" />
+          </section>
+        </>
+      )
+    }
+
+    <nav
+      class="post__foot measure type-body-lg"
+      aria-label={ui.writing.postNav[locale]}
+    >
+      <ReadMoreLink href={writingPath(locale)} locale={locale} />
     </nav>
   </Container>
 
   <script is:inline>
-    /* post-share: copies the post's own URL. */
+    /* post-share: copies the post's own URL. Both rows the page renders carry
+       a copy button, so every one of them gets the same behaviour. */
     (() => {
-      const button = document.querySelector("[data-copy-link]");
-      if (!button) return;
-      const name = button.getAttribute("aria-label");
-      const copied = button.dataset.copiedLabel;
-      button.addEventListener("click", async () => {
-        try {
-          await navigator.clipboard.writeText(window.location.href);
-          button.setAttribute("data-copied", "");
-          button.setAttribute("aria-label", copied);
-          setTimeout(() => {
+      const buttons = document.querySelectorAll("[data-copy-link]");
+      for (const button of buttons) {
+        const name = button.getAttribute("aria-label");
+        const copied = button.dataset.copiedLabel;
+        button.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            button.setAttribute("data-copied", "");
+            button.setAttribute("aria-label", copied);
+            setTimeout(() => {
+              button.removeAttribute("data-copied");
+              button.setAttribute("aria-label", name);
+            }, 2000);
+          } catch {
             button.removeAttribute("data-copied");
-            button.setAttribute("aria-label", name);
-          }, 2000);
-        } catch {
-          button.removeAttribute("data-copied");
-        }
-      });
+          }
+        });
+      }
     })();
   </script>
 </article>
@@ -224,7 +199,9 @@ const { Content } = await render(entry);
   }
 
   /* Date and tags open the article, above the headline. */
-  /* Two quiet actions under the deck: the marks alone, no chrome of their own. */
+  /* The two share rows — under the deck and at the end of the body — are the
+     same element: the marks alone, 12px apart, no chrome of their own. The
+     buttons' own box and states live in `ShareActions`. */
   .post__share {
     display: flex;
     align-items: center;
@@ -234,52 +211,24 @@ const { Content } = await render(entry);
     margin-block-start: calc(var(--dab-space-12) - 3px);
   }
 
-  /* The button box is the 24px mark, so the gaps around the row are the gaps
-     you see. The 44px target rides on a pseudo-element, which takes pointer
-     events without taking space. */
-  .post__share-button {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    inline-size: 24px;
-    block-size: 24px;
-    padding: 0;
-    border: 0;
-    background: none;
-    /* The header's nav colour: quiet at rest, ink on hover. */
-    color: var(--dab-color-text-secondary);
-    cursor: pointer;
-    transition: color var(--dab-duration-fast) var(--dab-easing-linear);
+  /* The end-of-article block: the heading at the body's size, set bold, with
+     the same marks and the same gap the article opens with. It borrows the
+     reading role's font size so `measure` resolves to the prose width — 36em
+     of 18px, the column the body actually occupies — rather than to the
+     narrower headline measure above it. */
+  .post__share-end {
+    margin-inline: auto;
+    margin-block-start: var(--dab-space-16);
   }
 
-  .post__share-button::after {
-    content: "";
-    position: absolute;
-    inset: calc((24px - var(--dab-target-min)) / 2);
-  }
-
-  .post__share-button:hover {
+  .post__share-end h2 {
+    margin: 0;
     color: var(--dab-color-text-primary);
   }
 
-  .post__share-icon {
-    display: block;
-    inline-size: 24px;
-    block-size: 24px;
-  }
-
-  /* The copy button answers by turning into a check for two seconds. */
-  .post__share-icon--check {
-    display: none;
-  }
-
-  .post__share-button[data-copied] .post__share-icon--link {
-    display: none;
-  }
-
-  .post__share-button[data-copied] .post__share-icon--check {
-    display: block;
+  /* The row itself is `.post__share`; only the gap above it differs. */
+  .post__share--end {
+    margin-block-start: var(--dab-space-4);
   }
 
   .post__meta {
@@ -298,7 +247,30 @@ const { Content } = await render(entry);
     color: var(--dab-color-text-primary);
   }
 
+  /* The shelf's single action: the shared `Read more` pill, centred in the
+     measure. Its radius, ink and lift live in `ReadMoreLink`. */
   .post__foot {
+    display: flex;
+    justify-content: center;
+    margin-inline: auto;
     margin-block-start: var(--dab-space-12);
+  }
+
+  /* The shelf that closes the page: a hairline at the prose measure, then the
+     newest posts in this locale as one row per article. */
+  .post__divider {
+    margin: var(--dab-space-16) auto var(--dab-space-12);
+    border: 0;
+    border-block-start: var(--dab-border-width) solid var(--dab-color-border);
+  }
+
+  .post__more {
+    /* The shelf stays inside the article's own column, not the page shell. */
+    margin-inline: auto;
+  }
+
+  .post__more-title {
+    margin: 0 0 var(--dab-space-2);
+    color: var(--dab-color-text-primary);
   }
 </style>

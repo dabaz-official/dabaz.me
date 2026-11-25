@@ -178,15 +178,18 @@ unpaired run, or an opener glued to text in front of a bracket.
 | `components/contact/ContactDetails.astro` | `locale` | `site.email` and the contact subset of `social.all`, as a fragment; `CV` reads 简历 on a zh page |
 | `components/contact/ContactPage.astro` | `locale` | `/contact` body: `type-h1` heading plus the details |
 | `components/writing/PostCards.astro` | `entries: WritingEntry[]`, `locale?`, `columns?` (`two` default \| `three`), `showSummary?`, `headingLevel?` (`h2` default), `class?` | the card grid shared by the home shelf (`three`) and the list and tag pages (`two`); card = 16:9 cover (the record's `cover`, else the placeholder) inside a rounded surface, eyebrow, headline, optional summary, date held at the card's bottom; one per row below 640; a row shares its cover, eyebrow, headline, summary and date tracks through `subgrid`, so a one-line headline still leaves the room the row's tallest headline needs |
-| `components/writing/TagLinks.astro` | `tags: string[]`, `locale`, `class?` | `type-caption` chips under the locale's tag route; 44px targets on coarse pointers |
+| `components/writing/PostRows.astro` | `entries: WritingEntry[]`, `locale?`, `headingLevel?` (`h3` default), `class?` | the post page's related shelf: one article per row, 16:9 cover on the left and the eyebrow, headline and date stacked on the right, a hairline between rows; stays one article wide at every size |
+| `components/writing/ReadMoreLink.astro` | `href`, `locale` | the pill that closes a writing surface: the `Read more` label on the button primitive, pill radius, one shadow and a 1px lift on hover; the post and tag pages place it, the caller centres it |
+| `components/writing/TagLinks.astro` | `tags: string[]`, `locale`, `class?` | `type-caption` plain-text links under the locale's tag route, a slash between them and an underline only on hover; 44px targets on coarse pointers |
 | `components/writing/PostFigure.astro` | `src: ImageMetadata`, `alt`, `caption?` | a post image at the prose measure, framed by `ContentImage`, with an optional caption |
 | `components/writing/Citation.astro` | `n: number` | a bracketless `type-caption` superscript, always underlined, that links to `#ref-<n>` and inherits the text colour; adjacent marks are spaced, never punctuated |
+| `components/writing/ShareActions.astro` | `entry: WritingEntry` | the post's two share actions, rendered once and used twice: an X intent link and a copy button, each a 24px mark at a 12px gap with the 44px target on a pseudo-element, so the row under the deck and the row that closes the body read as one element; the copied state swaps the mark for a check |
 | `components/prose/ProseOl.astro` | — | ordered lists in a post (the references) at the `type-caption` role |
 | `components/writing/Pager.astro` | `current`, `total`, `locale`, `class?` | prev/next links only when those pages exist; `rel="prev"`/`rel="next"` |
 | `components/writing/WritingListPage.astro` | `locale`, `page?` | the shared list body, empty state, and pager |
-| `components/writing/PostArticle.astro` | `entry: WritingEntry` | the shared post body, prose map, meta, and back link |
-| `components/writing/WritingTagPage.astro` | `label`, `locale`, `entries` | the shared tag page body |
-| `src/lib/writing.ts` | `publishedPosts`, `postsForLocale`, `postSlug`, `postPath`, `writingPath`, `tagSlug`, `tagPath`, `tagPathFromSlug`, `collectTags`, `pageCount`, `pageSlice`, `pagePath`, `alternatePostPath`, `alternateTagPath`, `POSTS_PER_PAGE` | one route shape per locale; drafts leave production builds; a duplicate slug within one locale or a locale/directory mismatch fails the build; the same slug may exist once per locale |
+| `components/writing/PostArticle.astro` | `entry: WritingEntry`, `related: WritingEntry[]` | the shared post body, prose map, meta, the two share rows (under the deck, and the `Share article` block that closes the body flush to the prose column), a hairline and the `More from DabAZ` shelf (the newest posts in the same locale, one row per article inside the prose measure; omitted when there are none), and a centred `ReadMoreLink` pill to the writing list |
+| `components/writing/WritingTagPage.astro` | `label`, `locale`, `entries` | the shared tag page body: heading, cards, and the centred `Read more` pill |
+| `src/lib/writing.ts` | `publishedPosts`, `postsForLocale`, `postSlug`, `postPath`, `writingPath`, `tagSlug`, `tagPath`, `tagPathFromSlug`, `collectTags`, `pageCount`, `pageSlice`, `pagePath`, `alternatePostPath`, `alternateTagPath`, `moreFromPosts`, `POSTS_PER_PAGE` | one route shape per locale; drafts leave production builds; a duplicate slug within one locale or a locale/directory mismatch fails the build; the same slug may exist once per locale; `moreFromPosts` keeps a post page's shelf inside its own locale |
 | `src/pages/writing/` and `src/pages/zh/writing/` | `/writing`, `/writing/page/<n>`, `/writing/<slug>`, `/writing/tag/<tag>` under each prefix | static routes; 10 posts per page; each locale lists only its own posts |
 | `src/content.config.ts` | `works`, `experience`, `writing` collections | Zod schemas mirroring DESIGN.md §10; `writing` adds `tags`, `draft`, and an optional `cover` |
 | `src/content/profile.ts` | `HomeCopy` and default export | home copy per locale: role, intro, `now`, about, portrait alt, section labels |
@@ -217,11 +220,14 @@ Four artifacts, no more:
    stays 0.82 at both ends. Other routes never get the attribute, so their bar
    keeps the band tone.
 4. **The post's copy button.** `PostArticle` renders one inline script per post
-   page that writes `location.href` to the clipboard and swaps the button label
-   to "Copied" for two seconds — the label arrives as a `data-copied`
-   attribute, since an `is:inline` script takes no expressions. The Share-on-X
-   link beside it is a plain intent URL and needs no script, and the page reads
-   the same without either.
+   page that writes `location.href` to the clipboard and swaps the clicked
+   button's label to "Copied" for two seconds — the label arrives as a
+   `data-copied` attribute, since an `is:inline` script takes no expressions.
+   The page carries two copy buttons (`ShareActions` renders the marks under the
+   deck and the `Share article` block that closes the article), so the script
+   walks every `[data-copy-link]` rather than the first. The Share-on-X links
+   beside them are plain intent URLs and need no script, and the page reads the
+   same without either.
 
 Everything else stays static. The showcase is a progressive enhancement: with
 scripting off the nav is hidden and the four panels stack in document order with
@@ -413,8 +419,9 @@ build's compiler catches template errors.
 
 - Skip link is the first focusable element; `#main` takes focus.
 - Visible focus: 2px `color-focus` outline, 2px offset, never removed.
-- Icon-only controls carry `aria-label` and a 44×44 target. No icon-only
-  control ships today; add the label with the control, not after it.
+- Icon-only controls carry `aria-label` and a 44×44 target (the post's share
+  marks take theirs on a pseudo-element, or on the button itself in the
+  end-of-article row).
 - The accent appears in at most three places per screen: section index, inline
   links, current nav item. A fourth is a defect.
 - Body copy holds the 36em measure; nothing else claims a second measure.
