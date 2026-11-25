@@ -1,75 +1,103 @@
 ---
 /**
- * Contact: one address, then the profiles.
+ * Contact — the link buttons.
  *
- * The profiles are the subset of `social.all` that belongs on a contact card;
- * YouTube and Spotify live in the music section instead.
- *
- * The home band and `/contact` share this body; each wrapper owns its heading.
+ * Two pills only: the address, which is what the page is for, and the CV. They
+ * use the site's pill button, so the fill, the height, and the hover are the
+ * same ones `View All` and `Read more` use. The CV is the one profile whose
+ * word translates, so it reads 简历 on a zh page.
  */
 import site from "../../data/site";
-import social, {
-  contactLabels as labels,
-  socialLabel,
-  type Social,
-} from "../../data/social";
+import social, { socialLabel } from "../../data/social";
 import type { Locale } from "../../lib/i18n";
 
 interface Props {
   locale: Locale;
 }
 
+interface Link {
+  label: string;
+  href: string;
+  /** The label's own language, when it is not the page's. */
+  lang?: string;
+  /** A destination outside the site, so it opens in a new tab. */
+  external?: boolean;
+}
+
 const { locale } = Astro.props;
 
-const links = labels
-  .map((label) => social.all.find((socialLink) => socialLink.label === label))
-  .filter((socialLink): socialLink is Social => Boolean(socialLink))
-  .map((link) => ({ href: link.href, ...socialLabel(link, locale) }));
+const cv = social.all.find((link) => link.label === "CV");
+const cvText = cv ? socialLabel(cv, locale) : undefined;
+
+const links: Link[] = [
+  { label: site.email, href: `mailto:${site.email}` },
+  ...(cv && cvText
+    ? [
+        {
+          label: cvText.label,
+          href: cv.href,
+          lang: cvText.lang,
+          external: true,
+        },
+      ]
+    : []),
+];
 ---
 
-<a class="type-h3 contact__email" href={`mailto:${site.email}`}>{site.email}</a>
-<ul class="contact__links">
+<ul class="contact-links">
   {
-    links.map(({ label, href, lang }) => (
+    links.map(({ label, href, lang, external }) => (
       <li>
-        <a class="type-h3" href={href} target="_blank" rel="noreferrer" lang={lang}
-          >{label}</a
+        <a
+          class="button type-body contact-links__button"
+          href={href}
+          lang={lang}
+          target={external ? "_blank" : undefined}
+          rel={external ? "noreferrer" : undefined}
         >
+          {label}
+        </a>
       </li>
     ))
   }
 </ul>
 
 <style>
-  .contact__email {
-    display: inline-block;
-    color: var(--dab-color-text-primary);
-    text-decoration: none;
-  }
-
-  .contact__email:hover {
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-
-  .contact__links {
-    inline-size: fit-content;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--dab-space-2) var(--dab-space-6);
-    margin: var(--dab-space-6) 0 0;
+  .contact-links {
+    display: grid;
+    gap: var(--dab-space-3);
+    margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .contact__links a {
-    color: var(--dab-color-text-secondary);
-    text-decoration: none;
+  /* The caller sets the group's width; each pill fills it. */
+  .contact-links__button {
+    inline-size: 100%;
+    min-height: var(--dab-control-height-lg);
+    padding-inline: var(--dab-space-6);
+    border-radius: var(--dab-radius-pill);
+    box-shadow: none;
+    transition:
+      background-color var(--dab-duration-fast) var(--dab-easing-linear),
+      box-shadow var(--dab-duration-base) var(--dab-easing-standard),
+      translate var(--dab-duration-base) var(--dab-easing-standard);
   }
 
-  .contact__links a:hover {
-    color: var(--dab-color-text-primary);
-    text-decoration: underline;
-    text-underline-offset: 3px;
+  /* The same lift the site's other pill has, so the two read as one control
+     family. */
+  .contact-links__button:hover {
+    box-shadow: var(--dab-shadow-floating);
+    translate: 0 -1px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-links__button {
+      transition: background-color var(--dab-duration-fast) var(--dab-easing-linear);
+    }
+
+    .contact-links__button:hover {
+      translate: none;
+    }
   }
 </style>

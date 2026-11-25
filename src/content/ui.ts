@@ -79,6 +79,12 @@ export interface UiCopy {
   };
   contact: {
     description: Localized;
+    /** The contact page photo's alt text. */
+    photoAlt: Localized;
+    /** The one-line descriptor under the role. */
+    traits: Localized;
+    /** The label over the profile names under the link index. */
+    elsewhere: Localized;
   };
   notFound: {
     title: Localized;
@@ -188,6 +194,16 @@ const ui: UiCopy = {
       en: "Contact DabAZ by email, or find him on X, GitHub, LinkedIn, Instagram, TikTok, and Threads for work, collaborations, and questions.",
       zh: "联系 DabAZ： 发邮件， 或在 X、 GitHub、 LinkedIn、 Instagram、 TikTok 与 Threads 上找到他。 欢迎工作邀约、 合作与提问。",
     },
+    /** The contact page's photo, as assistive tech hears it. */
+    photoAlt: {
+      en: "DabAZ standing in front of a black car, a yellow building behind him.",
+      zh: "DabAZ 站在一辆黑色汽车前， 背后是一栋黄色的建筑。",
+    },
+    traits: {
+      en: "Musician, designer, developer and former hacker",
+      zh: "音乐人、 设计师、 开发者和前黑客",
+    },
+    elsewhere: { en: "Elsewhere", zh: "其他平台" },
   },
   notFound: {
     title: { en: "Not found", zh: "页面不存在" },

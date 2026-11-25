@@ -2,11 +2,20 @@
 /**
  * Contact — the `/contact` body.
  *
- * The route file owns the document metadata and the language switch target;
- * this component owns the heading, the address, and the profiles.
+ * The page opens with the same title every section route uses, then a magazine
+ * spread: the photograph and the identity share the shell with a wide gutter
+ * between them. Two pills carry the address and the CV; the profiles and the
+ * music platforms close the page as marks. On a phone the spread folds into
+ * one column, the photo first. The header, footer, and route metadata stay the
+ * site's.
  */
-import Section from "../Section.astro";
+import { Image } from "astro:assets";
+import Container from "../Container.astro";
 import ContactDetails from "./ContactDetails.astro";
+import ContactSocials from "./ContactSocials.astro";
+import ContactMusic from "./ContactMusic.astro";
+import contactPhoto from "../../assets/images/contact.webp";
+import site from "../../data/site";
 import ui from "../../content/ui";
 import type { Locale } from "../../lib/i18n";
 
@@ -17,13 +26,137 @@ interface Props {
 const { locale } = Astro.props;
 ---
 
-<Section class="contact-page">
-  <h1 class="type-display contact-page__title">{ui.nav.contact[locale]}</h1>
-  <ContactDetails locale={locale} />
-</Section>
+<article class="contact-page">
+  <Container>
+    <h1 class="type-display contact-page__title">
+      {ui.nav.contact[locale]}
+    </h1>
+
+    <div class="contact-page__layout">
+      <figure class="contact-page__figure">
+        <Image
+          class="contact-page__photo"
+          src={contactPhoto}
+          alt={ui.contact.photoAlt[locale]}
+          width={832}
+          height={832}
+          loading="eager"
+          decoding="async"
+        />
+      </figure>
+
+      <div class="contact-page__body">
+        <div class="contact-page__identity">
+          <p class="type-h1 contact-page__name">
+            <span lang="en">{site.name}</span>
+          </p>
+          <p class="type-body-lg contact-page__role">{site.role[locale]}</p>
+          <p class="type-body contact-page__traits">
+            {ui.contact.traits[locale]}
+          </p>
+        </div>
+
+        <div class="contact-page__links">
+          <ContactDetails locale={locale} />
+          <div class="contact-page__marks">
+            <ContactSocials locale={locale} />
+            <ContactMusic locale={locale} />
+          </div>
+        </div>
+      </div>
+    </div>
+  </Container>
+</article>
 
 <style>
+  .contact-page {
+    padding-block: var(--dab-space-16);
+  }
+
+  /* The section routes' title rhythm: `space-8` under the title, then the
+     content. `/music` sets the same gap. */
   .contact-page__title {
     margin: 0 0 var(--dab-space-8);
+  }
+
+  /* One column on a phone, the photo leading. */
+  .contact-page__layout {
+    display: grid;
+    gap: var(--dab-space-8);
+  }
+
+  /* From the tablet width the page becomes a spread: the photo holds the left
+     half and the identity the right half, both starting on the same line. */
+  @media (min-width: 768px) {
+    .contact-page__layout {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--dab-space-12);
+      align-items: start;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .contact-page__layout {
+      gap: var(--dab-space-16);
+    }
+  }
+
+  .contact-page__figure {
+    margin: 0;
+  }
+
+  /* The photograph runs its column, square as it was shot, and is framed by the
+     radius alone — no hairline, so it reads as a photograph and not a card. */
+  .contact-page__photo {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--dab-radius-lg);
+  }
+
+  .contact-page__name {
+    margin: 0;
+    color: var(--dab-color-text-primary);
+  }
+
+  .contact-page__role {
+    margin: var(--dab-space-2) 0 0;
+    color: var(--dab-color-text-secondary);
+  }
+
+  /* The descriptor is one line, one step quieter than the role, so the role
+     still reads as the title of the block. */
+  .contact-page__traits {
+    margin: var(--dab-space-1) 0 0;
+    color: var(--dab-color-text-secondary);
+  }
+
+  /* Three sections on one rhythm: the identity, the pills, and the marks are
+     `space-8` apart, the same gap the title keeps. The two mark rows take the
+     same `space-8`, so every block breathes alike. */
+  .contact-page__body {
+    display: grid;
+    gap: var(--dab-space-8);
+  }
+
+  /* The pills take the column on a phone and the marks' width from the tablet
+     spread, where the two rows align edge to edge. */
+  .contact-page__links {
+    display: grid;
+    gap: var(--dab-space-8);
+    inline-size: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .contact-page__links {
+      inline-size: fit-content;
+    }
+  }
+
+  .contact-page__marks {
+    display: grid;
+    gap: var(--dab-space-8);
   }
 </style>
