@@ -54,7 +54,6 @@ export interface UiCopy {
     title: Localized;
     description: Localized;
     pageDescription: Localized<(page: number) => string>;
-    all: Localized;
     viewAll: Localized;
     empty: Localized;
     newer: Localized;
@@ -75,7 +74,7 @@ export interface UiCopy {
     shareArticle: Localized;
     /** Heading of the post page's related-posts shelf, named for the author. */
     moreFrom: Localized<(name: string) => string>;
-    /** The pill under the related shelf that opens the writing list. */
+    /** The pill that closes a writing surface and opens the writing list. */
     readMore: Localized;
   };
   contact: {
@@ -149,7 +148,6 @@ const ui: UiCopy = {
         `Writing, page ${page}: the archive of long-form notes by DabAZ on hardware, software, music, and the web.`,
       zh: (page) => `写作——第 ${page} 页： DabAZ 的长文笔记归档。`,
     },
-    all: { en: "All writing", zh: "全部文章" },
     shareX: { en: "Share on X", zh: "分享到 X" },
     copyLink: { en: "Copy link", zh: "复制链接" },
     copied: { en: "Copied", zh: "已复制" },

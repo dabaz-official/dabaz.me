@@ -19,6 +19,7 @@ import ProseH4 from "../prose/ProseH4.astro";
 import ProseLink from "../prose/ProseLink.astro";
 import ProseOl from "../prose/ProseOl.astro";
 import PostRows from "./PostRows.astro";
+import ReadMoreLink from "./ReadMoreLink.astro";
 import ShareActions from "./ShareActions.astro";
 import TagLinks from "./TagLinks.astro";
 import ui from "../../content/ui";
@@ -120,9 +121,7 @@ const { Content } = await render(entry);
       class="post__foot measure type-body-lg"
       aria-label={ui.writing.postNav[locale]}
     >
-      <a class="button post__more-all type-body" href={writingPath(locale)}>
-        {ui.writing.readMore[locale]}
-      </a>
+      <ReadMoreLink href={writingPath(locale)} locale={locale} />
     </nav>
   </Container>
 
@@ -248,38 +247,13 @@ const { Content } = await render(entry);
     color: var(--dab-color-text-primary);
   }
 
-  /* The shelf's single action: one centred pill, the same primitive and lift
-     the home band's `View All` uses. */
+  /* The shelf's single action: the shared `Read more` pill, centred in the
+     measure. Its radius, ink and lift live in `ReadMoreLink`. */
   .post__foot {
     display: flex;
     justify-content: center;
     margin-inline: auto;
     margin-block-start: var(--dab-space-12);
-  }
-
-  .post__more-all {
-    border: 0;
-    border-radius: var(--dab-radius-pill);
-    padding-inline: var(--dab-space-6);
-    transition:
-      background-color var(--dab-duration-fast) var(--dab-easing-linear),
-      box-shadow var(--dab-duration-base) var(--dab-easing-standard),
-      translate var(--dab-duration-base) var(--dab-easing-standard);
-  }
-
-  .post__more-all:hover {
-    box-shadow: var(--dab-shadow-floating);
-    translate: 0 -1px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .post__more-all {
-      transition: background-color var(--dab-duration-fast) var(--dab-easing-linear);
-    }
-
-    .post__more-all:hover {
-      translate: none;
-    }
   }
 
   /* The shelf that closes the page: a hairline at the prose measure, then the

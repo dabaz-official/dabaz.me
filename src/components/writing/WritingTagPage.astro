@@ -5,6 +5,7 @@
  */
 import Section from "../Section.astro";
 import PostCards from "./PostCards.astro";
+import ReadMoreLink from "./ReadMoreLink.astro";
 import ui from "../../content/ui";
 import type { Locale } from "../../lib/i18n";
 import { writingPath, type WritingEntry } from "../../lib/writing";
@@ -28,9 +29,7 @@ const { label, locale, entries } = Astro.props;
   <PostCards entries={entries} locale={locale} showSummary />
 
   <nav class="writing-tag__foot" aria-label={ui.writing.postNav[locale]}>
-    <a class="link type-label" href={writingPath(locale)}>
-      {ui.writing.all[locale]}
-    </a>
+    <ReadMoreLink href={writingPath(locale)} locale={locale} />
   </nav>
 </Section>
 
@@ -45,6 +44,8 @@ const { label, locale, entries } = Astro.props;
   }
 
   .writing-tag__foot {
+    display: flex;
+    justify-content: center;
     margin-block-start: var(--dab-space-12);
   }
 </style>
