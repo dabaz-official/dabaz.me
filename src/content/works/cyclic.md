@@ -1,7 +1,10 @@
 ---
 title: Cyclic
 order: 2
-year: 2023
+year: 2024
+start: 2023-11
+end: 2024-03
+shipped: 2024-Q1
 role:
   en: Independent developer
   zh: 独立开发者

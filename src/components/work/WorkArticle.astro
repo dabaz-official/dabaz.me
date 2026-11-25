@@ -3,11 +3,11 @@
  * One project, shared by both locale routes.
  *
  * The page takes the article page's shape and rhythm, so a reader who steps
- * from a post to a project does not feel the page move under them: the year
- * and the keywords as the meta block, the name, the summary as a deck, the
- * action at the deck's 45px beat, then the cover running the container. A
- * record body — when a case study grows one — renders at the prose measure
- * underneath.
+ * from a post to a project does not feel the page move under them: the span
+ * and the shipping quarter as the meta block, the name, the summary as a
+ * deck, the action at the deck's 45px beat, then the cover running the
+ * container. A record body — when a case study grows one — renders at the
+ * prose measure underneath.
  */
 import { Image } from "astro:assets";
 import { render } from "astro:content";
@@ -40,9 +40,21 @@ const proseComponents = {
 };
 
 const { entry, locale } = Astro.props;
-const { title, year, summary, tags, href, cover } = entry.data;
+const { title, start, end, shipped, summary, href, cover } = entry.data;
 const lang = htmlLang(locale);
-const keywords = tags[locale].join(" · ");
+
+/** `2025-10` reads as `2025.10`; an open end reads as now. */
+const month = (value: string) => value.replace("-", ".");
+const span = start
+  ? `${month(start)} – ${end ? month(end) : ui.work.ongoing[locale]}`
+  : undefined;
+const shippedLine = shipped
+  ? ui.work.shipped[locale](
+      Number(shipped.slice(0, 4)),
+      Number(shipped.slice(6)),
+    )
+  : undefined;
+
 const { Content } = await render(entry);
 ---
 
@@ -50,10 +62,8 @@ const { Content } = await render(entry);
   <Container>
     <header class="work__head measure">
       <div class="work__meta type-caption">
-        {year !== undefined && (
-          <time class="tabular" datetime={String(year)}>{year}</time>
-        )}
-        {keywords && <span lang={lang}>{keywords}</span>}
+        {span && <span class="tabular" lang={lang}>{span}</span>}
+        {shippedLine && <span lang={lang}>{shippedLine}</span>}
       </div>
       <h1 class="type-display" lang="en">{title}</h1>
       <p class="work__summary type-lede" lang={lang}>{summary[locale]}</p>
@@ -108,8 +118,9 @@ const { Content } = await render(entry);
     margin-block-end: var(--dab-space-12);
   }
 
-  /* Year and keywords stack as one opening block, the way a post sets its date
-     and tags: the gap is the 12px line's own leading, not a spacing step. */
+  /* The span and the shipping quarter stack as one opening block, the way a
+     post sets its date and tags: the gap is the 12px line's own leading, not a
+     spacing step. */
   .work__meta {
     display: flex;
     flex-direction: column;

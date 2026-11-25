@@ -1,7 +1,9 @@
 ---
 title: DabMusic
 order: 1
-year: 2024
+year: 2025
+start: 2025-10
+shipped: 2025-Q4
 role:
   en: Independent developer
   zh: 独立开发者

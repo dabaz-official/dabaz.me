@@ -44,6 +44,10 @@ export interface UiCopy {
     caseStudy: Localized;
     /** The project page's action: opens the project's own site. */
     visit: Localized;
+    /** The open end of a project's span, shown as `2025.10 – now`. */
+    ongoing: Localized;
+    /** The project page's shipping line, from `YYYY-Qn`. */
+    shipped: Localized<(year: number, quarter: number) => string>;
   };
   music: {
     description: Localized;
@@ -133,6 +137,12 @@ const ui: UiCopy = {
     nextProjects: { en: "Next project", zh: "下一个项目" },
     caseStudy: { en: "Case study", zh: "案例研究" },
     visit: { en: "Visit site", zh: "访问网站" },
+    ongoing: { en: "now", zh: "至今" },
+    shipped: {
+      en: (year, quarter) => `Shipped Q${quarter} ${year}`,
+      zh: (year, quarter) =>
+        `${year} 年${["一", "二", "三", "四"][quarter - 1]}季度上线`,
+    },
   },
   music: {
     description: {

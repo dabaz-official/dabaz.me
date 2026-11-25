@@ -19,12 +19,29 @@ const localizedList = z.object({
   zh: z.array(z.string().min(1)),
 });
 
+/** A calendar month in a record: `YYYY-MM`. */
+const isoMonth = z.string().regex(/^\d{4}-\d{2}$/, "use an ISO month: YYYY-MM");
+
+/** The quarter a work shipped: `YYYY-Qn`. */
+const isoQuarter = z
+  .string()
+  .regex(/^\d{4}-Q[1-4]$/, "use a calendar quarter: YYYY-Qn");
+
 const works = defineCollection({
   loader: glob({ pattern: "*.md", base: "./src/content/works" }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
+      /** The ship year: the card's year and the order fallback. */
       year: z.number().int().optional(),
+      /**
+       * The months the project ran, `YYYY-MM`. A work is planned in quarters,
+       * not stamped to a day; omit `end` while the project is ongoing.
+       */
+      start: isoMonth.optional(),
+      end: isoMonth.optional(),
+      /** The quarter it shipped, `YYYY-Qn`: the project page's second line. */
+      shipped: isoQuarter.optional(),
       /**
        * Curated display order in the home showcase and the `/work` grid: lower
        * first. Omit to fall back to newest year first (`src/lib/works.ts`).

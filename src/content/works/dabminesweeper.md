@@ -2,6 +2,8 @@
 title: DabMinesweeper
 order: 4
 year: 2026
+start: 2026-04
+shipped: 2026-Q3
 role:
   en: Independent developer
   zh: 独立开发者

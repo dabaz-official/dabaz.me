@@ -2,6 +2,9 @@
 title: DabSudoku
 order: 3
 year: 2025
+start: 2024-12
+end: 2025-02
+shipped: 2025-Q1
 role:
   en: Independent developer
   zh: 独立开发者
