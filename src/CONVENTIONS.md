@@ -173,7 +173,7 @@ unpaired run, or an opener glued to text in front of a bracket.
 | `components/home/WritingSection.astro` | `entries: WritingEntry[]`, `hasMore: boolean`, `locale?` | the newest posts as cards (`h3` titles, 16:9 cover or the neutral placeholder), plus the `View All` `PillButton` only when more exist; the page renders the section only when a post exists |
 | `components/work/WorkShowcase.astro` | `entries: CollectionEntry<"works">[]`, `locale` | pill-tab project gallery: one screenshot and one `summary` per record, cross-fading in one grid cell, with the medallion apple.com puts a play/pause in — a link to that project's case study (`/work/<slug>`, `/zh` alongside) named `ui.work.caseStudy`; the caption row is sized by the tallest summary so tabs never move; a tab list that overflows gets a 44px paddle per side that still has tabs beyond the edge; a press steps the selection by one project; the paddles are skipped in the tab order; the tab behaviour is the site's one client module (CONVENTIONS.md §6); nav hidden and panels stacked with scripting off |
 | `components/work/WorkGallery.astro` | `entries: CollectionEntry<"works">[]`, `locale`, `heading?` (`h3` default) | the `/work` card list in the writing list's form: a row of cards shares the 16:9 cover (the record's own, light/dark pair) and four text tracks through `subgrid`; card = cover, keywords (`tags[locale]`, `type-label-caps`), name (`type-h4`), `summary[locale]` (`type-body-sm`), year (`type-caption`, held at the card's bottom); one per row below 640; the whole card links to the project's page (`workDetailPath`), the hover scales the cover 1.03 as on the writing cards, and the card draws the focus ring the clipped frame cannot |
-| `components/work/WorkArticle.astro` | `entry: CollectionEntry<"works">`, `locale` | one project's page body, shared by both locale routes: a page-owned article that keeps the post page's rhythm exactly — the year and keywords as a `type-caption` meta block, the name as the only `h1`, the summary as a deck, the share row at the deck's 45px beat and the `Visit site` `PillButton` one step under it; the 16:9 cover runs the container, and the record's body renders at the prose measure; no role line; one inline script via `ShareScript` |
+| `components/work/WorkArticle.astro` | `entry: CollectionEntry<"works">`, `locale` | one project's page body, shared by both locale routes: a page-owned article that keeps the post page's rhythm exactly — the year and keywords as a `type-caption` meta block, the name as the only `h1`, the summary as a deck, the `Visit site` `PillButton` at the deck's 45px beat; the 16:9 cover runs the container, and the record's body renders at the prose measure; no role line, no share row, and no client script |
 | `components/work/WorkPage.astro` | `entries: CollectionEntry<"works">[]`, `locale` | `/work` body: `type-h1` heading plus the card list |
 | `components/music/MusicContent.astro` | `locale?`, `subHeading?` (`h3` default) | streaming links, DabMusic as own player, latest releases; kind labels and dates follow the locale |
 | `components/music/MusicPage.astro` | `locale` | `/music` body: `type-h1` heading plus the content under an `h2` |
@@ -187,8 +187,8 @@ unpaired run, or an opener glued to text in front of a bracket.
 | `components/writing/TagLinks.astro` | `tags: string[]`, `locale`, `class?` | `type-caption` plain-text links under the locale's tag route, a slash between them and an underline only on hover; 44px targets on coarse pointers |
 | `components/writing/PostFigure.astro` | `src: ImageMetadata`, `alt`, `caption?` | a post image at the prose measure, framed by `ContentImage`, with an optional caption |
 | `components/writing/Citation.astro` | `n: number` | a bracketless `type-caption` superscript, always underlined, that links to `#ref-<n>` and inherits the text colour; adjacent marks are spaced, never punctuated |
-| `components/ShareActions.astro` | `title`, `locale`, `path` | a page's two share actions in one row: the X intent link and the copy button, each a 24px mark at a 12px gap with the 44px target on a pseudo-element; a post renders the row twice (under the deck and in the closing block), a project page once under its action; the copied state swaps the mark for a check |
-| `components/ShareScript.astro` | — | the one inline script behind the share row: writes `location.href` to the clipboard and swaps the clicked button to its `data-copied-label` for two seconds; a post or project page renders it once beside `ShareActions`, and the row reads the same with scripting off |
+| `components/ShareActions.astro` | `title`, `locale`, `path` | a post's two share actions in one row: the X intent link and the copy button, each a 24px mark at a 12px gap with the 44px target on a pseudo-element, so the row under the deck and the row that closes the body read as one element; the copied state swaps the mark for a check |
+| `components/ShareScript.astro` | — | the one inline script behind a post's share row: writes `location.href` to the clipboard and swaps the clicked button to its `data-copied-label` for two seconds; a post renders it once beside `ShareActions` (which appears twice), and the rows read the same with scripting off |
 | `components/prose/ProseOl.astro` | — | ordered lists in a post (the references) at the `type-caption` role |
 | `components/writing/Pager.astro` | `current`, `total`, `locale`, `class?` | prev/next links only when those pages exist; `rel="prev"`/`rel="next"` |
 | `components/writing/WritingListPage.astro` | `locale`, `page?` | the shared list body, empty state, and pager |
@@ -225,16 +225,16 @@ Four artifacts, no more:
    The bar transitions its scrim from the band tone to white over 500ms; alpha
    stays 0.82 at both ends. Other routes never get the attribute, so their bar
    keeps the band tone.
-4. **The share row's copy button.** A post and a project page both render
-   `ShareScript` once; it writes `location.href` to the clipboard and swaps the
-   clicked button's label to "Copied" for two seconds — the label arrives as a
-   `data-copied` attribute, since an `is:inline` script takes no expressions. A
-   post carries two copy buttons (`ShareActions` renders the marks under the
+4. **The post's copy button.** `PostArticle` renders `ShareScript` once per
+   post page; it writes `location.href` to the clipboard and swaps the clicked
+   button's label to "Copied" for two seconds — the label arrives as a
+   `data-copied` attribute, since an `is:inline` script takes no expressions.
+   The page carries two copy buttons (`ShareActions` renders the marks under the
    deck and the `Share article` block that closes the article), so the script
    walks every `[data-copy-link]` rather than the first. The Share-on-X links
    beside them are plain intent URLs and need no script, and the page reads the
-   same without either. `check-meta` allows this script on the post and project
-   routes only.
+   same without either. `check-meta` allows this script on the post routes
+   only.
 
 Everything else stays static. The showcase is a progressive enhancement: with
 scripting off the nav is hidden and the four panels stack in document order with

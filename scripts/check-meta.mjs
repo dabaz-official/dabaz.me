@@ -76,10 +76,6 @@ const SHARE_MARKER = "share-actions";
 const HOME_PAGES = new Set(["index.html", "zh/index.html"]);
 /** `writing/<slug>/index.html` and `zh/writing/<slug>/index.html`. */
 const isPostPage = (rel) => /^(zh\/)?writing\/[^/]+\/index\.html$/.test(rel);
-/** `work/<id>/index.html` and `zh/work/<id>/index.html`. */
-const isProjectPage = (rel) => /^(zh\/)?work\/[^/]+\/index\.html$/.test(rel);
-/** A post and a project page both render the share row. */
-const hasShareRow = (rel) => isPostPage(rel) || isProjectPage(rel);
 const referencedScripts = new Set();
 
 const ogFiles = new Map();
@@ -236,9 +232,8 @@ for (const path of htmlFiles) {
       continue;
     }
 
-    // The share row's copy-link button: one inline script, on a post or a
-    // project page.
-    if (hasShareRow(rel) && body.includes(SHARE_MARKER)) {
+    // The post page's share row: one inline script, post routes only.
+    if (isPostPage(rel) && body.includes(SHARE_MARKER)) {
       shareRow += 1;
       continue;
     }
@@ -265,7 +260,7 @@ for (const path of htmlFiles) {
     errors.push(`${rel}: expected one header-tone script, found ${headerTone}`);
   }
 
-  if (hasShareRow(rel) && shareRow !== 1) {
+  if (isPostPage(rel) && shareRow !== 1) {
     errors.push(`${rel}: expected one share script, found ${shareRow}`);
   }
 }

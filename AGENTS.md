@@ -74,8 +74,8 @@ CI (`.github/workflows/ci.yml`) runs `pnpm check` on every pull request.
   stays this small) that adds the gallery's tab behaviour; `/` and `/zh` carry
   one inline script that flips the header's `data-past` once the first screen
   is behind, so its scrim fades from the band tone to white over 500ms; and a
-  post or project page carries one inline script for the copy-link button in
-  its share row. Everything renders, reads and scrolls without them.
+  post page carries one inline script for the copy-link button in its share
+  row. Everything renders, reads and scrolls without them.
   `scripts/check-meta.mjs` allows exactly those four artifacts and fails on any
   other script or bundle. No framework integration, router, or analytics; a new
   script is a new budget line and needs a recorded decision here.
