@@ -71,6 +71,12 @@ export interface UiCopy {
     shareX: Localized;
     copyLink: Localized;
     copied: Localized;
+    /** Heading of the share row that closes the article. */
+    shareArticle: Localized;
+    /** Heading of the post page's related-posts shelf, named for the author. */
+    moreFrom: Localized<(name: string) => string>;
+    /** The pill under the related shelf that opens the writing list. */
+    readMore: Localized;
   };
   contact: {
     description: Localized;
@@ -147,6 +153,12 @@ const ui: UiCopy = {
     shareX: { en: "Share on X", zh: "分享到 X" },
     copyLink: { en: "Copy link", zh: "复制链接" },
     copied: { en: "Copied", zh: "已复制" },
+    shareArticle: { en: "Share article", zh: "分享文章" },
+    moreFrom: {
+      en: (name) => `More from ${name}`,
+      zh: (name) => `${name} 的更多文章`,
+    },
+    readMore: { en: "Read more", zh: "阅读更多" },
     viewAll: { en: "View All", zh: "查看全部" },
     empty: { en: "No posts yet.", zh: "暂无文章。" },
     newer: { en: "Newer posts", zh: "较新的文章" },

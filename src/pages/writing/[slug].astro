@@ -8,6 +8,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import PostArticle from "../../components/writing/PostArticle.astro";
 import {
   alternatePostPath,
+  moreFromPosts,
   postPath,
   postSlug,
   postsForLocale,
@@ -40,5 +41,5 @@ const { entry, all } = Astro.props;
   ogType="article"
   jsonLd={postJsonLd(entry)}
 >
-  <PostArticle entry={entry} />
+  <PostArticle entry={entry} related={moreFromPosts(entry, all)} />
 </BaseLayout>
