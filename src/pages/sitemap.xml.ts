@@ -23,6 +23,7 @@ import {
   translationTagPath,
   writingPath,
 } from "../lib/writing";
+import { sortWorks, workDetailPath } from "../lib/works";
 
 /**
  * The sitemap: every public route, one `<url>` per locale, with the
@@ -83,6 +84,7 @@ ${entry.lastmod ? `    <lastmod>${entry.lastmod}</lastmod>\n` : ""}${alternates}
 
 export const GET: APIRoute = async () => {
   const published = publishedPosts(await getCollection("writing"));
+  const works = sortWorks(await getCollection("works"));
   const entries: UrlEntry[] = [];
 
   // Home, both locales.
@@ -98,6 +100,15 @@ export const GET: APIRoute = async () => {
         path: page(locale),
         locale,
         translationPath: page(otherLocale(locale)),
+      });
+    }
+
+    // Every project's page; a work record exists in both locales.
+    for (const work of works) {
+      entries.push({
+        path: workDetailPath(locale, work),
+        locale,
+        translationPath: workDetailPath(otherLocale(locale), work),
       });
     }
 

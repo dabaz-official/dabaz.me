@@ -42,6 +42,8 @@ export interface UiCopy {
     nextProjects: Localized;
     /** Accessible name of the medallion on a work screenshot. */
     caseStudy: Localized;
+    /** The project page's action: opens the project's own site. */
+    visit: Localized;
   };
   music: {
     description: Localized;
@@ -128,6 +130,7 @@ const ui: UiCopy = {
     previousProjects: { en: "Previous project", zh: "上一个项目" },
     nextProjects: { en: "Next project", zh: "下一个项目" },
     caseStudy: { en: "Case study", zh: "案例研究" },
+    visit: { en: "Visit site", zh: "访问网站" },
   },
   music: {
     description: {

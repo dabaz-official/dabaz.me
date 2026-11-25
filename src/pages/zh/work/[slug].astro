@@ -1,0 +1,35 @@
+---
+/**
+ * One project, Chinese page (`/zh/work/<slug>`). The record is the English
+ * one; its `Localized` fields carry the Chinese copy.
+ */
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import WorkArticle from "../../../components/work/WorkArticle.astro";
+import { otherLocale, type Locale } from "../../../lib/i18n";
+import { workDetailPath } from "../../../lib/works";
+
+const locale: Locale = "zh";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("works");
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const twin = otherLocale(locale);
+---
+
+<BaseLayout
+  title={entry.data.title}
+  description={entry.data.summary[locale]}
+  path={workDetailPath(locale, entry)}
+  locale={locale}
+  alternatePath={workDetailPath(twin, entry)}
+  translationPath={workDetailPath(twin, entry)}
+>
+  <WorkArticle entry={entry} locale={locale} />
+</BaseLayout>
