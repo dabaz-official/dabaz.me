@@ -44,7 +44,7 @@ const shippedLine = shipped
 
 <article class="work">
   <Container>
-    <header class="work__head measure">
+    <header class="work__head measure type-body-lg">
       <div class="work__meta type-caption">
         {span && <span class="tabular" lang={lang}>{span}</span>}
         {shippedLine && <span lang={lang}>{shippedLine}</span>}
@@ -95,6 +95,9 @@ const shippedLine = shipped
     padding-block-end: var(--dab-space-16);
   }
 
+  /* The head carries the reading role as well as the measure, so `36em`
+     resolves against the body's 18px and the headline column matches the case
+     study below it, the way a post's head meets its prose. */
   .work__head {
     margin-inline: auto;
     margin-block-end: var(--dab-space-12);

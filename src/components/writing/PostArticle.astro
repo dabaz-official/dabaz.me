@@ -56,7 +56,7 @@ const { Content } = await render(entry);
 
 <article class="post">
   <Container>
-    <header class="post__head measure">
+    <header class="post__head measure type-body-lg">
       <div class="post__meta type-caption">
         <time class="tabular" datetime={dateTime(date)}>
           {formatLongDate(date, locale)}
@@ -142,6 +142,9 @@ const { Content } = await render(entry);
     padding-block-end: var(--dab-space-16);
   }
 
+  /* The head carries the reading role as well as the measure, so `36em`
+     resolves against the body's 18px and the headline column matches the prose
+     column below it, rather than the shell's 16px. */
   .post__head {
     margin-inline: auto;
     margin-block-end: var(--dab-space-12);
