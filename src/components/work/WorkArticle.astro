@@ -10,36 +10,22 @@
  * prose measure underneath.
  */
 import { Image } from "astro:assets";
-import { render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import Container from "../Container.astro";
 import PillButton from "../PillButton.astro";
-import Prose from "../Prose.astro";
-import ProseH1 from "../prose/ProseH1.astro";
-import ProseH2 from "../prose/ProseH2.astro";
-import ProseH3 from "../prose/ProseH3.astro";
-import ProseH4 from "../prose/ProseH4.astro";
-import ProseLink from "../prose/ProseLink.astro";
-import ProseOl from "../prose/ProseOl.astro";
+import WorkDetailBody from "./WorkDetailBody.astro";
 import ui from "../../content/ui";
 import { htmlLang, type Locale } from "../../lib/i18n";
+import type { WorkDetailEntry } from "../../lib/works";
 
 interface Props {
   entry: CollectionEntry<"works">;
   locale: Locale;
+  /** The locale's case study; a project can ship its facts before its prose. */
+  detail?: WorkDetailEntry;
 }
 
-/** Markdown output carries no classes; the same map the post body uses. */
-const proseComponents = {
-  h1: ProseH1,
-  h2: ProseH2,
-  h3: ProseH3,
-  h4: ProseH4,
-  a: ProseLink,
-  ol: ProseOl,
-};
-
-const { entry, locale } = Astro.props;
+const { entry, locale, detail } = Astro.props;
 const { title, start, end, shipped, summary, href, cover } = entry.data;
 const lang = htmlLang(locale);
 
@@ -54,8 +40,6 @@ const shippedLine = shipped
       Number(shipped.slice(6)),
     )
   : undefined;
-
-const { Content } = await render(entry);
 ---
 
 <article class="work">
@@ -97,9 +81,7 @@ const { Content } = await render(entry);
       )
     }
 
-    <Prose class="work__body" type="body-lg">
-      <Content components={proseComponents} />
-    </Prose>
+    {detail && <WorkDetailBody detail={detail} />}
   </Container>
 </article>
 

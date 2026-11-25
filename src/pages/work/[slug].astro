@@ -7,19 +7,22 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import WorkArticle from "../../components/work/WorkArticle.astro";
 import { defaultLocale, otherLocale } from "../../lib/i18n";
-import { workDetailPath } from "../../lib/works";
+import { workDetailFor, workDetailPath } from "../../lib/works";
 
 const locale = defaultLocale;
 
 export async function getStaticPaths() {
-  const entries = await getCollection("works");
+  const [entries, details] = await Promise.all([
+    getCollection("works"),
+    getCollection("workDetails"),
+  ]);
   return entries.map((entry) => ({
     params: { slug: entry.id },
-    props: { entry },
+    props: { detail: workDetailFor(details, defaultLocale, entry), entry },
   }));
 }
 
-const { entry } = Astro.props;
+const { entry, detail } = Astro.props;
 const twin = otherLocale(locale);
 ---
 
@@ -31,5 +34,5 @@ const twin = otherLocale(locale);
   alternatePath={workDetailPath(twin, entry)}
   translationPath={workDetailPath(twin, entry)}
 >
-  <WorkArticle entry={entry} locale={locale} />
+  <WorkArticle entry={entry} locale={locale} detail={detail} />
 </BaseLayout>

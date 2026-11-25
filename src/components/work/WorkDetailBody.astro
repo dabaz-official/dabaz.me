@@ -1,0 +1,40 @@
+---
+/**
+ * A project's case study body, rendered at the prose measure.
+ *
+ * The detail is the locale's own file (`work-details/<locale>/<slug>`), so this
+ * component is only mounted when that locale has prose. Markdown output carries
+ * no classes, so headings and links render through the same components a post
+ * uses; the map has to live in the component that renders `Content`, which is
+ * why this shell exists rather than a `Content` variable in `WorkArticle`.
+ */
+import { render } from "astro:content";
+import Prose from "../Prose.astro";
+import ProseH1 from "../prose/ProseH1.astro";
+import ProseH2 from "../prose/ProseH2.astro";
+import ProseH3 from "../prose/ProseH3.astro";
+import ProseH4 from "../prose/ProseH4.astro";
+import ProseLink from "../prose/ProseLink.astro";
+import ProseOl from "../prose/ProseOl.astro";
+import type { WorkDetailEntry } from "../../lib/works";
+
+interface Props {
+  detail: WorkDetailEntry;
+}
+
+const proseComponents = {
+  h1: ProseH1,
+  h2: ProseH2,
+  h3: ProseH3,
+  h4: ProseH4,
+  a: ProseLink,
+  ol: ProseOl,
+};
+
+const { detail } = Astro.props;
+const { Content } = await render(detail);
+---
+
+<Prose class="work__body" type="body-lg">
+  <Content components={proseComponents} />
+</Prose>
