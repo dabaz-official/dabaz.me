@@ -12,6 +12,7 @@ import { Image } from "astro:assets";
 import { render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import Prose from "../Prose.astro";
+import PillButton from "../PillButton.astro";
 import ProseH1 from "../prose/ProseH1.astro";
 import ProseH2 from "../prose/ProseH2.astro";
 import ProseH3 from "../prose/ProseH3.astro";
@@ -61,14 +62,12 @@ const { Content } = await render(entry);
 
     {
       href && (
-        <a
-          class="button work__visit type-body"
+        <PillButton
+          class="work__visit"
           href={href}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {ui.work.visit[locale]}
-        </a>
+          label={ui.work.visit[locale]}
+          external
+        />
       )
     }
   </header>
@@ -125,22 +124,10 @@ const { Content } = await render(entry);
     color: var(--dab-color-text-tertiary);
   }
 
-  /* The pill is the button primitive with the radius and the lift the site's
-     other pills use: one shadow, 1px up, nothing else. */
-  .work__visit {
+  /* The pill is a child component, so its placement arrives through `:global`,
+     the documented way: the one gap under the facts line. */
+  .work__head :global(.work__visit) {
     margin-block-start: var(--dab-space-6);
-    border: 0;
-    border-radius: var(--dab-radius-pill);
-    padding-inline: var(--dab-space-6);
-    transition:
-      background-color var(--dab-duration-fast) var(--dab-easing-linear),
-      box-shadow var(--dab-duration-base) var(--dab-easing-standard),
-      translate var(--dab-duration-base) var(--dab-easing-standard);
-  }
-
-  .work__visit:hover {
-    box-shadow: var(--dab-shadow-floating);
-    translate: 0 -1px;
   }
 
   /* The cover runs the container, not the measure. */
@@ -161,15 +148,5 @@ const { Content } = await render(entry);
      centring reaches it through `:global`, the documented way. */
   .work :global(.work__body) {
     margin-inline: auto;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .work__visit {
-      transition: background-color var(--dab-duration-fast) var(--dab-easing-linear);
-    }
-
-    .work__visit:hover {
-      translate: none;
-    }
   }
 </style>

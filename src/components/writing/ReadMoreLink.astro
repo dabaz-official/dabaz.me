@@ -2,10 +2,12 @@
 /**
  * The pill that closes a writing surface: `Read more`, back to the list.
  *
- * A post's related shelf and a tag page offer the same action, so the
- * primitive, the label, and the lift live here once. The caller owns the
- * placement: the post centres it in its measure, the tag page in its foot row.
+ * A post's related shelf and a tag page offer the same action, so the label
+ * and the destination live here once, on the shared `PillButton`. The caller
+ * owns the placement: the post centres it in its measure, the tag page in its
+ * foot row.
  */
+import PillButton from "../PillButton.astro";
 import ui from "../../content/ui";
 import type { Locale } from "../../lib/i18n";
 
@@ -17,35 +19,4 @@ interface Props {
 const { href, locale } = Astro.props;
 ---
 
-<a class="button read-more type-body" href={href}>
-  {ui.writing.readMore[locale]}
-</a>
-
-<style>
-  /* The pill is the button primitive with the radius and the lift the home
-     band's `View All` established: neutral ink, one shadow on hover. */
-  .read-more {
-    border: 0;
-    border-radius: var(--dab-radius-pill);
-    padding-inline: var(--dab-space-6);
-    transition:
-      background-color var(--dab-duration-fast) var(--dab-easing-linear),
-      box-shadow var(--dab-duration-base) var(--dab-easing-standard),
-      translate var(--dab-duration-base) var(--dab-easing-standard);
-  }
-
-  .read-more:hover {
-    box-shadow: var(--dab-shadow-floating);
-    translate: 0 -1px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .read-more {
-      transition: background-color var(--dab-duration-fast) var(--dab-easing-linear);
-    }
-
-    .read-more:hover {
-      translate: none;
-    }
-  }
-</style>
+<PillButton href={href} label={ui.writing.readMore[locale]} />
