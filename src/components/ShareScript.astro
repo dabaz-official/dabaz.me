@@ -1,0 +1,36 @@
+---
+/**
+ * The copy-link behaviour for every `[data-copy-link]` on the page.
+ *
+ * A post and a project page both render `ShareActions`; each page renders this
+ * script once beside it, so a page with two share rows still carries one
+ * script. The label the button swaps to arrives as `data-copied-label`, since
+ * an `is:inline` script takes no expressions, and the X intent links next to
+ * the button need no script at all.
+ */
+---
+
+<script is:inline>
+  /* share-actions: copies the page's own URL. Every copy button the page
+     renders gets the same behaviour. */
+  (() => {
+    const buttons = document.querySelectorAll("[data-copy-link]");
+    for (const button of buttons) {
+      const name = button.getAttribute("aria-label");
+      const copied = button.dataset.copiedLabel;
+      button.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(window.location.href);
+          button.setAttribute("data-copied", "");
+          button.setAttribute("aria-label", copied);
+          setTimeout(() => {
+            button.removeAttribute("data-copied");
+            button.setAttribute("aria-label", name);
+          }, 2000);
+        } catch {
+          button.removeAttribute("data-copied");
+        }
+      });
+    }
+  })();
+</script>

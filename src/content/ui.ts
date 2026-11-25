@@ -68,16 +68,18 @@ export interface UiCopy {
     pageTitle: Localized<(page: number) => string>;
     /** The footer trail's crumb for a paginated list page. */
     pageLabel: Localized<(page: number) => string>;
-    /** Post actions: the X intent link and the copy-link button. */
-    shareX: Localized;
-    copyLink: Localized;
-    copied: Localized;
     /** Heading of the share row that closes the article. */
     shareArticle: Localized;
     /** Heading of the post page's related-posts shelf, named for the author. */
     moreFrom: Localized<(name: string) => string>;
     /** The pill that closes a writing surface and opens the writing list. */
     readMore: Localized;
+  };
+  /** The X intent link and the copy-link button, on a post and a project page. */
+  share: {
+    x: Localized;
+    copyLink: Localized;
+    copied: Localized;
   };
   contact: {
     description: Localized;
@@ -157,9 +159,6 @@ const ui: UiCopy = {
         `Writing, page ${page}: the archive of long-form notes by DabAZ on hardware, software, music, and the web.`,
       zh: (page) => `写作——第 ${page} 页： DabAZ 的长文笔记归档。`,
     },
-    shareX: { en: "Share on X", zh: "分享到 X" },
-    copyLink: { en: "Copy link", zh: "复制链接" },
-    copied: { en: "Copied", zh: "已复制" },
     shareArticle: { en: "Share article", zh: "分享文章" },
     moreFrom: {
       en: (name) => `More from ${name}`,
@@ -191,6 +190,11 @@ const ui: UiCopy = {
       en: (page) => `Page ${page}`,
       zh: (page) => `第 ${page} 页`,
     },
+  },
+  share: {
+    x: { en: "Share on X", zh: "分享到 X" },
+    copyLink: { en: "Copy link", zh: "复制链接" },
+    copied: { en: "Copied", zh: "已复制" },
   },
   contact: {
     description: {

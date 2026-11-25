@@ -2,26 +2,30 @@
 /**
  * One project, shared by both locale routes.
  *
- * The page owns the only `h1` and reads entirely from the record: the year and
- * the keywords as the meta row above the name, as a post opens, then the name,
- * the summary as a deck, and the project's own site as its one action. The
- * cover runs the container the way a post's does, and a record body — when a
- * case study grows one — renders at the prose measure underneath.
+ * The page takes the article page's shape and rhythm, so a reader who steps
+ * from a post to a project does not feel the page move under them: the year
+ * and the keywords as the meta block, the name, the summary as a deck, the
+ * action at the deck's 45px beat, the share marks one step under it, then the
+ * cover running the container. A record body — when a case study grows one —
+ * renders at the prose measure underneath.
  */
 import { Image } from "astro:assets";
 import { render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
-import Prose from "../Prose.astro";
+import Container from "../Container.astro";
 import PillButton from "../PillButton.astro";
+import Prose from "../Prose.astro";
+import ShareActions from "../ShareActions.astro";
+import ShareScript from "../ShareScript.astro";
 import ProseH1 from "../prose/ProseH1.astro";
 import ProseH2 from "../prose/ProseH2.astro";
 import ProseH3 from "../prose/ProseH3.astro";
 import ProseH4 from "../prose/ProseH4.astro";
 import ProseLink from "../prose/ProseLink.astro";
 import ProseOl from "../prose/ProseOl.astro";
-import Section from "../Section.astro";
 import ui from "../../content/ui";
 import { htmlLang, type Locale } from "../../lib/i18n";
+import { workDetailPath } from "../../lib/works";
 
 interface Props {
   entry: CollectionEntry<"works">;
@@ -45,52 +49,73 @@ const keywords = tags[locale].join(" · ");
 const { Content } = await render(entry);
 ---
 
-<Section as="article" class="work">
-  <header class="work__head measure">
-    <div class="work__meta type-caption">
-      {year !== undefined && (
-        <time class="tabular" datetime={String(year)}>{year}</time>
-      )}
-      {keywords && <span lang={lang}>{keywords}</span>}
-    </div>
-    <h1 class="type-display" lang="en">{title}</h1>
-    <p class="work__summary type-lede" lang={lang}>{summary[locale]}</p>
+<article class="work">
+  <Container>
+    <header class="work__head measure">
+      <div class="work__meta type-caption">
+        {year !== undefined && (
+          <time class="tabular" datetime={String(year)}>{year}</time>
+        )}
+        {keywords && <span lang={lang}>{keywords}</span>}
+      </div>
+      <h1 class="type-display" lang="en">{title}</h1>
+      <p class="work__summary type-lede" lang={lang}>{summary[locale]}</p>
+
+      {
+        href && (
+          <PillButton
+            class="work__visit"
+            href={href}
+            label={ui.work.visit[locale]}
+            external
+          />
+        )
+      }
+
+      <div class="work__share">
+        <ShareActions
+          title={title}
+          locale={locale}
+          path={workDetailPath(locale, entry)}
+        />
+      </div>
+    </header>
 
     {
-      href && (
-        <PillButton
-          class="work__visit"
-          href={href}
-          label={ui.work.visit[locale]}
-          external
-        />
+      cover && (
+        <figure class="work__cover">
+          <Image
+            src={cover.src}
+            alt={cover.alt[locale]}
+            width={1600}
+            height={900}
+            widths={[720, 1440, 1600]}
+            sizes="(min-width: 1024px) 960px, 100vw"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
       )
     }
-  </header>
 
-  {
-    cover && (
-      <figure class="work__cover">
-        <Image
-          src={cover.src}
-          alt={cover.alt[locale]}
-          width={1600}
-          height={900}
-          widths={[720, 1440, 1600]}
-          sizes="(min-width: 1024px) 960px, 100vw"
-          loading="lazy"
-          decoding="async"
-        />
-      </figure>
-    )
-  }
+    <Prose class="work__body" type="body-lg">
+      <Content components={proseComponents} />
+    </Prose>
+  </Container>
 
-  <Prose class="work__body" type="body-lg">
-    <Content components={proseComponents} />
-  </Prose>
-</Section>
+  <ShareScript />
+</article>
 
 <style>
+  /* A page-owned article rather than `Section`, exactly as a post: the rhythm
+     is the band's 64px, the column is centred, and the top pays 4.5px for the
+     meta line's own leading so the pixels measure to 48 — the same first line
+     the article page sets. */
+  .work {
+    padding-block-start: calc(var(--dab-space-12) - 4.5px);
+    padding-block-end: var(--dab-space-16);
+  }
+
   .work__head {
     margin-inline: auto;
     margin-block-end: var(--dab-space-12);
@@ -106,7 +131,7 @@ const { Content } = await render(entry);
     color: var(--dab-color-text-tertiary);
   }
 
-  /* The headline picks up the space the meta used to hold. */
+  /* The headline picks up the space the meta used to hold, as on a post. */
   .work__head h1 {
     margin: var(--dab-space-4) 0 0;
     color: var(--dab-color-text-primary);
@@ -119,13 +144,23 @@ const { Content } = await render(entry);
     text-wrap: pretty;
   }
 
-  /* The pill is a child component, so its placement arrives through `:global`,
-     the documented way: the one gap under the deck. */
+  /* The action takes the post's share beat: 45px under the deck, which is the
+     48 step less the 3px the summary's descender eats. */
   .work__head :global(.work__visit) {
+    margin-block-start: calc(var(--dab-space-12) - 3px);
+  }
+
+  /* The share marks sit one spacing step under the action, in the same 24px
+     box and 12px gap the post's share row uses. */
+  .work__share {
+    display: flex;
+    align-items: center;
+    gap: var(--dab-space-3);
     margin-block-start: var(--dab-space-6);
   }
 
-  /* The cover runs the container, not the measure. */
+  /* The cover runs the container, not the measure, and keeps the post's 48
+     above the body. */
   .work__cover {
     margin: 0 0 var(--dab-space-12);
     overflow: clip;

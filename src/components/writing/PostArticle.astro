@@ -20,13 +20,14 @@ import ProseLink from "../prose/ProseLink.astro";
 import ProseOl from "../prose/ProseOl.astro";
 import PostRows from "./PostRows.astro";
 import ReadMoreLink from "./ReadMoreLink.astro";
-import ShareActions from "./ShareActions.astro";
+import ShareActions from "../ShareActions.astro";
+import ShareScript from "../ShareScript.astro";
 import TagLinks from "./TagLinks.astro";
 import ui from "../../content/ui";
 import site from "../../data/site";
 import { dateTime, formatLongDate } from "../../lib/dates";
 import { htmlLang } from "../../lib/i18n";
-import { writingPath, type WritingEntry } from "../../lib/writing";
+import { postPath, writingPath, type WritingEntry } from "../../lib/writing";
 
 interface Props {
   entry: WritingEntry;
@@ -66,7 +67,7 @@ const { Content } = await render(entry);
       <p class="post__summary type-lede" lang={lang}>{summary}</p>
 
       <div class="post__share">
-        <ShareActions entry={entry} />
+        <ShareActions title={title} locale={locale} path={postPath(entry)} />
       </div>
     </header>
 
@@ -96,7 +97,7 @@ const { Content } = await render(entry);
         {ui.writing.shareArticle[locale]}
       </h2>
       <div class="post__share post__share--end">
-        <ShareActions entry={entry} />
+        <ShareActions title={title} locale={locale} path={postPath(entry)} />
       </div>
     </section>
 
@@ -125,30 +126,7 @@ const { Content } = await render(entry);
     </nav>
   </Container>
 
-  <script is:inline>
-    /* post-share: copies the post's own URL. Both rows the page renders carry
-       a copy button, so every one of them gets the same behaviour. */
-    (() => {
-      const buttons = document.querySelectorAll("[data-copy-link]");
-      for (const button of buttons) {
-        const name = button.getAttribute("aria-label");
-        const copied = button.dataset.copiedLabel;
-        button.addEventListener("click", async () => {
-          try {
-            await navigator.clipboard.writeText(window.location.href);
-            button.setAttribute("data-copied", "");
-            button.setAttribute("aria-label", copied);
-            setTimeout(() => {
-              button.removeAttribute("data-copied");
-              button.setAttribute("aria-label", name);
-            }, 2000);
-          } catch {
-            button.removeAttribute("data-copied");
-          }
-        });
-      }
-    })();
-  </script>
+  <ShareScript />
 </article>
 
 <style>

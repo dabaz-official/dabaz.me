@@ -1,28 +1,31 @@
 ---
 /**
- * A post's two share actions: the X intent link and the copy-link button.
+ * A page's two share actions: the X intent link and the copy-link button.
  *
  * A post renders them twice — the quiet marks under the deck, and the
- * `Share article` block that closes the body — so the glyphs, the intent URL,
- * and the copied state live here once. Both rows use the same 24px box and the
- * same 12px gap, so the two read as the same element at the top and the end of
- * the article; the 44px target rides on a pseudo-element and takes no space.
+ * `Share article` block that closes the body — and a project page renders them
+ * once under its action, so the glyphs, the intent URL and the copied state
+ * live here once. Every row uses the same 24px box and the same 12px gap; the
+ * 44px target rides on a pseudo-element and takes no space.
  *
- * The copy behaviour is `PostArticle`'s one inline script, which finds every
- * `[data-copy-link]` on the page; this component renders the markup it
- * enhances, and both actions work as plain links with scripting off.
+ * The copy behaviour is `ShareScript`, which the page renders once; this
+ * component renders the markup it enhances, and both actions work as plain
+ * links with scripting off.
  */
-import ui from "../../content/ui";
-import site from "../../data/site";
-import { postPath, type WritingEntry } from "../../lib/writing";
+import ui from "../content/ui";
+import site from "../data/site";
+import type { Locale } from "../lib/i18n";
 
 interface Props {
-  entry: WritingEntry;
+  /** The page's title, the X intent's text. */
+  title: string;
+  locale: Locale;
+  /** The page's site-relative path; the intent link points at its absolute form. */
+  path: string;
 }
 
-const { entry } = Astro.props;
-const { title, locale } = entry.data;
-const canonical = new URL(postPath(entry), site.url).href;
+const { title, locale, path } = Astro.props;
+const canonical = new URL(path, site.url).href;
 const shareHref = `https://x.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(canonical)}`;
 ---
 
@@ -31,7 +34,7 @@ const shareHref = `https://x.com/intent/tweet?text=${encodeURIComponent(title)}&
   href={shareHref}
   target="_blank"
   rel="noreferrer"
-  aria-label={ui.writing.shareX[locale]}
+  aria-label={ui.share.x[locale]}
 >
   <svg
     class="share-action__icon"
@@ -51,8 +54,8 @@ const shareHref = `https://x.com/intent/tweet?text=${encodeURIComponent(title)}&
   class="share-action"
   type="button"
   data-copy-link
-  aria-label={ui.writing.copyLink[locale]}
-  data-copied-label={ui.writing.copied[locale]}
+  aria-label={ui.share.copyLink[locale]}
+  data-copied-label={ui.share.copied[locale]}
 >
   <svg
     class="share-action__icon share-action__icon--link"

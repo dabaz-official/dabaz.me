@@ -71,11 +71,15 @@ const INLINE_BOOTSTRAP =
 const SHOWCASE_MARKER = "[data-showcase]";
 /** The home header's tone switch, carried by its own comment. */
 const HEADER_TONE_MARKER = "header-tone";
-/** The post page's copy-link button, carried by its own comment. */
-const POST_SHARE_MARKER = "post-share";
+/** The share row's copy-link button, carried by its own comment. */
+const SHARE_MARKER = "share-actions";
 const HOME_PAGES = new Set(["index.html", "zh/index.html"]);
 /** `writing/<slug>/index.html` and `zh/writing/<slug>/index.html`. */
 const isPostPage = (rel) => /^(zh\/)?writing\/[^/]+\/index\.html$/.test(rel);
+/** `work/<id>/index.html` and `zh/work/<id>/index.html`. */
+const isProjectPage = (rel) => /^(zh\/)?work\/[^/]+\/index\.html$/.test(rel);
+/** A post and a project page both render the share row. */
+const hasShareRow = (rel) => isPostPage(rel) || isProjectPage(rel);
 const referencedScripts = new Set();
 
 const ogFiles = new Map();
@@ -196,7 +200,7 @@ for (const path of htmlFiles) {
 
   let showcaseModules = 0;
   let headerTone = 0;
-  let postShare = 0;
+  let shareRow = 0;
 
   for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)) {
     const attributes = attrs(match[1]);
@@ -232,9 +236,10 @@ for (const path of htmlFiles) {
       continue;
     }
 
-    // The post page's copy-link button: one inline script, post routes only.
-    if (isPostPage(rel) && body.includes(POST_SHARE_MARKER)) {
-      postShare += 1;
+    // The share row's copy-link button: one inline script, on a post or a
+    // project page.
+    if (hasShareRow(rel) && body.includes(SHARE_MARKER)) {
+      shareRow += 1;
       continue;
     }
 
@@ -260,8 +265,8 @@ for (const path of htmlFiles) {
     errors.push(`${rel}: expected one header-tone script, found ${headerTone}`);
   }
 
-  if (isPostPage(rel) && postShare !== 1) {
-    errors.push(`${rel}: expected one post-share script, found ${postShare}`);
+  if (hasShareRow(rel) && shareRow !== 1) {
+    errors.push(`${rel}: expected one share script, found ${shareRow}`);
   }
 }
 
