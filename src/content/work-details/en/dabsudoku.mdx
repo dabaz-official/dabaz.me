@@ -1,0 +1,51 @@
+---
+locale: en
+---
+
+import WorkDetails from "../../../components/work/WorkDetails.astro";
+
+## Details
+
+<WorkDetails
+  rows={[
+    { label: "Role", value: "Sole Designer and Developer." },
+    {
+      label: "Focus",
+      value:
+        "UI Design, Interaction Design, Game Logic, Prototyping, Accessibility.",
+    },
+  ]}
+/>
+
+## Overview
+
+DabSudoku is a quiet Sudoku: four difficulties, pencil notes, three hints, undo, a three-mistake limit, and a short tutorial. It was built between December 2024 and February 2025, and shipped in the first quarter of 2025 as a PWA that installs and plays offline.
+
+The brief asked for Notion's visual language, so the shell is warm neutrals, a purple accent, and soft pastel highlights. The DabAZ design tokens still govern spacing, radius, type, breakpoints, and contrast; where the two disagreed, Notion won.
+
+## Outcome
+
+- A puzzle on demand at four difficulties, each with exactly one solution and 180°-symmetric givens.
+- Keyboard play from anywhere on the page, a timer that pauses with the game, notes that clean themselves from peers, and wrong entries counted in place.
+- A board of 81 real buttons: one tab stop, arrow navigation, and a live region that announces every mistake, hint, and win.
+- Light and dark themes applied before first paint, so a returning dark-mode player never sees a white flash.
+
+## Solution
+
+The game is a pure engine with a thin React shell. A bitmask solver with an MRV heuristic counts solutions and stops at two, which is enough to prove uniqueness; the generator fills a grid from a shuffled base and digs symmetric holes, checking the count after every removal and keeping the sparsest result when a target clue count is not reachable. Difficulty is clue count — 45, 35, 29, 25 — with uniqueness guaranteed, not a grade of solving technique.
+
+State is a reducer, not scattered hooks: selection, input, notes, erase, hint, undo, pause, win, and loss all move through one function, which is what the tests exercise. The timer derives from `Date.now()` rather than accumulated intervals, so a throttled tab cannot drift, and it stops when the tab hides or the tutorial opens.
+
+The board is a CSS grid of buttons with a roving tabindex; the status bar carries a count as well as a colour, and the selected cell says so in its own label.
+
+## Ideation
+
+The first version was a Next.js prototype. The rebuild dropped the server entirely: a Sudoku is one client surface, and Vite plus React was less machinery for the same game.
+
+The design had two owners — the canonical DabAZ specification and the requested Notion style — and reconciling them was the real work. The accent, the warm neutrals, and the type scale come from Notion; the token system, spacing, and accessibility rules come from DabAZ. The dark theme had to be derived rather than copied, including a board highlight scale that keeps the selected cell distinct on a near-black canvas.
+
+## Reflection
+
+The solver was the easy part. The dark theme took longer: pastel highlights that separate by hue on white collapse into one grey on black, so the board needed its own lightness steps and a measured contrast pass.
+
+Two choices I would keep: the mistake limit, which makes a wrong entry matter, and the tutorial, which explains one rule better than any settings screen. Not done: sound, statistics history, and a contrast preference beyond the two themes.

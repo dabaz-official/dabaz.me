@@ -1,0 +1,53 @@
+---
+locale: en
+---
+
+import WorkDetails from "../../../components/work/WorkDetails.astro";
+
+## Details
+
+<WorkDetails
+  rows={[
+    { label: "Role", value: "Sole Designer and Developer." },
+    {
+      label: "Focus",
+      value:
+        "UI Design, Interaction Design, Game Logic, Prototyping, Accessibility.",
+    },
+  ]}
+/>
+
+## Overview
+
+DabMinesweeper is a complete Minesweeper for the browser: three presets and a custom board builder, first-click safety, flood reveal, flags, chording, live counters, and per-difficulty records. It has been running since April 2026, shipped in the third quarter, and is still maintained.
+
+The shell is Notion-inspired; the board is deliberately not. Cell gradients, bevels, press feedback, and the original number colours stay as they were, so the field still reads as the classic game while everything around it belongs to this site.
+
+## Outcome
+
+- The classic rules, intact: a safe first click, flood reveal from empty cells, flags, chording, wrong-flag marking, and all mines revealed on a loss.
+- Boards from 5×5 to 30×30 with validated mine counts, alongside Beginner, Intermediate, and Expert.
+- A board sized to the space it actually has, so a laptop never scrolls the page to play and a phone scrolls inside the frame instead.
+- Records per difficulty and a remembered theme, stored locally, with no backend and no tracking.
+
+## Solution
+
+The rules are a pure engine. `revealCell`, `toggleFlag`, and `chordCell` each take a board and return a new one; React only renders the result. Mines are placed after the first click, clearing the clicked cell and its eight neighbours, which is what makes "first click is always safe" a property rather than a hope.
+
+The board measures its column and the distance to the bottom of the viewport, subtracts what sits below it, and takes the tighter of width and height, clamped between 20 and 42 pixels per cell. Hidden decorative lines measure as zero, so the board reclaims that space on short screens by itself.
+
+The engine is checked by 712 assertions against seeded randomness: mine counts, adjacency, flood fill, flags, chording with and without matching flags, wins, losses, wrong flags, and auto-flagging. A rule that cannot be tested without a DOM would be a rule in the wrong place.
+
+## Ideation
+
+The first decision was not to use a game library. The board is an array and the rules are a few hundred lines; adapting someone else's engine would have been more code than writing the one this game needs.
+
+The second was to split the visual language. A Notion-style page around a classic board is a deliberate contrast: the frame is calm and current, the field is the game people remember. Restyling the tiles would have made it another minimal puzzle; keeping them makes it Minesweeper.
+
+Custom boards came from playing: three presets are a demo, not a game. Once the board could be measured instead of fixed, any size became possible.
+
+## Reflection
+
+The engine tests were worth their weight — nearly every bug lived in chording and flag interactions, not in the UI. The fiddly part was sizing: a 30×16 board has to fit a laptop without page scroll and a phone without shrinking the cells into confetti.
+
+What is left is small and honest: no sound, no statistics beyond best times, and touch long-press that could always be tuned further. The game is finished in the way a small game can be.

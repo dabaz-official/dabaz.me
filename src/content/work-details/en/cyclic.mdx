@@ -1,0 +1,51 @@
+---
+locale: en
+---
+
+import WorkDetails from "../../../components/work/WorkDetails.astro";
+
+## Details
+
+<WorkDetails
+  rows={[
+    { label: "Role", value: "Sole Designer and Developer." },
+    {
+      label: "Focus",
+      value:
+        "UI Design, Interaction Design, Information Architecture, Prototyping, Technology Selection.",
+    },
+  ]}
+/>
+
+## Overview
+
+Cyclic is a Notion-style knowledge base for one person: nested pages, a block editor, page icons and covers, a search command, a trash, and a switch that turns any page into a public URL. It ran from November 2023 to March 2024 and shipped in the first quarter of 2024.
+
+The private side needs an account. The public side does not: a published page opens read-only at `/preview/<id>` for anyone with the link, and unpublishing takes it back.
+
+## Outcome
+
+- A page tree, not a flat list: every page can hold children, and archiving a page archives everything under it.
+- An editor that saves as you type, with covers, icons, and the usual block types.
+- One switch per page: private draft or published link, with a copy button and a way back.
+- A search command across pages, a trash that can restore or delete, and sign-in only where it is needed.
+
+## Solution
+
+The workspace is a small data model. One `pages` table holds the title, owner, parent, content, cover, icon, and two flags: published and archived. Two indexes do the work — by owner, and by owner and parent — so the sidebar is one query per level and archiving a subtree is a recursive walk rather than a schema of its own.
+
+The editor loads on the client only, because it is the page. BlockNote provides the block model; the document is stored as the editor's own JSON and written back on every change through Convex's live queries, so there is no save button to forget.
+
+Clerk owns the private routes. The public route sits outside the authenticated shell and reads only a published page; a page that is not published does not resolve there.
+
+## Ideation
+
+It began as a Notion clone for my own notes. The clone is the wrong frame for the whole product — databases, relations, collaboration — but it is a good frame for the part I actually used: a tree of pages that can be written in and, when it matters, shared.
+
+The interesting boundary turned out to be public and private, not rich text. Editors are solved; deciding what a stranger can open should be explicit, per page, and reversible. That became the one piece of product design in the build.
+
+## Reflection
+
+A clone is defined by what it leaves out. There is no collaboration, no comments, no databases, no backlinks — and the app is better for it, because each of those would have doubled the surface without changing how I write.
+
+Live queries made the editor feel local; the cost is that the backend is not mine to move. If I rebuilt it, I would keep the page tree and rethink publishing at a finer grain than a whole page.
