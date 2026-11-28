@@ -75,7 +75,7 @@ export function postJsonLd(entry: WritingEntry) {
     inLanguage: htmlLang(locale),
     url,
     mainEntityOfPage: url,
-    image: new URL(site.ogImage[locale], site.url).href,
+    image: new URL(site.ogImage, site.url).href,
     author: { "@type": "Person", name: site.name, url: site.url },
     publisher: { "@type": "Person", name: site.name, url: site.url },
     ...(tags.length > 0 ? { keywords: tags.join(", ") } : {}),

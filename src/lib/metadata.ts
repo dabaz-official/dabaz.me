@@ -109,7 +109,7 @@ export function resolveMeta({
     tagline,
     ogType: ogType ?? ogTypeOf(path),
     ogLocale: site.ogLocale[locale],
-    ogImage: new URL(site.ogImage[locale], site.url).href,
+    ogImage: new URL(site.ogImage, site.url).href,
     hreflang,
     xDefault,
   };

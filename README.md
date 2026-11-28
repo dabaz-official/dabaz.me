@@ -44,7 +44,7 @@ Node 24 (`.nvmrc`), pnpm 12.
 | `pnpm preview` | Serve `dist/` locally |
 | `pnpm lint` | Token guard plus the Chinese copy-spacing guard |
 | `pnpm typecheck` | `astro sync && tsc --noEmit` |
-| `pnpm icons` | Export the favicon, Apple icon, and manifest icons from `public/icon.svg` |
+| `pnpm icons` | Export the favicon, Apple icon, and manifest icons from `public/icon.svg` and `public/icon-maskable.svg` |
 | `pnpm glyphs` | Refresh `scripts/home-glyphs.txt` from `dist/` (run after a build) |
 | `pnpm subset` | Regenerate the two home-only font subsets (needs `scripts/requirements.txt`) |
 | `pnpm check` | Gate: lint, typecheck, build, metadata guard, home-subset guard |

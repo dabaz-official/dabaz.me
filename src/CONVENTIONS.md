@@ -390,12 +390,13 @@ site name once.
   `WebSite` on the home route, `BlogPosting` on a post, and `CollectionPage`
   on a list or tag page. It is serialised once by `BaseLayout` as
   `application/ld+json` (data, not an island).
-- **Icons and manifest.** `public/icon.svg` is the supplied plate master
-  (`rx=108`, inside iOS's squircle). `scripts/generate-icons.mjs` exports
-  `favicon.ico` (16/32/48), `apple-icon.png` (180), `icons/icon-192.png`,
-  `icons/icon-512.png`, and `icons/icon-maskable-512.png` from it without
-  re-rounding or recolouring. `public/site.webmanifest` lists 192/512 from the
-  plate and a maskable 512.
+- **Icons and manifest.** `public/icon.svg` is the plate master (`rx=108`,
+  inside iOS's squircle); `public/icon-maskable.svg` is the maskable master
+  (full-bleed white field, `rx=112`). `scripts/generate-icons.mjs` exports
+  `favicon.ico` (16/32/48), `apple-icon.png` (180), `icons/icon-192.png`, and
+  `icons/icon-512.png` from the plate, and `icons/icon-maskable-512.png` from
+  the maskable master, without re-rounding or recolouring.
+  `public/site.webmanifest` lists 192/512 from the plate and a maskable 512.
 - **Crawl files.** `src/pages/sitemap.xml.ts` emits every public route with the
   same alternates as the head; drafts never reach it. `public/robots.txt`
   points at the sitemap. `404.astro` is a real 404 and carries `noindex`.
