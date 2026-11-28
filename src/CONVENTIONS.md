@@ -36,7 +36,8 @@ commit. `DESIGN.md` owns composition; DabDesign, DabFonts, and DabAgents (pins i
 | `scripts/check-tokens.mjs` | the token guard behind `pnpm lint` | foundation |
 | `scripts/check-copy.mjs` | the Chinese punctuation and CJK–Latin spacing guard | thread 4 |
 | `scripts/check-meta.mjs` | the post-build metadata guard (title pattern, OG, icons, sitemap, `hreflang`, no client JS) | thread 5 |
-| `scripts/generate-icons.mjs` | the icon exports from the supplied plate master | thread 5 |
+| `scripts/generate-icons.mjs` | the icon exports from the supplied plate and maskable masters | thread 5 |
+| `scripts/generate-og.mjs` | the two per-locale OG cards used outside the home route | thread 5 |
 | `scripts/subset-home-fonts.sh` | regenerates the home-only subset from the pinned faces | thread 5 |
 | `scripts/home-glyphs.txt` | the exact character set the two home routes render | thread 5 |
 
@@ -381,11 +382,12 @@ site name once.
   twin from `translationPostPath()` / `translationTagPath()`; home and the
   writing list pass their counterpart. `x-default` points at the English
   version when one exists.
-- **Head surface.** Open Graph and Twitter use one description, one canonical
-  URL, and one 1200×630 JPEG shared by both locales
-  (`public/og/dabaz-og.jpg`). `og:image:alt` is the page title. `og:type` is
-  `article` on a post and `website` elsewhere. `twitter:card` is
-  `summary_large_image`; there is no invented handle.
+- **Head surface.** Open Graph and Twitter use one description and one
+  canonical URL. The home route (`/` and `/zh`) uses the supplied
+  1200×630 JPEG (`public/og/dabaz-og.jpg`); every other route uses the
+  generated per-locale card (`public/og/en.png`, `zh.png`). `og:image:alt` is
+  the page title. `og:type` is `article` on a post and `website` elsewhere.
+  `twitter:card` is `summary_large_image`; there is no invented handle.
 - **Structured data.** `src/lib/structured-data.ts` supplies `Person` and
   `WebSite` on the home route, `BlogPosting` on a post, and `CollectionPage`
   on a list or tag page. It is serialised once by `BaseLayout` as

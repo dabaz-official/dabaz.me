@@ -45,6 +45,7 @@ Node 24 (`.nvmrc`), pnpm 12.
 | `pnpm lint` | Token guard plus the Chinese copy-spacing guard |
 | `pnpm typecheck` | `astro sync && tsc --noEmit` |
 | `pnpm icons` | Export the favicon, Apple icon, and manifest icons from `public/icon.svg` and `public/icon-maskable.svg` |
+| `pnpm og` | Render the two 1200×630 OG cards (needs Chrome) |
 | `pnpm glyphs` | Refresh `scripts/home-glyphs.txt` from `dist/` (run after a build) |
 | `pnpm subset` | Regenerate the two home-only font subsets (needs `scripts/requirements.txt`) |
 | `pnpm check` | Gate: lint, typecheck, build, metadata guard, home-subset guard |

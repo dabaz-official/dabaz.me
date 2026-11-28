@@ -54,6 +54,7 @@ pnpm preview    # serve dist/ locally
 pnpm lint       # token guard + Chinese punctuation/CJK–Latin spacing guard
 pnpm typecheck  # astro sync && tsc --noEmit
 pnpm icons      # export favicon, Apple icon, and manifest icons from public/icon.svg and public/icon-maskable.svg
+pnpm og         # render public/og/en.png and zh.png (needs Chrome)
 pnpm glyphs     # refresh scripts/home-glyphs.txt from dist/ (run after a build)
 pnpm subset     # regenerate the two home font subsets (needs scripts/requirements.txt)
 pnpm check      # the gate: lint + typecheck + build + metadata + home-subset guard

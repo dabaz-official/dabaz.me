@@ -37,8 +37,14 @@ const site = {
     zh: "zh_CN",
   } satisfies Localized,
 
-  /** The one OG image, shared by every locale (1200×630). */
-  ogImage: "/og/dabaz-og.jpg",
+  /** The supplied OG card for the home route (1200×630). */
+  ogImageHome: "/og/dabaz-og.jpg",
+
+  /** One generated OG card per locale for every other route. */
+  ogImage: {
+    en: "/og/en.png",
+    zh: "/og/zh.png",
+  } satisfies Localized,
 
   /** Plate master and its exports (rule 10 §4). */
   icon: "/icon.svg",
