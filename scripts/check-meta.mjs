@@ -4,7 +4,7 @@
  *
  * Runs after `astro build` as part of `pnpm check`. It asserts the surfaces
  * rule 10 owns: one `<h1>` and title per page, the title pattern, the shared
- * description, the canonical/OG URL, a 1200×630 OG PNG, the icon files, the
+ * description, the canonical/OG URL, a 1200×630 OG image, the icon files, the
  * manifest, the sitemap and robots, `hreflang`, and the JavaScript budget:
  * the one shared bootstrap plus the home showcase module, nothing else.
  *
@@ -12,6 +12,7 @@
  * the guard reports that as a warning instead of padding owner copy.
  */
 import { readdir, readFile, stat } from "node:fs/promises";
+import sharp from "sharp";
 import { join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -79,10 +80,9 @@ const isPostPage = (rel) => /^(zh\/)?writing\/[^/]+\/index\.html$/.test(rel);
 const referencedScripts = new Set();
 
 const ogFiles = new Map();
-for (const path of files.filter((file) => file.endsWith(".png") && file.includes("/og/"))) {
+for (const path of files.filter((file) => /\/og\/[^/]+\.(png|jpe?g|webp)$/i.test(file))) {
   const buffer = await readFile(path);
-  const width = buffer.readUInt32BE(16);
-  const height = buffer.readUInt32BE(20);
+  const { width, height } = await sharp(buffer).metadata();
   ogFiles.set(relative(root, path), { width, height, bytes: buffer.length });
 }
 
@@ -167,13 +167,13 @@ for (const path of htmlFiles) {
     errors.push(`${rel}: missing absolute og:image`);
   } else {
     const local = image.slice(siteUrl.length + 1);
-    const png = ogFiles.get(local);
-    if (!png) errors.push(`${rel}: og:image ${local} was not emitted`);
+    const og = ogFiles.get(local);
+    if (!og) errors.push(`${rel}: og:image ${local} was not emitted`);
     else {
-      if (png.width !== 1200 || png.height !== 630) {
-        errors.push(`${rel}: og:image is ${png.width}×${png.height}, expected 1200×630`);
+      if (og.width !== 1200 || og.height !== 630) {
+        errors.push(`${rel}: og:image is ${og.width}×${og.height}, expected 1200×630`);
       }
-      if (png.bytes > 5 * 1024 * 1024) errors.push(`${rel}: og:image exceeds 5 MB`);
+      if (og.bytes > 5 * 1024 * 1024) errors.push(`${rel}: og:image exceeds 5 MB`);
     }
   }
   if (meta("twitter:image") !== image) errors.push(`${rel}: twitter:image differs from og:image`);

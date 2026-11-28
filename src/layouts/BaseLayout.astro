@@ -56,6 +56,10 @@ const path = Astro.props.path ?? "/";
 const isHome = path === "/" || path === "/zh";
 const alternateLocale = otherLocale(locale);
 const hasTranslation = meta.hreflang.length > 1;
+const ogImageType =
+  meta.ogImage.endsWith(".jpg") || meta.ogImage.endsWith(".jpeg")
+    ? "image/jpeg"
+    : "image/png";
 const jsonLd = Astro.props.jsonLd
   ? JSON.stringify(Astro.props.jsonLd).replace(/</g, "\\u003c")
   : undefined;
@@ -98,7 +102,7 @@ const jsonLd = Astro.props.jsonLd
       )
     }
     <meta property="og:image" content={meta.ogImage} />
-    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:type" content={ogImageType} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={meta.pageTitle} />
